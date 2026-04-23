@@ -1,0 +1,35 @@
+"""
+Application configuration using Pydantic Settings
+Loads environment variables from .env file
+"""
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    """
+    Application settings loaded from environment variables
+    """
+    # Database configuration
+    database_url: str = Field(default="sqlite:///./expenses.db", validation_alias="DATABASE_URL")
+    
+    # CORS configuration
+    cors_origins: list = ["http://localhost:5173"]
+    
+    # API metadata
+    app_name: str = "Personal Expense Tracker API"
+    app_version: str = "1.0.0"
+    app_description: str = "API for managing personal expenses"
+    
+    # JWT Authentication configuration
+    secret_key: str = Field(default="your-super-secret-key-change-in-production", validation_alias="SECRET_KEY")
+    algorithm: str = Field(default="HS256", validation_alias="ALGORITHM")
+    access_token_expire_minutes: int = Field(default=30, validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        extra="ignore"
+    )
+
+# Create global settings instance
+settings = Settings()
