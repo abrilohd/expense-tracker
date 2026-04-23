@@ -46,8 +46,8 @@ def get_expenses(
     min_amount: Optional[float] = Query(None, ge=0, description="Filter expenses above this amount"),
     max_amount: Optional[float] = Query(None, ge=0, description="Filter expenses below this amount"),
     # Sorting parameters
-    sort_by: str = Query("date", regex="^(date|amount)$", description="Sort by date or amount"),
-    order: str = Query("desc", regex="^(asc|desc)$", description="Sort order: asc or desc"),
+    sort_by: str = Query("date", pattern="^(date|amount)$", description="Sort by date or amount"),
+    order: str = Query("desc", pattern="^(asc|desc)$", description="Sort order: asc or desc"),
     # Pagination parameters
     skip: int = Query(0, ge=0, description="Pagination offset"),
     limit: int = Query(20, ge=1, le=100, description="Pagination limit (max 100)"),
