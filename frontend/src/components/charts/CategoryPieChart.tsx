@@ -59,11 +59,11 @@ const CategoryPieChart = ({ data, isLoading = false }: CategoryPieChartProps) =>
   // Loading state
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+      <div className="bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] rounded-[20px] p-6">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
           Spending by Category
         </h3>
-        <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="h-64 bg-gray-200 dark:bg-white/[0.04] rounded animate-pulse" />
       </div>
     );
   }
@@ -71,13 +71,13 @@ const CategoryPieChart = ({ data, isLoading = false }: CategoryPieChartProps) =>
   // Empty state
   if (!data || data.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+      <div className="bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] rounded-[20px] p-6">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
           Spending by Category
         </h3>
-        <div className="h-64 flex flex-col items-center justify-center text-gray-400">
+        <div className="h-64 flex flex-col items-center justify-center text-gray-400 dark:text-gray-600">
           <PieChart size={48} />
-          <p className="mt-2">No categories yet</p>
+          <p className="mt-2 text-sm">No categories yet</p>
         </div>
       </div>
     );
@@ -156,8 +156,8 @@ const CategoryPieChart = ({ data, isLoading = false }: CategoryPieChartProps) =>
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-card p-6">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+    <div className="bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] rounded-[20px] p-6">
+      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
         Spending by Category
       </h3>
       <div className="h-64">

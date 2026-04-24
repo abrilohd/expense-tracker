@@ -1,5 +1,6 @@
 /**
  * Main layout wrapper for all protected pages
+ * FIXED: Sidebar now always visible on desktop with proper margin
  */
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -32,25 +33,30 @@ const Layout = () => {
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Sidebar */}
+    <div className="flex min-h-screen bg-gray-50 dark:bg-[#0D0F16]">
+      {/* Sidebar - always rendered, visibility controlled by CSS */}
       <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
       {/* Mobile overlay */}
       <MobileOverlay isOpen={sidebarOpen} onClose={closeSidebar} />
 
-      {/* Main content area */}
-      <div className="flex-1 flex flex-col lg:ml-64 min-h-screen">
+      {/* Main content area - CRITICAL FIX: lg:ml-[240px] matches sidebar width */}
+      <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px]">
         {/* Header */}
         <Header onMenuClick={toggleSidebar} title={pageTitle} />
 
-        {/* Page content with animation */}
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+        {/* Page content with enhanced animation and spacing */}
+        <main className="flex-1 p-6 md:p-8 lg:p-10 overflow-auto bg-gray-50 dark:bg-[#0D0F16]">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{
+              duration: 0.3,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
+            className="max-w-[1600px] mx-auto"
           >
             <Outlet />
           </motion.div>

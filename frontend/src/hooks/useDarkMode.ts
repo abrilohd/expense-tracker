@@ -20,7 +20,7 @@ interface UseDarkModeReturn {
  * Get system color scheme preference
  */
 const getSystemPreference = (): Theme => {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
   
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
@@ -36,7 +36,7 @@ const getInitialTheme = (): Theme => {
     return savedTheme;
   }
   
-  // Fall back to system preference
+  // Fall back to system preference (default to dark for Fundex design)
   return getSystemPreference();
 };
 

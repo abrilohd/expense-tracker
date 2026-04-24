@@ -105,3 +105,378 @@
 .shake-hover:hover {
   animation: shake 0.4s ease-in-out;
 }
+
+/* ============================================ */
+/* DUAL THEME SUPPORT - LIGHT & DARK MODES */
+/* ============================================ */
+
+/* Global body styles - supports both themes */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode (default) */
+body {
+  background-color: #F8FAFC;
+  color: #1E293B;
+}
+
+/* Dark mode */
+body.dark,
+.dark body {
+  background-color: #0D0F16;
+  color: #F9FAFB;
+}
+
+/* Custom scrollbar - Light mode */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Custom scrollbar - Dark mode */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Firefox scrollbar - Light mode */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+/* Firefox scrollbar - Dark mode */
+.dark * {
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+/* Improved typography scale with better spacing */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 1.75rem;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.375rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+/* Paragraph spacing */
+p {
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+
+/* Better link styles - Light mode */
+a {
+  color: #7C3AED;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: #6D28D9;
+}
+
+/* Better link styles - Dark mode */
+.dark a {
+  color: #A78BFA;
+}
+
+.dark a:hover {
+  color: #C4B5FD;
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, select, textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Button base styles */
+button {
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Input base styles - Light mode */
+input, select, textarea {
+  font-size: 0.9375rem;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(107, 114, 128, 0.6);
+}
+
+/* Input base styles - Dark mode */
+.dark input::placeholder, 
+.dark textarea::placeholder {
+  color: rgba(156, 163, 175, 0.6);
+}
+
+/* Purple focus ring globally */
+*:focus-visible {
+  outline: 2px solid #8B5CF6;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Smooth page transitions */
+.page-container {
+  min-height: 100vh;
+}
+
+/* Card styles with better shadows */
+.card-hover {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slide in from left */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scale in animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Spacing utilities - increased whitespace */
+.section-spacing {
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    margin-bottom: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-spacing {
+    margin-bottom: 3.5rem;
+  }
+}
+
+/* Card spacing */
+.card-padding {
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .card-padding {
+    padding: 2rem;
+  }
+}
+
+/* Mobile responsive spacing utilities */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.875rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  h4 {
+    font-size: 1.0625rem;
+  }
+  
+  /* Reduce spacing on mobile */
+  .section-spacing {
+    margin-bottom: 2rem;
+  }
+  
+  .card-padding {
+    padding: 1.25rem;
+  }
+}
+
+/* Empty state styles */
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.empty-state-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #F9FAFB;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-description {
+  font-size: 0.875rem;
+  color: #9CA3AF;
+  margin-bottom: 1.5rem;
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Skeleton loading improvements */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

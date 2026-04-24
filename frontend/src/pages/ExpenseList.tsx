@@ -1,44 +1,40 @@
 /**
  * Expense List page - view, filter, search, edit, and delete expenses
+ * Updated to use Zustand store with Fundex-inspired dark design
  */
 import { useState, useEffect } from 'react';
 import {
   Search,
   PlusCircle,
-  Pencil,
-  Trash2,
-  CreditCard,
   X,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import toast from 'react-hot-toast';
-import type { Expense, FilterParams, ExpenseCategory } from '../types';
-import { getExpenses } from '../api/expenses';
+import type { Expense, ExpenseCategory } from '../types';
+import { useExpenseList, useExpenseMutations } from '../hooks/useExpenses';
 import { CATEGORIES, PAGE_SIZE } from '../utils/constants';
-import { formatCurrency, formatDate } from '../utils/formatters';
-import Badge from '../components/ui/Badge';
+import TransactionRow from '../components/ui/TransactionRow';
 import ExpenseModal from '../components/ui/ExpenseModal';
 import DeleteConfirmModal from '../components/ui/DeleteConfirmModal';
-import { TableSkeleton } from '../components/ui/LoadingSpinner';
 
 const ExpenseListPage = () => {
-  // Data state
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Zustand store hooks
+  const {
+    expenses,
+    total,
+    isLoading,
+    error,
+    filters,
+    currentPage,
+    setFilters,
+    setPage,
+    resetFilters,
+    refetch,
+  } = useExpenseList();
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
+  const { removeExpense, isDeleting } = useExpenseMutations();
 
-  // Filter state
-  const [filters, setFilters] = useState<FilterParams>({
-    sort_by: 'date',
-    order: 'desc',
-  });
-
-  // Search with debounce
+  // Search with debounce (local state)
   const [searchInput, setSearchInput] = useState('');
 
   // Modal state
@@ -47,43 +43,32 @@ const ExpenseListPage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // Fetch expenses from API
-  const fetchExpenses = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const skip = (currentPage - 1) * PAGE_SIZE;
-      const response = await getExpenses({
-        ...filters,
-        skip,
-        limit: PAGE_SIZE,
-      });
-
-      setExpenses(response.items);
-      setTotal(response.total);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load expenses');
-      toast.error('Failed to load expenses');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch expenses when filters or page changes
-  useEffect(() => {
-    fetchExpenses();
-  }, [filters, currentPage]);
-
-  // Debounced search
+  // Debounced search - update store filters
   useEffect(() => {
     const timer = setTimeout(() => {
-      setFilters((prev) => ({ ...prev, search: searchInput || undefined }));
-      setCurrentPage(1);
+      setFilters({ search: searchInput || undefined });
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchInput]);
+  }, [searchInput, setFilters]);
+
+  // Clear all filters
+  const clearFilters = () => {
+    resetFilters();
+    setSearchInput('');
+  };
+
+  // Handle filter changes
+  const handleCategoryChange = (category: string) => {
+    setFilters({
+      category: category ? (category as ExpenseCategory) : undefined,
+    });
+  };
+
+  const handleSortChange = (sortValue: string) => {
+    const [sort_by, order] = sortValue.split('-') as ['date' | 'amount', 'asc' | 'desc'];
+    setFilters({ sort_by, order });
+  };
 
   // Check if any filters are active
   const hasActiveFilters = () => {
@@ -95,26 +80,14 @@ const ExpenseListPage = () => {
     );
   };
 
-  // Clear all filters
-  const clearFilters = () => {
-    setFilters({ sort_by: 'date', order: 'desc' });
-    setSearchInput('');
-    setCurrentPage(1);
-  };
-
-  // Handle filter changes
-  const handleCategoryChange = (category: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      category: category ? (category as ExpenseCategory) : undefined,
-    }));
-    setCurrentPage(1);
-  };
-
-  const handleSortChange = (sortValue: string) => {
-    const [sort_by, order] = sortValue.split('-') as ['date' | 'amount', 'asc' | 'desc'];
-    setFilters((prev) => ({ ...prev, sort_by, order }));
-    setCurrentPage(1);
+  // Count active filters
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (filters.category) count++;
+    if (filters.search) count++;
+    if (filters.start_date) count++;
+    if (filters.end_date) count++;
+    return count;
   };
 
   // Pagination helpers
@@ -135,17 +108,15 @@ const ExpenseListPage = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-            Expenses
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Expenses</h1>
           {total > 0 && (
-            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-semibold">
-              {total}
-            </span>
+            <div className="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/15 text-purple-700 dark:text-purple-400">
+              <span className="text-sm font-semibold">{total}</span>
+            </div>
           )}
         </div>
 
@@ -155,7 +126,7 @@ const ExpenseListPage = () => {
             setSelectedExpense(null);
             setIsEditModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-colors bg-purple-600 hover:bg-purple-700"
         >
           <PlusCircle size={20} />
           Add Expense
@@ -163,14 +134,14 @@ const ExpenseListPage = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-card p-4">
+      <div className="rounded-[20px] p-5 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
         <div className="space-y-3">
           {/* Row 1: Search + Category */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* Search */}
             <div className="relative">
               <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-600"
                 size={18}
               />
               <input
@@ -178,7 +149,7 @@ const ExpenseListPage = () => {
                 placeholder="Search expenses..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-3 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
               />
             </div>
 
@@ -186,11 +157,13 @@ const ExpenseListPage = () => {
             <select
               value={filters.category || ''}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             >
-              <option value="">All Categories</option>
+              <option value="" className="bg-white dark:bg-[#1A1D26]">
+                All Categories
+              </option>
               {CATEGORIES.map((cat) => (
-                <option key={cat.value} value={cat.value}>
+                <option key={cat.value} value={cat.value} className="bg-white dark:bg-[#1A1D26]">
                   {cat.emoji} {cat.label}
                 </option>
               ))}
@@ -204,13 +177,11 @@ const ExpenseListPage = () => {
               type="date"
               value={filters.start_date || ''}
               onChange={(e) => {
-                setFilters((prev) => ({
-                  ...prev,
+                setFilters({
                   start_date: e.target.value || undefined,
-                }));
-                setCurrentPage(1);
+                });
               }}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             />
 
             {/* End Date */}
@@ -218,72 +189,115 @@ const ExpenseListPage = () => {
               type="date"
               value={filters.end_date || ''}
               onChange={(e) => {
-                setFilters((prev) => ({
-                  ...prev,
+                setFilters({
                   end_date: e.target.value || undefined,
-                }));
-                setCurrentPage(1);
+                });
               }}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             />
 
             {/* Sort */}
             <select
               value={`${filters.sort_by}-${filters.order}`}
               onChange={(e) => handleSortChange(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             >
-              <option value="date-desc">Date (Newest)</option>
-              <option value="date-asc">Date (Oldest)</option>
-              <option value="amount-desc">Amount (High)</option>
-              <option value="amount-asc">Amount (Low)</option>
+              <option value="date-desc" className="bg-white dark:bg-[#1A1D26]">
+                Date (Newest)
+              </option>
+              <option value="date-asc" className="bg-white dark:bg-[#1A1D26]">
+                Date (Oldest)
+              </option>
+              <option value="amount-desc" className="bg-white dark:bg-[#1A1D26]">
+                Amount (High)
+              </option>
+              <option value="amount-asc" className="bg-white dark:bg-[#1A1D26]">
+                Amount (Low)
+              </option>
             </select>
 
             {/* Clear Filters */}
             {hasActiveFilters() && (
               <button
                 onClick={clearFilters}
-                className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-red-600 dark:text-red-400 transition-colors border border-red-300 dark:border-red-800/30 hover:bg-red-100 dark:hover:bg-red-900/10"
               >
-                <X size={16} />
-                Clear Filters
+                <X size={14} />
+                Clear
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Expenses Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-card overflow-hidden">
+      {/* Expenses List */}
+      <div className="rounded-[20px] overflow-hidden bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
         {isLoading ? (
-          <div className="p-6">
-            <TableSkeleton rows={PAGE_SIZE} cols={5} />
+          // Loading state
+          <div className="px-4 py-2">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="flex gap-3 items-center p-3">
+                {/* Circle skeleton */}
+                <div className="rounded-xl animate-pulse flex-shrink-0 w-11 h-11 bg-gray-200 dark:bg-white/[0.05]" />
+
+                {/* Middle block */}
+                <div className="flex-1">
+                  <div className="rounded animate-pulse mb-2 h-3.5 w-32 bg-gray-200 dark:bg-white/[0.05]" />
+                  <div className="rounded animate-pulse h-3 w-48 bg-gray-200 dark:bg-white/[0.05]" />
+                </div>
+
+                {/* Right block */}
+                <div className="ml-auto">
+                  <div className="rounded animate-pulse mb-2 h-4 w-16 bg-gray-200 dark:bg-white/[0.05]" />
+                  <div className="rounded animate-pulse h-3 w-12 bg-gray-200 dark:bg-white/[0.05]" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : error ? (
           <div className="p-12 text-center">
-            <p className="text-red-600 dark:text-red-400">{error}</p>
+            <p className="text-red-400">{error}</p>
             <button
-              onClick={fetchExpenses}
-              className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              onClick={refetch}
+              className="mt-4 px-4 py-2 rounded-xl font-medium text-white transition-colors"
+              style={{
+                backgroundColor: '#8B5CF6',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#7C3AED';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#8B5CF6';
+              }}
             >
               Retry
             </button>
           </div>
         ) : expenses.length === 0 ? (
-          <div className="p-12 text-center">
+          <div className="py-16 text-center">
             {hasActiveFilters() ? (
               <>
                 {/* Empty state with filters */}
-                <Search className="mx-auto text-gray-400" size={48} />
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  No expenses found
-                </h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Try adjusting your filters
+                <div style={{ fontSize: '48px' }}>🔍</div>
+                <h3 className="text-lg font-semibold text-white mt-4">No results found</h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  Try adjusting or clearing your filters
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="mt-6 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                  className="mt-6 px-6 py-2.5 rounded-xl text-sm font-medium text-gray-400 transition-colors"
+                  style={{
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    backgroundColor: 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    e.currentTarget.style.color = '#FFFFFF';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.color = '#9CA3AF';
+                  }}
                 >
                   Clear Filters
                 </button>
@@ -291,19 +305,26 @@ const ExpenseListPage = () => {
             ) : (
               <>
                 {/* Empty state no expenses */}
-                <CreditCard className="mx-auto text-gray-400" size={48} />
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  No expenses yet
-                </h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Start tracking your spending
+                <div style={{ fontSize: '48px' }}>💸</div>
+                <h3 className="text-lg font-semibold text-white mt-4">No expenses yet</h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  Start tracking your spending journey
                 </p>
                 <button
                   onClick={() => {
                     setSelectedExpense(null);
                     setIsEditModalOpen(true);
                   }}
-                  className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                  className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium text-white transition-colors"
+                  style={{
+                    backgroundColor: '#8B5CF6',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#7C3AED';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#8B5CF6';
+                  }}
                 >
                   <PlusCircle size={20} />
                   Add First Expense
@@ -313,130 +334,131 @@ const ExpenseListPage = () => {
           </div>
         ) : (
           <>
-            {/* Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Title
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {expenses.map((expense) => (
-                    <tr
-                      key={expense.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-                    >
-                      {/* Title */}
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-white">
-                            {expense.title}
-                          </p>
-                          {expense.description && (
-                            <p className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
-                              {expense.description}
-                            </p>
-                          )}
-                        </div>
-                      </td>
+            {/* List Header */}
+            <div
+              className="flex justify-between items-center px-5 py-4"
+              style={{
+                borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+              }}
+            >
+              {/* Left: Transaction count + filter badge */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-400">{total} transactions</span>
+                {hasActiveFilters() && (
+                  <span className="text-xs text-purple-400">
+                    ({getActiveFilterCount()} filter{getActiveFilterCount() !== 1 ? 's' : ''}{' '}
+                    active)
+                  </span>
+                )}
+              </div>
 
-                      {/* Category */}
-                      <td className="px-6 py-4">
-                        <Badge category={expense.category} label={expense.category} size="sm" />
-                      </td>
+              {/* Right: Sort indicator */}
+              <span className="text-xs text-gray-600">
+                Sort:{' '}
+                {filters.sort_by === 'date'
+                  ? filters.order === 'desc'
+                    ? 'Newest'
+                    : 'Oldest'
+                  : filters.order === 'desc'
+                  ? 'High to Low'
+                  : 'Low to High'}
+              </span>
+            </div>
 
-                      {/* Amount */}
-                      <td className="px-6 py-4 text-right">
-                        <span className="font-semibold text-red-500">
-                          {formatCurrency(expense.amount)}
-                        </span>
-                      </td>
-
-                      {/* Date */}
-                      <td className="px-6 py-4 text-right">
-                        <span className="text-sm text-gray-400">
-                          {formatDate(expense.date)}
-                        </span>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-center gap-2">
-                          {/* Edit Button */}
-                          <button
-                            onClick={() => {
-                              setSelectedExpense(expense);
-                              setIsEditModalOpen(true);
-                            }}
-                            className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                            title="Edit expense"
-                          >
-                            <Pencil size={18} />
-                          </button>
-
-                          {/* Delete Button */}
-                          <button
-                            onClick={() => {
-                              setExpenseToDelete(expense);
-                              setIsDeleteModalOpen(true);
-                            }}
-                            className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                            title="Delete expense"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            {/* Transaction Rows */}
+            <div className="px-4 py-2">
+              {expenses.map((expense, index) => (
+                <TransactionRow
+                  key={expense.id}
+                  expense={expense}
+                  index={index}
+                  showActions={true}
+                  compact={false}
+                  onEdit={(e) => {
+                    setSelectedExpense(e);
+                    setIsEditModalOpen(true);
+                  }}
+                  onDelete={(e) => {
+                    setExpenseToDelete(e);
+                    setIsDeleteModalOpen(true);
+                  }}
+                />
+              ))}
             </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+              <div
+                className="flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-4"
+                style={{
+                  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                }}
+              >
                 {/* Results info */}
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Showing {startIndex}–{endIndex} of {total} expenses
+                <p className="text-xs text-gray-600">
+                  Showing {startIndex}–{endIndex} of {total}
                 </p>
 
                 {/* Page controls */}
                 <div className="flex items-center gap-2">
                   {/* Previous button */}
                   <button
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    onClick={() => setPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="p-2 text-gray-400 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (currentPage !== 1) {
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                        e.currentTarget.style.color = '#FFFFFF';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (currentPage !== 1) {
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+                        e.currentTarget.style.color = '#9CA3AF';
+                      }
+                    }}
                   >
-                    <ChevronLeft size={20} />
+                    <ChevronLeft size={16} />
                   </button>
 
                   {/* Page numbers */}
                   {getPageNumbers().map((page) => (
                     <button
                       key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                        page === currentPage
-                          ? 'bg-blue-600 text-white'
-                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      onClick={() => setPage(page)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        page === currentPage ? '' : ''
                       }`}
+                      style={
+                        page === currentPage
+                          ? {
+                              backgroundColor: '#8B5CF6',
+                              color: '#FFFFFF',
+                              border: '1px solid #8B5CF6',
+                            }
+                          : {
+                              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                              color: '#9CA3AF',
+                              border: '1px solid rgba(255, 255, 255, 0.06)',
+                            }
+                      }
+                      onMouseEnter={(e) => {
+                        if (page !== currentPage) {
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                          e.currentTarget.style.color = '#FFFFFF';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (page !== currentPage) {
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+                          e.currentTarget.style.color = '#9CA3AF';
+                        }
+                      }}
                     >
                       {page}
                     </button>
@@ -444,11 +466,27 @@ const ExpenseListPage = () => {
 
                   {/* Next button */}
                   <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="p-2 text-gray-400 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (currentPage !== totalPages) {
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                        e.currentTarget.style.color = '#FFFFFF';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (currentPage !== totalPages) {
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+                        e.currentTarget.style.color = '#9CA3AF';
+                      }
+                    }}
                   >
-                    <ChevronRight size={20} />
+                    <ChevronRight size={16} />
                   </button>
                 </div>
               </div>
@@ -465,7 +503,7 @@ const ExpenseListPage = () => {
           setIsEditModalOpen(false);
           setSelectedExpense(null);
         }}
-        onSuccess={fetchExpenses}
+        onSuccess={refetch}
       />
 
       <DeleteConfirmModal
@@ -475,7 +513,7 @@ const ExpenseListPage = () => {
           setIsDeleteModalOpen(false);
           setExpenseToDelete(null);
         }}
-        onSuccess={fetchExpenses}
+        onSuccess={refetch}
       />
     </div>
   );

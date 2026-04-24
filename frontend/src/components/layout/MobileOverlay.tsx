@@ -17,7 +17,7 @@ const MobileOverlay = ({ isOpen, onClose }: MobileOverlayProps) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 lg:hidden"
         />
       )}
     </AnimatePresence>

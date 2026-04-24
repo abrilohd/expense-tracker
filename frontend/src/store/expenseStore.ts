@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import toast from 'react-hot-toast';
 import * as api from '../api/expenses';
+import { PAGE_SIZE } from '../utils/constants';
 import type {
   Expense,
   ExpenseCreate,
@@ -15,177 +16,206 @@ import type {
 } from '../types';
 
 interface ExpenseState {
-  // State
+  // Expense list
   expenses: Expense[];
   total: number;
-  isLoading: boolean;
-  error: string | null;
-  filters: FilterParams;
+  isLoadingExpenses: boolean;
+  expensesError: string | null;
+
+  // Dashboard
   dashboard: DashboardData | null;
+  isLoadingDashboard: boolean;
+  dashboardError: string | null;
+
+  // Insights
   insights: InsightsResponse | null;
+  isLoadingInsights: boolean;
+  insightsError: string | null;
+
+  // Filters + pagination
+  filters: FilterParams;
+  currentPage: number;
+
+  // Mutation states
+  isSaving: boolean;
+  isDeleting: boolean;
 
   // Actions
   fetchExpenses: (params?: FilterParams) => Promise<void>;
   fetchDashboard: () => Promise<void>;
   fetchInsights: (days?: number) => Promise<void>;
   addExpense: (data: ExpenseCreate) => Promise<void>;
-  updateExpense: (id: number, data: ExpenseUpdate) => Promise<void>;
-  deleteExpense: (id: number) => Promise<void>;
-  setFilters: (filters: Partial<FilterParams>) => void;
-  clearError: () => void;
-  reset: () => void;
+  editExpense: (id: number, data: ExpenseUpdate) => Promise<void>;
+  removeExpense: (id: number) => Promise<void>;
+  setFilters: (newFilters: Partial<FilterParams>) => void;
+  setPage: (page: number) => void;
+  clearDashboard: () => void;
+  resetFilters: () => void;
 }
-
-// Initial state
-const initialState = {
-  expenses: [],
-  total: 0,
-  isLoading: false,
-  error: null,
-  filters: {},
-  dashboard: null,
-  insights: null,
-};
 
 export const useExpenseStore = create<ExpenseState>()(
   immer((set, get) => ({
     // Initial state
-    ...initialState,
+    expenses: [],
+    total: 0,
+    isLoadingExpenses: false,
+    expensesError: null,
 
-    // Fetch expenses with optional filters
+    dashboard: null,
+    isLoadingDashboard: false,
+    dashboardError: null,
+
+    insights: null,
+    isLoadingInsights: false,
+    insightsError: null,
+
+    filters: {},
+    currentPage: 1,
+
+    isSaving: false,
+    isDeleting: false,
+
+    // Fetch expenses with filters and pagination
     fetchExpenses: async (params?: FilterParams) => {
       set((state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.isLoadingExpenses = true;
+        state.expensesError = null;
       });
 
       try {
-        // Merge with current filters if params provided
-        const finalParams = params || get().filters;
-        const response = await api.getExpenses(finalParams);
+        const { filters, currentPage } = get();
+
+        // Merge filters with params and add pagination
+        const response = await api.getExpenses({
+          ...filters,
+          ...params,
+          skip: (currentPage - 1) * PAGE_SIZE,
+          limit: PAGE_SIZE,
+        });
 
         set((state) => {
           state.expenses = response.items;
           state.total = response.total;
-          state.isLoading = false;
+          state.isLoadingExpenses = false;
         });
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch expenses';
         set((state) => {
-          state.error = errorMessage;
-          state.isLoading = false;
+          state.expensesError = error instanceof Error ? error.message : 'Failed to load expenses';
+          state.isLoadingExpenses = false;
         });
-        toast.error(errorMessage);
       }
     },
 
-    // Fetch dashboard data
+    // Fetch dashboard analytics
     fetchDashboard: async () => {
       set((state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.isLoadingDashboard = true;
+        state.dashboardError = null;
       });
 
       try {
-        const dashboardData = await api.getDashboard();
+        const dashboard = await api.getDashboard();
 
         set((state) => {
-          state.dashboard = dashboardData;
-          state.isLoading = false;
+          state.dashboard = dashboard;
+          state.isLoadingDashboard = false;
         });
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch dashboard';
         set((state) => {
-          state.error = errorMessage;
-          state.isLoading = false;
+          state.dashboardError = error instanceof Error ? error.message : 'Failed to load dashboard';
+          state.isLoadingDashboard = false;
         });
-        toast.error(errorMessage);
       }
     },
 
     // Fetch AI insights
     fetchInsights: async (days: number = 30) => {
       set((state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.isLoadingInsights = true;
+        state.insightsError = null;
       });
 
       try {
-        const insightsData = await api.getInsights(days);
+        const insights = await api.getInsights(days);
 
         set((state) => {
-          state.insights = insightsData;
-          state.isLoading = false;
+          state.insights = insights;
+          state.isLoadingInsights = false;
         });
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch insights';
         set((state) => {
-          state.error = errorMessage;
-          state.isLoading = false;
+          state.insightsError = error instanceof Error ? error.message : 'Failed to load insights';
+          state.isLoadingInsights = false;
         });
-        toast.error(errorMessage);
       }
     },
 
     // Add expense with optimistic update
     addExpense: async (data: ExpenseCreate) => {
-      // Create temporary expense for optimistic update
+      set((state) => {
+        state.isSaving = true;
+      });
+
+      // Create temp expense for optimistic update
       const tempExpense: Expense = {
-        id: Date.now(), // Temporary ID
-        ...data,
-        user_id: 0, // Will be set by backend
+        id: -1,
+        title: data.title,
+        amount: data.amount,
+        category: data.category,
+        date: data.date,
+        description: data.description,
+        user_id: 0, // Will be set by server
       };
 
-      // Optimistic update
+      // Optimistically add to list
       set((state) => {
         state.expenses.unshift(tempExpense);
-        state.total += 1;
       });
 
       try {
-        // API call
         const newExpense = await api.createExpense(data);
 
-        // Replace temp expense with real one
+        // Replace temp with real expense
         set((state) => {
-          const index = state.expenses.findIndex((e) => e.id === tempExpense.id);
+          const index = state.expenses.findIndex((e) => e.id === -1);
           if (index !== -1) {
             state.expenses[index] = newExpense;
           }
+          state.total += 1;
+          state.dashboard = null; // Invalidate dashboard
+          state.isSaving = false;
         });
 
-        toast.success('Expense added successfully');
-
-        // Refresh dashboard if loaded
-        if (get().dashboard) {
-          get().fetchDashboard();
-        }
+        toast.success('Expense added!');
       } catch (error) {
-        // Revert optimistic update
+        // Remove temp expense on error
         set((state) => {
-          state.expenses = state.expenses.filter((e) => e.id !== tempExpense.id);
-          state.total -= 1;
+          state.expenses = state.expenses.filter((e) => e.id !== -1);
+          state.isSaving = false;
         });
 
-        const errorMessage = error instanceof Error ? error.message : 'Failed to add expense';
-        set((state) => {
-          state.error = errorMessage;
-        });
-        toast.error(errorMessage);
+        toast.error(error instanceof Error ? error.message : 'Failed to add expense');
         throw error;
       }
     },
 
-    // Update expense with optimistic update
-    updateExpense: async (id: number, data: ExpenseUpdate) => {
-      // Store original expense for rollback
+    // Edit expense with optimistic update
+    editExpense: async (id: number, data: ExpenseUpdate) => {
+      set((state) => {
+        state.isSaving = true;
+      });
+
+      // Save original for rollback
       const originalExpense = get().expenses.find((e) => e.id === id);
       if (!originalExpense) {
+        set((state) => {
+          state.isSaving = false;
+        });
         toast.error('Expense not found');
         return;
       }
 
-      // Optimistic update
+      // Optimistically update
       set((state) => {
         const index = state.expenses.findIndex((e) => e.id === id);
         if (index !== -1) {
@@ -194,104 +224,110 @@ export const useExpenseStore = create<ExpenseState>()(
       });
 
       try {
-        // API call
         const updatedExpense = await api.updateExpense(id, data);
 
-        // Update with real data from server
+        // Replace with server response
         set((state) => {
           const index = state.expenses.findIndex((e) => e.id === id);
           if (index !== -1) {
             state.expenses[index] = updatedExpense;
           }
+          state.dashboard = null; // Invalidate dashboard
+          state.isSaving = false;
         });
 
-        toast.success('Expense updated successfully');
-
-        // Refresh dashboard if loaded
-        if (get().dashboard) {
-          get().fetchDashboard();
-        }
+        toast.success('Expense updated!');
       } catch (error) {
-        // Revert optimistic update
+        // Rollback on error
         set((state) => {
           const index = state.expenses.findIndex((e) => e.id === id);
           if (index !== -1) {
             state.expenses[index] = originalExpense;
           }
+          state.isSaving = false;
         });
 
-        const errorMessage = error instanceof Error ? error.message : 'Failed to update expense';
-        set((state) => {
-          state.error = errorMessage;
-        });
-        toast.error(errorMessage);
+        toast.error(error instanceof Error ? error.message : 'Failed to update expense');
         throw error;
       }
     },
 
-    // Delete expense with optimistic update
-    deleteExpense: async (id: number) => {
-      // Store original expense for rollback
-      const originalExpense = get().expenses.find((e) => e.id === id);
-      if (!originalExpense) {
+    // Remove expense with optimistic update
+    removeExpense: async (id: number) => {
+      set((state) => {
+        state.isDeleting = true;
+      });
+
+      // Save for rollback
+      const removedExpense = get().expenses.find((e) => e.id === id);
+      const removedIndex = get().expenses.findIndex((e) => e.id === id);
+      const originalTotal = get().total;
+
+      if (!removedExpense) {
+        set((state) => {
+          state.isDeleting = false;
+        });
         toast.error('Expense not found');
         return;
       }
 
-      const originalIndex = get().expenses.findIndex((e) => e.id === id);
-
-      // Optimistic delete
+      // Optimistically remove
       set((state) => {
         state.expenses = state.expenses.filter((e) => e.id !== id);
         state.total -= 1;
       });
 
       try {
-        // API call
         await api.deleteExpense(id);
 
-        toast.success('Expense deleted successfully');
+        // Success - invalidate dashboard
+        set((state) => {
+          state.dashboard = null;
+          state.isDeleting = false;
+        });
 
-        // Refresh dashboard if loaded
-        if (get().dashboard) {
-          get().fetchDashboard();
-        }
+        toast.success('Expense deleted!');
       } catch (error) {
-        // Revert optimistic delete - restore at original position
+        // Rollback on error
         set((state) => {
-          state.expenses.splice(originalIndex, 0, originalExpense);
-          state.total += 1;
+          state.expenses.splice(removedIndex, 0, removedExpense);
+          state.total = originalTotal;
+          state.isDeleting = false;
         });
 
-        const errorMessage = error instanceof Error ? error.message : 'Failed to delete expense';
-        set((state) => {
-          state.error = errorMessage;
-        });
-        toast.error(errorMessage);
+        toast.error(error instanceof Error ? error.message : 'Failed to delete expense');
         throw error;
       }
     },
 
-    // Update filters and trigger re-fetch
+    // Update filters (does not auto-fetch)
     setFilters: (newFilters: Partial<FilterParams>) => {
       set((state) => {
         state.filters = { ...state.filters, ...newFilters };
+        state.currentPage = 1; // Reset to first page
       });
-
-      // Trigger re-fetch with new filters
-      get().fetchExpenses();
     },
 
-    // Clear error message
-    clearError: () => {
+    // Update current page (does not auto-fetch)
+    setPage: (page: number) => {
       set((state) => {
-        state.error = null;
+        state.currentPage = page;
       });
     },
 
-    // Reset store to initial state (useful for logout)
-    reset: () => {
-      set(initialState);
+    // Clear dashboard to force re-fetch
+    clearDashboard: () => {
+      set((state) => {
+        state.dashboard = null;
+      });
+    },
+
+    // Reset filters to default
+    resetFilters: () => {
+      set((state) => {
+        state.filters = {};
+        state.currentPage = 1;
+      });
     },
   }))
 );
