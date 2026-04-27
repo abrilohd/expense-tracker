@@ -114,17 +114,17 @@ const DashboardPage = () => {
   const countSparklineData = data.monthly_trends.slice(-7).map((t) => t.count);
 
   return (
-    <div className="space-y-6 md:space-y-8">
+    <div className="space-y-4 md:space-y-6 lg:space-y-8">
       {/* Quick Stats Pills */}
       {!isLoading && data && (
         <motion.div
-          className="flex gap-3 flex-wrap"
+          className="flex gap-2 flex-wrap"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.5 }}
         >
           {/* Pill 1: Total */}
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
             <div className="rounded-full w-2 h-2 bg-purple-600" />
             <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
               Total: {formatCurrency(data.total_expenses)}
@@ -132,7 +132,7 @@ const DashboardPage = () => {
           </div>
 
           {/* Pill 2: Transactions */}
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
             <div className="rounded-full w-2 h-2 bg-blue-600" />
             <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
               {data.total_count} transactions
@@ -140,7 +140,7 @@ const DashboardPage = () => {
           </div>
 
           {/* Pill 3: Average */}
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
             <div className="rounded-full w-2 h-2 bg-green-600" />
             <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
               Avg: {formatCurrency(data.average_expense)}
@@ -151,18 +151,18 @@ const DashboardPage = () => {
 
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
           {getGreeting()}, {getUserName()}! 👋
         </h1>
-        <p className="text-sm md:text-base text-gray-600 dark:text-gray-500 mt-2">
+        <p className="text-sm md:text-base text-gray-600 dark:text-gray-500 mt-1 md:mt-2">
           {format(new Date(), 'EEEE, MMMM d, yyyy')}
         </p>
       </div>
 
       {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 md:gap-6 lg:gap-8">
         {/* Left Column */}
-        <div className="space-y-6 md:space-y-8">
+        <div className="space-y-4 md:space-y-6 lg:space-y-8">
           {/* Hero Card */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -178,7 +178,7 @@ const DashboardPage = () => {
 
           {/* Stats Row */}
           <motion.div
-            className="grid grid-cols-2 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"
             initial="hidden"
             animate="visible"
             variants={{
@@ -241,7 +241,7 @@ const DashboardPage = () => {
 
         {/* Right Column */}
         <motion.div
-          className="space-y-6 md:space-y-8"
+          className="space-y-4 md:space-y-6 lg:space-y-8"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
@@ -269,19 +269,19 @@ const DashboardPage = () => {
 
       {/* Income vs Expense Summary Row */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-5 lg:gap-6"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.25 }}
       >
         {/* This Month Spending Card */}
-        <div className="rounded-2xl p-5 flex items-center gap-4 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
-          <div className="flex items-center justify-center rounded-xl flex-shrink-0 w-12 h-12 bg-red-100 dark:bg-[#3B1219]">
-            <TrendingUp size={24} className="text-red-500 dark:text-red-400" style={{ transform: 'rotate(180deg)' }} />
+        <div className="rounded-2xl p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+          <div className="flex items-center justify-center rounded-xl flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-red-100 dark:bg-[#3B1219]">
+            <TrendingUp size={20} className="md:w-6 md:h-6 text-red-500 dark:text-red-400" style={{ transform: 'rotate(180deg)' }} />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <p className="text-xs text-gray-600 dark:text-gray-500 mb-1">This Month Spending</p>
-            <p className="text-xl font-bold text-gray-900 dark:text-white">
+            <p className="text-lg md:text-xl font-bold text-gray-900 dark:text-white truncate">
               {formatCurrency(data.current_month_total)}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-600 mt-0.5">
@@ -291,13 +291,13 @@ const DashboardPage = () => {
         </div>
 
         {/* Avg per Transaction Card */}
-        <div className="rounded-2xl p-5 flex items-center gap-4 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
-          <div className="flex items-center justify-center rounded-xl flex-shrink-0 w-12 h-12 bg-purple-100 dark:bg-[#2D1B69]">
-            <ArrowUpRight size={24} className="text-purple-600 dark:text-purple-400" />
+        <div className="rounded-2xl p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+          <div className="flex items-center justify-center rounded-xl flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-purple-100 dark:bg-[#2D1B69]">
+            <ArrowUpRight size={20} className="md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <p className="text-xs text-gray-600 dark:text-gray-500 mb-1">Avg per Transaction</p>
-            <p className="text-xl font-bold text-gray-900 dark:text-white">{formatCurrency(data.average_expense)}</p>
+            <p className="text-lg md:text-xl font-bold text-gray-900 dark:text-white truncate">{formatCurrency(data.average_expense)}</p>
             <p className="text-xs text-gray-500 dark:text-gray-600 mt-0.5">
               Based on {data.total_count} expenses
             </p>
@@ -307,7 +307,7 @@ const DashboardPage = () => {
 
       {/* Charts Row */}
       <motion.div
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.3 }}
@@ -329,15 +329,15 @@ const DashboardPage = () => {
           transition={{ duration: 0.4, delay: 0.4 }}
         >
           {/* Section header */}
-          <div className="mb-5">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Category Breakdown</h2>
+          <div className="mb-4 md:mb-5">
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">Category Breakdown</h2>
             <p className="text-sm text-gray-600 dark:text-gray-500 mt-1">
               Detailed spending by category
             </p>
           </div>
 
           {/* Category cards grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
             {data.categories.slice(0, 8).map((category, index) => (
               <CategoryCard
                 key={category.category}

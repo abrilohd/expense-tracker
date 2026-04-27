@@ -85,3 +85,79 @@ export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + '...';
 };
+
+/**
+ * Format currency in compact notation for charts
+ * @example formatCompactCurrency(1234) → "$1.2k"
+ * @example formatCompactCurrency(1234567) → "$1.2M"
+ */
+export const formatCompactCurrency = (amount: number): string => {
+  if (amount < 1000) {
+    return `$${Math.round(amount)}`;
+  } else if (amount < 1000000) {
+    return `$${(amount / 1000).toFixed(1)}k`;
+  } else {
+    return `$${(amount / 1000000).toFixed(1)}M`;
+  }
+};
+
+/**
+ * Get month name from month string
+ * @example getMonthName("2026-04") → "Apr"
+ * @example getMonthName("2026-04", false) → "April"
+ */
+export const getMonthName = (monthStr: string, short: boolean = true): string => {
+  const [year, month] = monthStr.split('-');
+  const date = new Date(parseInt(year), parseInt(month) - 1);
+  return format(date, short ? 'MMM' : 'MMMM');
+};
+
+/**
+ * Check if date string is in current month
+ * @example isCurrentMonth("2026-04-25") → true (if current month is April 2026)
+ */
+export const isCurrentMonth = (dateStr: string): boolean => {
+  const date = parseISO(dateStr);
+  const now = new Date();
+  return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+};
+
+/**
+ * Get number of days elapsed in current month
+ * @example getDaysInMonth() → 25 (if today is April 25th)
+ */
+export const getDaysInMonth = (): number => {
+  const now = new Date();
+  return now.getDate();
+};
+
+/**
+ * Calculate trend percentage between two values
+ * @example calculateTrend(150, 100) → { percentage: 50, isPositive: true, isNeutral: false }
+ * @example calculateTrend(100, 0) → { percentage: 0, isPositive: false, isNeutral: true }
+ */
+export const calculateTrend = (
+  current: number,
+  previous: number
+): {
+  percentage: number;
+  isPositive: boolean;
+  isNeutral: boolean;
+} => {
+  // Handle division by zero
+  if (previous === 0) {
+    return {
+      percentage: 0,
+      isPositive: false,
+      isNeutral: true,
+    };
+  }
+
+  const percentage = ((current - previous) / previous) * 100;
+
+  return {
+    percentage: Math.round(percentage * 10) / 10, // Round to 1 decimal
+    isPositive: current > previous,
+    isNeutral: false,
+  };
+};

@@ -42,13 +42,13 @@ const BudgetOverviewCard = ({
   // Loading state
   if (isLoading) {
     return (
-      <div className="rounded-[20px] p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+      <div className="rounded-2xl md:rounded-[20px] p-5 md:p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex gap-3 items-center py-3">
-              <div className="rounded-xl animate-pulse w-10 h-10 bg-gray-200 dark:bg-white/[0.05]" />
-              <div className="flex-1">
-                <div className="rounded animate-pulse mb-2 h-3 w-32 bg-gray-200 dark:bg-white/[0.05]" />
+            <div key={i} className="flex gap-2 md:gap-3 items-center py-2 md:py-3">
+              <div className="rounded-xl animate-pulse w-9 h-9 md:w-10 md:h-10 bg-gray-200 dark:bg-white/[0.05]" />
+              <div className="flex-1 min-w-0">
+                <div className="rounded animate-pulse mb-2 h-2.5 md:h-3 w-24 md:w-32 bg-gray-200 dark:bg-white/[0.05]" />
                 <div className="rounded animate-pulse h-1.5 w-full bg-gray-200 dark:bg-white/[0.05]" />
               </div>
             </div>
@@ -61,12 +61,12 @@ const BudgetOverviewCard = ({
   // Empty state
   if (!categories || categories.length === 0) {
     return (
-      <div className="rounded-[20px] p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">Budget Overview</h3>
-        <p className="text-xs text-gray-600 dark:text-gray-500 mb-6">Spending by category</p>
+      <div className="rounded-2xl md:rounded-[20px] p-5 md:p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+        <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white mb-1">Budget Overview</h3>
+        <p className="text-xs text-gray-600 dark:text-gray-500 mb-5 md:mb-6">Spending by category</p>
 
-        <div className="flex flex-col items-center justify-center py-8">
-          <PieChart size={28} className="text-gray-400 dark:text-gray-700 mb-3" />
+        <div className="flex flex-col items-center justify-center py-6 md:py-8">
+          <PieChart size={24} className="md:w-7 md:h-7 text-gray-400 dark:text-gray-700 mb-3" />
           <p className="text-sm text-gray-500 dark:text-gray-600 mb-1">No spending data</p>
           <p className="text-xs text-gray-400 dark:text-gray-700">Add expenses to see breakdown</p>
         </div>
@@ -75,17 +75,17 @@ const BudgetOverviewCard = ({
   }
 
   return (
-    <div className="rounded-[20px] p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+    <div className="rounded-2xl md:rounded-[20px] p-5 md:p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
       {/* Header row */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3 md:mb-4">
         {/* Left: Title + subtitle */}
         <div>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Budget Overview</h3>
+          <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">Budget Overview</h3>
           <p className="text-xs text-gray-600 dark:text-gray-500 mt-0.5">Spending by category</p>
         </div>
 
         {/* Right: Total amount pill */}
-        <div className="rounded-full px-3 py-1 bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08]">
+        <div className="rounded-full px-2.5 md:px-3 py-1 bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] self-start">
           <span className="text-xs text-gray-700 dark:text-gray-300">
             Total: {formatCurrency(totalSpent)}
           </span>
@@ -93,10 +93,10 @@ const BudgetOverviewCard = ({
       </div>
 
       {/* Sort toggle */}
-      <div className="flex gap-1 mb-4">
+      <div className="w-full grid grid-cols-2 sm:inline-flex gap-1 mb-3 md:mb-4">
         <button
           onClick={() => setSortBy('amount')}
-          className={`text-xs px-3 py-1 rounded-lg transition-all duration-200 ${
+          className={`flex-1 sm:flex-none text-xs px-3 py-1.5 sm:py-1 rounded-lg text-center transition-all duration-200 ${
             sortBy === 'amount' ? 'border border-purple-500/20 bg-purple-100 dark:bg-purple-900/15 text-purple-700 dark:text-purple-400' : 'text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400'
           }`}
         >
@@ -105,7 +105,7 @@ const BudgetOverviewCard = ({
 
         <button
           onClick={() => setSortBy('count')}
-          className={`text-xs px-3 py-1 rounded-lg transition-all duration-200 ${
+          className={`flex-1 sm:flex-none text-xs px-3 py-1.5 sm:py-1 rounded-lg text-center transition-all duration-200 ${
             sortBy === 'count' ? 'border border-purple-500/20 bg-purple-100 dark:bg-purple-900/15 text-purple-700 dark:text-purple-400' : 'text-gray-600 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-400'
           }`}
         >
@@ -133,6 +133,9 @@ const BudgetOverviewCard = ({
           .rounded-\\[20px\\] > div > div:last-child {
             border-bottom: none !important;
           }
+          .rounded-2xl > div > div:last-child {
+            border-bottom: none !important;
+          }
         `}</style>
       </div>
 
@@ -140,7 +143,7 @@ const BudgetOverviewCard = ({
       {sortedCategories.length > 6 && (
         <button
           onClick={() => setShowAll(!showAll)}
-          className="text-xs text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors mt-3 w-full text-center cursor-pointer"
+          className="text-xs text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors mt-3 py-2 md:py-1 w-full text-center cursor-pointer"
         >
           {showAll
             ? 'Show less'

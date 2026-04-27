@@ -12,8 +12,10 @@ type Theme = 'light' | 'dark';
 
 interface UseDarkModeReturn {
   isDark: boolean;
-  toggleDark: () => void;
-  setTheme: (theme: Theme) => void;
+  toggle: () => void;
+  setDark: (dark: boolean) => void;
+  toggleDark: () => void; // Deprecated: use toggle instead
+  setTheme: (theme: Theme) => void; // Deprecated: use setDark instead
 }
 
 /**
@@ -102,10 +104,17 @@ export const useDarkMode = (): UseDarkModeReturn => {
     setThemeState(newTheme);
   };
 
+  // Set dark mode directly
+  const setDark = (dark: boolean) => {
+    setThemeState(dark ? 'dark' : 'light');
+  };
+
   return {
     isDark: theme === 'dark',
-    toggleDark,
-    setTheme,
+    toggle: toggleDark, // Primary API
+    setDark, // Primary API
+    toggleDark, // Backward compatibility
+    setTheme, // Backward compatibility
   };
 };
 

@@ -1,0 +1,268 @@
+/**
+ * Stats Section Styles
+ * ALL values must reference tokens from tokens.css
+ */
+
+/* ============================================
+   STATS SECTION
+   ============================================ */
+
+.stats {
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
+  position: relative;
+}
+
+.stats__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+/* ============================================
+   STATS GRID
+   ============================================ */
+
+.stats__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-7);
+}
+
+/* ============================================
+   STAT CARD
+   ============================================ */
+
+.stat-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  border: var(--border-width-1) solid var(--border-subtle);
+  transition: transform var(--duration-medium) var(--ease-premium),
+              box-shadow var(--duration-medium) var(--ease-premium),
+              border-color var(--duration-medium) var(--ease-premium);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-glass-hover);
+}
+
+.stat-card:focus-within {
+  outline: var(--border-width-2) solid var(--accent-primary);
+  outline-offset: var(--space-1);
+}
+
+.stat-card__number {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: var(--weight-bold);
+  color: var(--accent-primary);
+  line-height: var(--leading-none);
+  text-shadow: var(--glow-accent);
+  min-height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-medium) var(--ease-premium);
+}
+
+.stat-card:hover .stat-card__number {
+  transform: scale(1.05);
+}
+
+.stat-card__label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* ============================================
+   TESTIMONIALS
+   ============================================ */
+
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8);
+  padding-top: var(--space-7);
+}
+
+/* ============================================
+   TESTIMONIAL CARD
+   ============================================ */
+
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-8);
+  transition: transform var(--duration-medium) var(--ease-premium),
+              box-shadow var(--duration-medium) var(--ease-premium);
+  will-change: transform, opacity;
+}
+
+.testimonial-card.is-visible {
+  will-change: auto;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-2px);
+}
+
+.testimonial-card__quote {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-regular);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  font-style: italic;
+  position: relative;
+}
+
+.testimonial-card__quote::before {
+  content: '"';
+  position: absolute;
+  top: calc(-1 * var(--space-2));
+  left: calc(-1 * var(--space-3));
+  font-size: var(--text-6xl);
+  color: var(--accent-primary);
+  opacity: var(--opacity-20);
+  font-family: var(--font-display);
+  line-height: var(--leading-none);
+}
+
+.testimonial-card__author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.testimonial-card__avatar {
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+}
+
+.testimonial-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.testimonial-card__name {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.testimonial-card__title {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  color: var(--text-muted);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card {
+    transition: none;
+  }
+
+  .testimonial-card {
+    transition: none;
+    will-change: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .stats__grid {
+    gap: var(--space-6);
+  }
+
+  .stat-card__number {
+    font-size: var(--text-4xl);
+  }
+
+  .testimonials {
+    gap: var(--space-6);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+  }
+
+  .stats__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .stat-card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .stat-card__number {
+    font-size: var(--text-4xl);
+  }
+
+  .testimonials {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .testimonial-card {
+    padding: var(--space-6);
+  }
+
+  .testimonial-card__quote {
+    font-size: var(--text-base);
+  }
+  
+  .stats__container {
+    gap: var(--space-12);
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-card__number {
+    font-size: var(--text-3xl);
+    min-height: 2.5rem;
+  }
+
+  .stat-card__label {
+    font-size: var(--text-xs);
+  }
+
+  .testimonial-card__quote {
+    font-size: var(--text-sm);
+  }
+  
+  .stats {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+}

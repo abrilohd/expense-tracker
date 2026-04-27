@@ -1,0 +1,167 @@
+/**
+ * Dashboard Preview Section Styles
+ * ALL values must reference tokens from tokens.css
+ */
+
+/* ============================================
+   DASHBOARD PREVIEW SECTION
+   ============================================ */
+
+.dashboard-preview {
+  position: relative;
+  width: 100%;
+  background: var(--bg-primary);
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-8);
+  overflow: hidden;
+}
+
+.dashboard-preview__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+/* ============================================
+   SECTION HEADING
+   ============================================ */
+
+.dashboard-preview__heading {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  text-align: center;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  max-width: var(--container-md);
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+  margin-bottom: var(--space-0);
+}
+
+.dashboard-preview__heading .accent {
+  color: var(--accent-primary);
+  text-shadow: var(--glow-text);
+}
+
+/* ============================================
+   DASHBOARD IMAGE CONTAINER
+   ============================================ */
+
+.dashboard-preview__image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  will-change: transform;
+}
+
+.dashboard-preview__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  border: var(--border-width-1) solid var(--border-subtle);
+  transition: box-shadow var(--duration-medium) var(--ease-premium),
+              border-color var(--duration-medium) var(--ease-premium),
+              transform var(--duration-medium) var(--ease-premium);
+}
+
+.dashboard-preview__image:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--border-glass-hover);
+  transform: scale(1.01);
+}
+
+/* ============================================
+   DECORATIVE ELEMENTS
+   ============================================ */
+
+.dashboard-preview__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background: var(--gradient-dashboard-glow);
+  pointer-events: none;
+  z-index: var(--z-base);
+  opacity: var(--opacity-50);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-preview__image-wrapper {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .dashboard-preview__image {
+    transition: none;
+  }
+
+  .stat-card {
+    transition: none;
+  }
+
+  .testimonial-card {
+    transition: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-preview__image-wrapper {
+    max-width: 90%;
+  }
+  
+  .dashboard-preview__heading {
+    font-size: var(--text-4xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-preview {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-6);
+  }
+
+  .dashboard-preview__heading {
+    font-size: var(--text-3xl);
+  }
+
+  .dashboard-preview__image-wrapper {
+    max-width: 100%;
+    transform: none !important;
+  }
+
+  .dashboard-preview__container {
+    gap: var(--space-8);
+  }
+  
+  .dashboard-preview__image {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-preview__heading {
+    font-size: var(--text-2xl);
+  }
+
+  .dashboard-preview__image-wrapper {
+    max-width: 100%;
+  }
+  
+  .dashboard-preview {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-4);
+  }
+}

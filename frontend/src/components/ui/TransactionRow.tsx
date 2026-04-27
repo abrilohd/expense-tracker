@@ -64,7 +64,7 @@ const TransactionRow = ({ expense, index, onClick }: TransactionRowProps) => {
       {/* Title + Transaction ID */}
       <div className="flex-1 min-w-0">
         <h4 className="text-sm font-semibold text-white truncate">
-          {expense.title}
+          {expense.title.length > 20 ? `${expense.title.slice(0, 20)}...` : expense.title}
         </h4>
         <div className="flex items-center gap-2 mt-0.5">
           {/* Transaction ID */}
@@ -75,10 +75,10 @@ const TransactionRow = ({ expense, index, onClick }: TransactionRowProps) => {
             #{expense.id.toString().padStart(4, '0')}
           </span>
           {/* Separator dot */}
-          <span style={{ color: '#4B5563' }}>•</span>
-          {/* Category name */}
+          <span className="hidden sm:inline" style={{ color: '#4B5563' }}>•</span>
+          {/* Category name - hidden on mobile */}
           <span
-            className="text-xs"
+            className="text-xs hidden sm:inline"
             style={{ color: colors.primary }}
           >
             {expense.category}
@@ -89,7 +89,7 @@ const TransactionRow = ({ expense, index, onClick }: TransactionRowProps) => {
       {/* Amount + Date */}
       <div className="text-right flex-shrink-0">
         <div
-          className="text-base font-bold"
+          className="text-sm md:text-base font-bold"
           style={{ color: '#F87171' }}
         >
           {formatCurrency(expense.amount)}

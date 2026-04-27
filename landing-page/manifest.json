@@ -1,0 +1,21 @@
+{
+  "name": "Personal Expense Tracker",
+  "short_name": "ExpenseTracker",
+  "description": "Track expenses, visualize spending patterns, and take control of your financial future",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0F",
+  "theme_color": "#00F5C4",
+  "icons": [
+    {
+      "src": "assets/images/profile.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/profile.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

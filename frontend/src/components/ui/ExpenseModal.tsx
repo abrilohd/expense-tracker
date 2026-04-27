@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { Expense } from '../../types';
 import { ExpenseCategory } from '../../types';
@@ -136,112 +136,139 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/50 z-50"
+            className="fixed inset-0 bg-black/75 backdrop-blur-[8px] z-50"
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 pointer-events-none">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+              initial={{ opacity: 0, y: 100, scale: 1 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 100, scale: 0.95 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="bg-[#1A1D26] border border-white/[0.08] rounded-t-3xl rounded-b-none sm:rounded-3xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto pointer-events-auto"
             >
+              {/* Drag Handle (Mobile Only) */}
+              <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mt-3 mb-2 sm:hidden" />
+
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {isEditMode ? 'Edit Expense' : 'Add New Expense'}
-                </h2>
+              <div className="flex justify-between items-start p-5 md:p-7 pb-4 md:pb-6">
+                <div>
+                  <h2 className="text-lg font-semibold text-white">
+                    {isEditMode ? 'Edit Expense' : 'Add Expense'}
+                  </h2>
+                  <p className="text-xs text-gray-500 mt-0.5">Fill in the details below</p>
+                </div>
                 <button
                   onClick={handleClose}
                   disabled={isSubmitting}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-50"
+                  className="w-8 h-8 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-gray-400 hover:text-white flex items-center justify-center transition-colors disabled:opacity-50"
                 >
-                  <X size={24} />
+                  <X size={18} />
                 </button>
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-                {/* Title */}
-                <FormField label="Title" required error={errors.title?.message}>
-                  <input
-                    type="text"
-                    placeholder="e.g. Coffee, Rent, Groceries..."
-                    className={inputClassName}
-                    {...register('title')}
-                  />
-                </FormField>
+              <form onSubmit={handleSubmit(onSubmit)} className="px-5 md:px-7 pb-5 md:pb-7">
+                {/* Transaction Details Section */}
+                <div className="mb-6">
+                  <h3 className="text-xs text-gray-600 uppercase tracking-wider mb-3">
+                    Transaction Details
+                  </h3>
 
-                {/* Amount and Category (side by side) */}
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Amount */}
-                  <FormField label="Amount ($)" required error={errors.amount?.message}>
+                  {/* Title */}
+                  <FormField label="Title" required error={errors.title?.message}>
                     <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      placeholder="0.00"
+                      type="text"
+                      placeholder="e.g. Coffee, Rent, Groceries..."
                       className={inputClassName}
-                      {...register('amount', { valueAsNumber: true })}
+                      {...register('title')}
                     />
                   </FormField>
 
-                  {/* Category */}
-                  <FormField label="Category" required error={errors.category?.message}>
-                    <select className={inputClassName} {...register('category')}>
-                      <option value="">Select category</option>
-                      {CATEGORIES.map((cat) => (
-                        <option key={cat.value} value={cat.value}>
-                          {cat.emoji} {cat.label}
-                        </option>
-                      ))}
-                    </select>
+                  {/* Amount and Category (side by side on desktop, stacked on mobile) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Amount */}
+                    <FormField label="Amount ($)" required error={errors.amount?.message}>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        placeholder="0.00"
+                        className={inputClassName}
+                        {...register('amount', { valueAsNumber: true })}
+                      />
+                    </FormField>
+
+                    {/* Category */}
+                    <FormField label="Category" required error={errors.category?.message}>
+                      <div className="relative">
+                        <select className={`${inputClassName} appearance-none pr-10`} {...register('category')}>
+                          <option value="">Select</option>
+                          {CATEGORIES.map((cat) => (
+                            <option key={cat.value} value={cat.value}>
+                              {cat.emoji} {cat.label}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown
+                          size={16}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 pointer-events-none"
+                        />
+                      </div>
+                    </FormField>
+                  </div>
+                </div>
+
+                {/* Additional Info Section */}
+                <div>
+                  <h3 className="text-xs text-gray-600 uppercase tracking-wider mb-3">
+                    Additional Info
+                  </h3>
+
+                  {/* Date */}
+                  <FormField label="Date" required error={errors.date?.message}>
+                    <input
+                      type="date"
+                      max={getTodayDate()}
+                      className={inputClassName}
+                      {...register('date')}
+                    />
+                  </FormField>
+
+                  {/* Description */}
+                  <FormField
+                    label="Description"
+                    error={errors.description?.message}
+                    hint="Optional notes about this expense"
+                  >
+                    <textarea
+                      rows={3}
+                      placeholder="Add any additional details..."
+                      className={inputClassName}
+                      {...register('description')}
+                    />
                   </FormField>
                 </div>
 
-                {/* Date */}
-                <FormField label="Date" required error={errors.date?.message}>
-                  <input
-                    type="date"
-                    max={getTodayDate()}
-                    className={inputClassName}
-                    {...register('date')}
-                  />
-                </FormField>
-
-                {/* Description */}
-                <FormField
-                  label="Description"
-                  error={errors.description?.message}
-                  hint="Optional notes about this expense"
-                >
-                  <textarea
-                    rows={3}
-                    placeholder="Add any additional details..."
-                    className={inputClassName}
-                    {...register('description')}
-                  />
-                </FormField>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3 pt-4">
+                {/* Footer Buttons */}
+                <div className="border-t border-white/[0.06] mt-6 pt-6 flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
                   <button
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors disabled:opacity-50"
+                    className="btn-ghost flex-1 disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="btn-primary flex-1 disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 size={18} className="animate-spin" />
+                        <Loader2 size={16} className="animate-spin" />
                         Saving...
                       </>
                     ) : (

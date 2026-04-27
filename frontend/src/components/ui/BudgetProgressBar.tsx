@@ -93,8 +93,10 @@ const BudgetProgressBar = ({
       <div className="flex-1 min-w-0">
         {/* Top row: category name + amount */}
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-white">{category}</span>
-          <span className="text-sm font-semibold text-white">
+          <span className="text-xs md:text-sm font-medium text-white truncate mr-2">
+            {category.length > 12 ? `${category.slice(0, 12)}...` : category}
+          </span>
+          <span className="text-xs md:text-sm font-semibold text-white flex-shrink-0">
             {formatCurrency(spent)}
           </span>
         </div>

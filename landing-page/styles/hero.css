@@ -1,0 +1,314 @@
+/**
+ * Hero Section Styles
+ * ALL values must reference tokens from tokens.css
+ */
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: calc(var(--space-8) + var(--space-16));
+}
+
+/* ============================================
+   VIDEO BACKGROUND
+   ============================================ */
+
+.hero__video-container {
+  position: absolute;
+  top: var(--space-0);
+  left: var(--space-0);
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-base);
+  margin: var(--space-0);
+  padding: var(--space-0);
+}
+
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--opacity-40);
+  transition: opacity var(--duration-slow) var(--ease-out);
+  display: block;
+  margin: var(--space-0);
+  padding: var(--space-0);
+}
+
+.hero__video-overlay {
+  position: absolute;
+  top: var(--space-0);
+  left: var(--space-0);
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-video-overlay);
+  pointer-events: none;
+}
+
+/* ============================================
+   HERO CONTENT
+   ============================================ */
+
+.hero__content {
+  position: relative;
+  z-index: var(--z-dropdown);
+  text-align: center;
+  max-width: var(--container-lg);
+}
+
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+/* ============================================
+   HEADLINE
+   ============================================ */
+
+.hero__headline {
+  font-family: var(--font-display);
+  font-size: 3.5rem; /* 56px */
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+  max-width: 48rem;
+  margin-bottom: var(--space-0);
+}
+
+/* ============================================
+   SUBHEADLINE
+   ============================================ */
+
+.hero__subheadline {
+  font-family: var(--font-body);
+  font-size: var(--text-lg); /* 18px */
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+  max-width: 40rem;
+  opacity: var(--opacity-0);
+  animation: entrance-fade-up var(--duration-slower) var(--ease-premium) 0.15s forwards;
+}
+
+@keyframes entrance-fade-up {
+  to {
+    opacity: var(--opacity-100);
+    transform: translateY(var(--space-0));
+  }
+}
+
+/* ============================================
+   CTA BUTTONS
+   ============================================ */
+
+.hero__cta-group {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: var(--opacity-0);
+  animation: entrance-fade-up var(--duration-slower) var(--ease-premium) 0.3s forwards;
+}
+
+/* ============================================
+   BUTTON COMPONENTS
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-8);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-none);
+  border-radius: var(--radius-xl);
+  transition: all var(--duration-medium) var(--ease-premium);
+  cursor: pointer;
+  border: var(--border-width-0);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width var(--duration-medium) var(--ease-premium),
+              height var(--duration-medium) var(--ease-premium);
+}
+
+.btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Primary CTA Button */
+.btn--primary {
+  background: var(--cta-primary);
+  color: var(--text-inverse);
+  box-shadow: var(--glow-cta);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn-primary-hover);
+}
+
+.btn--primary:active {
+  transform: translateY(-1px);
+}
+
+.btn--primary:focus-visible {
+  outline: var(--border-width-2) solid var(--accent-primary);
+  outline-offset: var(--space-1);
+}
+
+.btn--primary:disabled {
+  opacity: var(--opacity-40);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Ghost CTA Button */
+.btn--ghost {
+  background: transparent;
+  color: var(--accent-primary);
+  border: var(--border-width-2) solid var(--accent-primary);
+  box-shadow: var(--glow-accent);
+}
+
+.btn--ghost:hover {
+  background: var(--bg-ghost-hover);
+  box-shadow: var(--shadow-btn-ghost-hover);
+  transform: translateY(-2px);
+}
+
+.btn--ghost:active {
+  transform: translateY(-1px);
+}
+
+.btn--ghost:focus-visible {
+  outline: var(--border-width-2) solid var(--accent-primary);
+  outline-offset: var(--space-1);
+}
+
+.btn--ghost:disabled {
+  opacity: var(--opacity-40);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  border-color: var(--text-tertiary);
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__headline,
+  .hero__subheadline,
+  .hero__cta-group {
+    animation: none;
+    opacity: var(--opacity-100);
+    transform: none;
+  }
+  
+  .hero__headline span {
+    opacity: var(--opacity-100) !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .btn,
+  .btn::before {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 100vh;
+  }
+  
+  .hero__video-container {
+    left: 0;
+    right: 0;
+    width: 100%;
+    transform: none;
+    margin: var(--space-0);
+    padding: var(--space-0);
+  }
+  
+  .hero__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .hero__headline {
+    font-size: var(--text-3xl);
+  }
+  
+  .hero__subheadline {
+    font-size: var(--text-base);
+  }
+  
+  .hero__cta-group {
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+    max-width: 20rem;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .hero__text {
+    gap: var(--space-8);
+    align-items: center;
+  }
+  
+  .hero__content {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__headline {
+    font-size: var(--text-4xl);
+  }
+  
+  .hero {
+    padding-top: calc(var(--space-6) + var(--space-16));
+  }
+  
+  .hero__text {
+    gap: var(--space-6);
+  }
+}

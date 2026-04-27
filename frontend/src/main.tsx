@@ -16,22 +16,26 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Toaster
       position="top-right"
       toastOptions={{
-        duration: 3000,
+        duration: 3500,
         style: {
-          background: 'var(--color-bg-primary)',
-          color: 'var(--color-text-primary)',
-          border: '1px solid var(--color-border)',
+          background: '#1A1D26',
+          color: '#F9FAFB',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '12px',
+          fontSize: '13px',
+          fontFamily: 'Inter, sans-serif',
+          padding: '12px 16px',
         },
         success: {
           iconTheme: {
-            primary: '#10B981',
-            secondary: '#FFFFFF',
+            primary: '#34D399',
+            secondary: '#1A1D26',
           },
         },
         error: {
           iconTheme: {
-            primary: '#EF4444',
-            secondary: '#FFFFFF',
+            primary: '#F87171',
+            secondary: '#1A1D26',
           },
         },
       }}

@@ -82,3 +82,45 @@ export const TableSkeleton = ({ rows = 5, cols = 4 }: TableSkeletonProps) => {
 };
 
 export default LoadingSpinner;
+
+/**
+ * Shimmer Card Skeleton
+ * Reusable card skeleton with shimmer animation effect
+ * Uses .shimmer class from index.css
+ */
+interface ShimmerCardProps {
+  height?: string;
+  className?: string;
+}
+
+export const ShimmerCard: React.FC<ShimmerCardProps> = ({ 
+  height = 'h-32', 
+  className = '' 
+}) => {
+  return (
+    <div 
+      className={`${height} ${className} rounded-2xl shimmer bg-white/[0.03]`}
+    />
+  );
+};
+
+/**
+ * Shimmer Text Skeleton
+ * Reusable text skeleton with shimmer animation effect
+ * Uses .shimmer class from index.css
+ */
+interface ShimmerTextProps {
+  width?: string;
+  className?: string;
+}
+
+export const ShimmerText: React.FC<ShimmerTextProps> = ({ 
+  width = 'w-32', 
+  className = '' 
+}) => {
+  return (
+    <div 
+      className={`h-3 ${width} ${className} rounded-full shimmer bg-white/[0.05]`}
+    />
+  );
+};

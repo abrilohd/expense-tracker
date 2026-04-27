@@ -70,22 +70,22 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
   const layoutStyles = getLayoutStyles(isDark);
 
   return (
-    <header className="sticky top-0 z-30 h-16 px-6 flex items-center justify-between bg-white dark:bg-[#0F1117] border-b border-gray-200 dark:border-white/[0.06]">
+    <header className="sticky top-0 z-30 h-14 lg:h-16 px-4 md:px-6 flex items-center justify-between bg-white dark:bg-[#0F1117] border-b border-gray-200 dark:border-white/[0.06]">
       {/* Left Side */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1">
         {/* Mobile menu button */}
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 rounded-lg transition-colors text-gray-600 dark:text-gray-500 hover:text-gray-900 dark:hover:text-gray-300"
+          className="lg:hidden p-2 rounded-lg transition-colors text-gray-600 dark:text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 flex-shrink-0"
         >
           <Menu size={20} />
         </button>
 
         {/* Page title with subtitle */}
-        <div>
-          <h1 className="text-base font-semibold text-gray-900 dark:text-white">{title}</h1>
+        <div className="min-w-0 flex-1">
+          <h1 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white truncate">{title}</h1>
           {subtitle && (
-            <p className="text-xs text-gray-600 dark:text-gray-500">
+            <p className="text-xs text-gray-600 dark:text-gray-500 hidden sm:block truncate">
               {subtitle}
             </p>
           )}
@@ -93,7 +93,7 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
       </div>
 
       {/* Right Side */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
         {/* Search Bar - Desktop only */}
         <form onSubmit={handleSearch} className="hidden md:block">
           <div className="relative">
@@ -117,15 +117,15 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
           className="p-2 rounded-lg transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-600 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-white/[0.08] hover:text-gray-900 dark:hover:text-gray-300"
           aria-label="Toggle dark mode"
         >
-          {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          {isDark ? <Sun size={16} className="md:w-[18px] md:h-[18px]" /> : <Moon size={16} className="md:w-[18px] md:h-[18px]" />}
         </button>
 
-        {/* Notification Bell */}
+        {/* Notification Bell - Hidden on small mobile */}
         <button
-          className="relative p-2 rounded-lg transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-600 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-white/[0.08] hover:text-gray-900 dark:hover:text-gray-300"
+          className="hidden sm:block relative p-2 rounded-lg transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-600 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-white/[0.08] hover:text-gray-900 dark:hover:text-gray-300"
           aria-label="Notifications"
         >
-          <Bell size={18} />
+          <Bell size={16} className="md:w-[18px] md:h-[18px]" />
           {/* Red notification dot */}
           <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500" />
         </button>
@@ -134,9 +134,9 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="w-[34px] h-[34px] rounded-full flex items-center justify-center transition-opacity hover:opacity-90 bg-gradient-to-br from-purple-600 to-indigo-600"
+            className="w-8 h-8 md:w-[34px] md:h-[34px] rounded-full flex items-center justify-center transition-opacity hover:opacity-90 bg-gradient-to-br from-purple-600 to-indigo-600"
           >
-            <span className="text-white text-sm font-medium">{getUserInitial()}</span>
+            <span className="text-white text-xs md:text-sm font-medium">{getUserInitial()}</span>
           </button>
 
           {/* Dropdown menu */}

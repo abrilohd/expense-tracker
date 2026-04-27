@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './Sidebar';
 import MobileOverlay from './MobileOverlay';
 import Header from './Header';
@@ -33,7 +33,7 @@ const Layout = () => {
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#0D0F16]">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-[#0D0F16] overflow-x-hidden">
       {/* Sidebar - always rendered, visibility controlled by CSS */}
       <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
@@ -46,20 +46,21 @@ const Layout = () => {
         <Header onMenuClick={toggleSidebar} title={pageTitle} />
 
         {/* Page content with enhanced animation and spacing */}
-        <main className="flex-1 p-6 md:p-8 lg:p-10 overflow-auto bg-gray-50 dark:bg-[#0D0F16]">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{
-              duration: 0.3,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-            className="max-w-[1600px] mx-auto"
-          >
-            <Outlet />
-          </motion.div>
+        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto overflow-x-hidden bg-gray-50 dark:bg-[#0D0F16]">
+          <div className="max-w-[1600px] mx-auto min-w-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+                style={{ flex: 1 }}
+              >
+                <Outlet />
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </main>
       </div>
     </div>

@@ -13,29 +13,40 @@ interface FormFieldProps {
 
 // Shared input className for consistent styling
 export const inputClassName = `
-  w-full px-3 py-2 rounded-lg border text-sm
-  bg-white dark:bg-gray-700
-  text-gray-900 dark:text-white
-  border-gray-300 dark:border-gray-600
-  focus:outline-none focus:ring-2 focus:ring-blue-500
-  focus:border-transparent
-  placeholder:text-gray-400
+  w-full px-4 py-3 rounded-xl text-sm
+  bg-white/[0.05]
+  text-white
+  border border-white/[0.08]
+  focus:outline-none
+  focus:border-purple-500/60
+  focus:bg-white/[0.07]
+  placeholder:text-gray-600
   transition duration-150
 `.trim();
 
 // Input className with error state
+export const inputErrorClassName = `
+  w-full px-4 py-3 rounded-xl text-sm
+  bg-red-500/[0.05]
+  text-white
+  border border-red-500/40
+  focus:outline-none
+  focus:border-red-500/60
+  placeholder:text-gray-600
+  transition duration-150
+`.trim();
+
+// Input className with error state (legacy support)
 export const inputClassNameWithError = (hasError: boolean) =>
-  hasError
-    ? `${inputClassName} border-red-500 focus:ring-red-500`
-    : inputClassName;
+  hasError ? inputErrorClassName : inputClassName;
 
 const FormField = ({ label, error, required, children, hint }: FormFieldProps) => {
   return (
     <div className="flex flex-col gap-1 mb-4">
       {/* Label */}
-      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label className="text-xs font-medium text-gray-400 mb-1.5">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-red-400 ml-1">*</span>}
       </label>
 
       {/* Input/Select/Textarea */}
@@ -43,7 +54,7 @@ const FormField = ({ label, error, required, children, hint }: FormFieldProps) =
 
       {/* Error message */}
       {error && (
-        <div className="flex items-center gap-1 text-xs text-red-500 mt-1">
+        <div className="flex items-center gap-1 text-xs text-red-400 mt-1.5">
           <AlertCircle size={12} />
           <span>{error}</span>
         </div>
@@ -51,7 +62,7 @@ const FormField = ({ label, error, required, children, hint }: FormFieldProps) =
 
       {/* Hint text (shown if no error) */}
       {!error && hint && (
-        <p className="text-xs text-gray-400 mt-1">{hint}</p>
+        <p className="text-xs text-gray-600 mt-1.5">{hint}</p>
       )}
     </div>
   );

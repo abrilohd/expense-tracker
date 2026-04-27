@@ -108,14 +108,14 @@ const ExpenseListPage = () => {
   };
 
   return (
-    <div className="space-y-6 md:space-y-8">
+    <div className="space-y-4 md:space-y-6 lg:space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-6">
-        <div className="flex items-center gap-3">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Expenses</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-3">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Expenses</h1>
           {total > 0 && (
-            <div className="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/15 text-purple-700 dark:text-purple-400">
-              <span className="text-sm font-semibold">{total}</span>
+            <div className="px-2.5 py-0.5 md:px-3 md:py-1 rounded-full bg-purple-100 dark:bg-purple-900/15 text-purple-700 dark:text-purple-400">
+              <span className="text-xs md:text-sm font-semibold">{total}</span>
             </div>
           )}
         </div>
@@ -126,30 +126,30 @@ const ExpenseListPage = () => {
             setSelectedExpense(null);
             setIsEditModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-colors bg-purple-600 hover:bg-purple-700"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 md:px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-colors bg-purple-600 hover:bg-purple-700"
         >
-          <PlusCircle size={20} />
+          <PlusCircle size={18} className="md:w-5 md:h-5" />
           Add Expense
         </button>
       </div>
 
       {/* Filters */}
-      <div className="rounded-[20px] p-5 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+      <div className="rounded-2xl md:rounded-[20px] p-4 md:p-5 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
         <div className="space-y-3">
           {/* Row 1: Search + Category */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Search */}
             <div className="relative">
               <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-600"
-                size={18}
+                size={16}
               />
               <input
                 type="text"
                 placeholder="Search expenses..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
+                className="w-full pl-9 md:pl-10 pr-3 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
               />
             </div>
 
@@ -157,7 +157,7 @@ const ExpenseListPage = () => {
             <select
               value={filters.category || ''}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
+              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             >
               <option value="" className="bg-white dark:bg-[#1A1D26]">
                 All Categories
@@ -171,7 +171,7 @@ const ExpenseListPage = () => {
           </div>
 
           {/* Row 2: Dates + Sort + Clear */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Start Date */}
             <input
               type="date"
@@ -181,7 +181,7 @@ const ExpenseListPage = () => {
                   start_date: e.target.value || undefined,
                 });
               }}
-              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
+              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             />
 
             {/* End Date */}
@@ -193,14 +193,14 @@ const ExpenseListPage = () => {
                   end_date: e.target.value || undefined,
                 });
               }}
-              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
+              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             />
 
             {/* Sort */}
             <select
               value={`${filters.sort_by}-${filters.order}`}
               onChange={(e) => handleSortChange(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
+              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
             >
               <option value="date-desc" className="bg-white dark:bg-[#1A1D26]">
                 Date (Newest)
@@ -231,35 +231,35 @@ const ExpenseListPage = () => {
       </div>
 
       {/* Expenses List */}
-      <div className="rounded-[20px] overflow-hidden bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+      <div className="rounded-2xl md:rounded-[20px] overflow-hidden bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
         {isLoading ? (
           // Loading state
-          <div className="px-4 py-2">
+          <div className="px-3 md:px-4 py-2">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="flex gap-3 items-center p-3">
+              <div key={i} className="flex gap-2 md:gap-3 items-center p-2 md:p-3">
                 {/* Circle skeleton */}
-                <div className="rounded-xl animate-pulse flex-shrink-0 w-11 h-11 bg-gray-200 dark:bg-white/[0.05]" />
+                <div className="rounded-xl animate-pulse flex-shrink-0 w-10 h-10 md:w-11 md:h-11 bg-gray-200 dark:bg-white/[0.05]" />
 
                 {/* Middle block */}
-                <div className="flex-1">
-                  <div className="rounded animate-pulse mb-2 h-3.5 w-32 bg-gray-200 dark:bg-white/[0.05]" />
-                  <div className="rounded animate-pulse h-3 w-48 bg-gray-200 dark:bg-white/[0.05]" />
+                <div className="flex-1 min-w-0">
+                  <div className="rounded animate-pulse mb-2 h-3 md:h-3.5 w-24 md:w-32 bg-gray-200 dark:bg-white/[0.05]" />
+                  <div className="rounded animate-pulse h-2.5 md:h-3 w-32 md:w-48 bg-gray-200 dark:bg-white/[0.05]" />
                 </div>
 
                 {/* Right block */}
-                <div className="ml-auto">
-                  <div className="rounded animate-pulse mb-2 h-4 w-16 bg-gray-200 dark:bg-white/[0.05]" />
-                  <div className="rounded animate-pulse h-3 w-12 bg-gray-200 dark:bg-white/[0.05]" />
+                <div className="ml-auto flex-shrink-0">
+                  <div className="rounded animate-pulse mb-2 h-3.5 md:h-4 w-12 md:w-16 bg-gray-200 dark:bg-white/[0.05]" />
+                  <div className="rounded animate-pulse h-2.5 md:h-3 w-10 md:w-12 bg-gray-200 dark:bg-white/[0.05]" />
                 </div>
               </div>
             ))}
           </div>
         ) : error ? (
-          <div className="p-12 text-center">
-            <p className="text-red-400">{error}</p>
+          <div className="p-8 md:p-12 text-center">
+            <p className="text-sm md:text-base text-red-400">{error}</p>
             <button
               onClick={refetch}
-              className="mt-4 px-4 py-2 rounded-xl font-medium text-white transition-colors"
+              className="mt-4 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
               style={{
                 backgroundColor: '#8B5CF6',
               }}
@@ -274,18 +274,18 @@ const ExpenseListPage = () => {
             </button>
           </div>
         ) : expenses.length === 0 ? (
-          <div className="py-16 text-center">
+          <div className="py-12 md:py-16 px-4 text-center">
             {hasActiveFilters() ? (
               <>
                 {/* Empty state with filters */}
-                <div style={{ fontSize: '48px' }}>🔍</div>
-                <h3 className="text-lg font-semibold text-white mt-4">No results found</h3>
+                <div className="text-4xl md:text-5xl">🔍</div>
+                <h3 className="text-base md:text-lg font-semibold text-white mt-4">No results found</h3>
                 <p className="text-sm text-gray-500 mt-2">
                   Try adjusting or clearing your filters
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="mt-6 px-6 py-2.5 rounded-xl text-sm font-medium text-gray-400 transition-colors"
+                  className="mt-6 px-5 md:px-6 py-2.5 rounded-xl text-sm font-medium text-gray-400 transition-colors"
                   style={{
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     backgroundColor: 'transparent',
@@ -305,8 +305,8 @@ const ExpenseListPage = () => {
             ) : (
               <>
                 {/* Empty state no expenses */}
-                <div style={{ fontSize: '48px' }}>💸</div>
-                <h3 className="text-lg font-semibold text-white mt-4">No expenses yet</h3>
+                <div className="text-4xl md:text-5xl">💸</div>
+                <h3 className="text-base md:text-lg font-semibold text-white mt-4">No expenses yet</h3>
                 <p className="text-sm text-gray-500 mt-2">
                   Start tracking your spending journey
                 </p>
@@ -315,7 +315,7 @@ const ExpenseListPage = () => {
                     setSelectedExpense(null);
                     setIsEditModalOpen(true);
                   }}
-                  className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium text-white transition-colors"
+                  className="mt-6 inline-flex items-center gap-2 px-5 md:px-6 py-2.5 rounded-xl text-sm font-medium text-white transition-colors"
                   style={{
                     backgroundColor: '#8B5CF6',
                   }}
@@ -326,7 +326,7 @@ const ExpenseListPage = () => {
                     e.currentTarget.style.backgroundColor = '#8B5CF6';
                   }}
                 >
-                  <PlusCircle size={20} />
+                  <PlusCircle size={18} className="md:w-5 md:h-5" />
                   Add First Expense
                 </button>
               </>
@@ -336,14 +336,14 @@ const ExpenseListPage = () => {
           <>
             {/* List Header */}
             <div
-              className="flex justify-between items-center px-5 py-4"
+              className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 px-4 md:px-5 py-3 md:py-4"
               style={{
                 borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
               {/* Left: Transaction count + filter badge */}
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-400">{total} transactions</span>
+                <span className="text-xs md:text-sm text-gray-400">{total} transactions</span>
                 {hasActiveFilters() && (
                   <span className="text-xs text-purple-400">
                     ({getActiveFilterCount()} filter{getActiveFilterCount() !== 1 ? 's' : ''}{' '}
@@ -366,7 +366,7 @@ const ExpenseListPage = () => {
             </div>
 
             {/* Transaction Rows */}
-            <div className="px-4 py-2">
+            <div className="px-3 md:px-4 py-2">
               {expenses.map((expense, index) => (
                 <TransactionRow
                   key={expense.id}
@@ -389,7 +389,7 @@ const ExpenseListPage = () => {
             {/* Pagination */}
             {totalPages > 1 && (
               <div
-                className="flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-4"
+                className="flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 px-4 md:px-5 py-3 md:py-4"
                 style={{
                   borderTop: '1px solid rgba(255, 255, 255, 0.06)',
                 }}
@@ -426,43 +426,50 @@ const ExpenseListPage = () => {
                     <ChevronLeft size={16} />
                   </button>
 
-                  {/* Page numbers */}
-                  {getPageNumbers().map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => setPage(page)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                        page === currentPage ? '' : ''
-                      }`}
-                      style={
-                        page === currentPage
-                          ? {
-                              backgroundColor: '#8B5CF6',
-                              color: '#FFFFFF',
-                              border: '1px solid #8B5CF6',
-                            }
-                          : {
-                              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                              color: '#9CA3AF',
-                              border: '1px solid rgba(255, 255, 255, 0.06)',
-                            }
-                      }
-                      onMouseEnter={(e) => {
-                        if (page !== currentPage) {
-                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-                          e.currentTarget.style.color = '#FFFFFF';
+                  {/* Page numbers - Hidden on mobile, show "Page X of Y" instead */}
+                  <div className="hidden sm:flex items-center gap-2">
+                    {getPageNumbers().map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setPage(page)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                          page === currentPage ? '' : ''
+                        }`}
+                        style={
+                          page === currentPage
+                            ? {
+                                backgroundColor: '#8B5CF6',
+                                color: '#FFFFFF',
+                                border: '1px solid #8B5CF6',
+                              }
+                            : {
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                color: '#9CA3AF',
+                                border: '1px solid rgba(255, 255, 255, 0.06)',
+                              }
                         }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (page !== currentPage) {
-                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                          e.currentTarget.style.color = '#9CA3AF';
-                        }
-                      }}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                        onMouseEnter={(e) => {
+                          if (page !== currentPage) {
+                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                            e.currentTarget.style.color = '#FFFFFF';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (page !== currentPage) {
+                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+                            e.currentTarget.style.color = '#9CA3AF';
+                          }
+                        }}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Mobile: Show "Page X of Y" */}
+                  <span className="sm:hidden text-xs text-gray-400 px-2">
+                    Page {currentPage} of {totalPages}
+                  </span>
 
                   {/* Next button */}
                   <button

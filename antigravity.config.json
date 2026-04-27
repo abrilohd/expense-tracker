@@ -1,0 +1,38 @@
+{
+  "name": "expense-tracker-app",
+  "version": "1.0.0",
+  "description": "Personal Expense Tracker with AI-powered insights",
+  "routes": {
+    "/": "landing-page/index.html",
+    "/app": "frontend/index.html",
+    "/app/*": "frontend/",
+    "/app/login": "frontend/index.html",
+    "/app/register": "frontend/index.html",
+    "/api/*": "backend/"
+  },
+  "shared": [
+    "shared/nav.js"
+  ],
+  "headers": {
+    "Cache-Control": "public, max-age=31536000, immutable",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "geolocation=(), microphone=(), camera=()"
+  },
+  "build": {
+    "frontend": {
+      "command": "npm run build",
+      "output": "frontend/dist"
+    },
+    "backend": {
+      "command": "pip install -r requirements.txt",
+      "runtime": "python3.11"
+    }
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "VITE_API_URL": "/api"
+  }
+}
