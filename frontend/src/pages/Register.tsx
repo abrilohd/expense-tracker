@@ -401,8 +401,8 @@ const RegisterPage = () => {
               type="button"
               className="google-button"
               onClick={() => {
-                // Google OAuth integration placeholder
-                console.log('Google signup clicked');
+                // Redirect to backend Google OAuth endpoint
+                window.location.href = 'http://localhost:8000/auth/google/login';
               }}
             >
               <svg className="google-icon" viewBox="0 0 24 24">

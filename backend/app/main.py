@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 
 from app.core.config import settings
 from app.db.database import engine, Base
-from app.routes import expenses, auth, dashboard, insights
+from app.routes import expenses, auth, dashboard, insights, google_auth
 from app.core.exceptions import AppException
 from app.core.error_handlers import (
     handle_app_exception,
@@ -50,6 +50,7 @@ app.add_exception_handler(Exception, handle_generic_exception)
 
 # Include routers with proper prefixes and tags
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+app.include_router(google_auth.router, prefix="/auth", tags=["Google OAuth"])
 app.include_router(expenses.router, prefix="/expenses", tags=["Expenses"])
 app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 app.include_router(insights.router, prefix="/insights", tags=["Insights"])

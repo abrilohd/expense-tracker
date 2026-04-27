@@ -4,6 +4,8 @@
  */
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Calendar,
   TrendingUp,
@@ -22,10 +24,28 @@ import ExpenseAreaChart from '../components/charts/ExpenseAreaChart';
 import CategoryPieChart from '../components/charts/CategoryPieChart';
 import { formatCurrency, formatDate, getCategoryEmoji } from '../utils/formatters';
 import { PageLoader } from '../components/ui/LoadingSpinner';
+import { TOKEN_KEY } from '../utils/constants';
 
 const DashboardPage = () => {
   const { user } = useAuthStore();
   const { data, isLoading, error, refetch } = useDashboardData();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Handle Google OAuth callback token
+  useEffect(() => {
+    const token = searchParams.get('token');
+    if (token) {
+      // Save token to localStorage
+      localStorage.setItem(TOKEN_KEY, token);
+      
+      // Remove token from URL
+      navigate('/dashboard', { replace: true });
+      
+      // Reload user data
+      window.location.reload();
+    }
+  }, [searchParams, navigate]);
 
   // Get time-based greeting
   const getGreeting = () => {

@@ -17,7 +17,14 @@ class User(Base):
     
     # User credentials
     email = Column(String, unique=True, nullable=False, index=True)
-    hashed_password = Column(String, nullable=False)
+    hashed_password = Column(String, nullable=True)  # Nullable for Google OAuth users
+    
+    # User profile
+    name = Column(String, nullable=True)  # Full name from Google
+    picture = Column(String, nullable=True)  # Profile picture URL from Google
+    
+    # Authentication provider
+    provider = Column(String, default="local", nullable=False)  # "local" or "google"
     
     # User status
     is_active = Column(Boolean, default=True, nullable=False)

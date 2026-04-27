@@ -25,6 +25,12 @@ class Settings(BaseSettings):
     algorithm: str = Field(default="HS256", validation_alias="ALGORITHM")
     access_token_expire_minutes: int = Field(default=30, validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES")
     
+    # Google OAuth configuration
+    google_client_id: str = Field(default="", validation_alias="GOOGLE_CLIENT_ID")
+    google_client_secret: str = Field(default="", validation_alias="GOOGLE_CLIENT_SECRET")
+    google_redirect_uri: str = Field(default="http://localhost:8000/auth/google/callback", validation_alias="GOOGLE_REDIRECT_URI")
+    frontend_url: str = Field(default="http://localhost:5173", validation_alias="FRONTEND_URL")
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
