@@ -2,12 +2,13 @@
  * Frontend Configuration Constants
  * Environment-based URLs for local and production
  */
+import API_BASE_URL from '../lib/api';
 
 // App URL (React Frontend)
 export const APP_URL = import.meta.env.VITE_APP_URL || 'http://localhost:5173';
 
-// API URL (Backend)
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// API URL (Backend) - imported from centralized config
+export const API_URL = API_BASE_URL;
 
 // Landing Page URL
 export const LANDING_URL = import.meta.env.VITE_LANDING_URL || 'http://localhost:8080';

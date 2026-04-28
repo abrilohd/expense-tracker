@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { API_URL } from '../config/constants';
 import { 
   Eye, 
   EyeOff, 
@@ -402,8 +403,7 @@ const RegisterPage = () => {
               className="google-button"
               onClick={() => {
                 // Redirect to backend Google OAuth endpoint
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-                window.location.href = `${apiUrl}/auth/google/login`;
+                window.location.href = `${API_URL}/auth/google/login`;
               }}
             >
               <svg className="google-icon" viewBox="0 0 24 24">

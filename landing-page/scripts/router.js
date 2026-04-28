@@ -10,15 +10,19 @@ const AUTH_KEY = 'expense_token';
  * @returns {string} The destination URL
  */
 function getAuthDestination() {
+  // Check for auth token in localStorage
   const token = localStorage.getItem(AUTH_KEY);
   
-  if (token) {
+  // Fallback: also check for 'user' key (alternative auth storage)
+  const user = localStorage.getItem('user');
+  
+  if (token || user) {
     // User is authenticated, go to dashboard
     return window.APP_CONFIG.routes.dashboard();
   }
   
-  // User is not authenticated, go to login
-  return window.APP_CONFIG.routes.login();
+  // User is not authenticated, go to signup (better for landing page CTAs)
+  return window.APP_CONFIG.routes.signup();
 }
 
 /**
@@ -28,6 +32,7 @@ function getAuthDestination() {
 function handleCTAClick(e) {
   e.preventDefault();
   const destination = getAuthDestination();
+  console.log('CTA clicked, routing to:', destination);
   window.location.href = destination;
 }
 
@@ -36,13 +41,16 @@ function handleCTAClick(e) {
  */
 function updateNavDashboardLink() {
   const token = localStorage.getItem(AUTH_KEY);
+  const user = localStorage.getItem('user');
   const dashboardLink = document.querySelector('[data-nav-dashboard]');
   
   if (dashboardLink) {
-    if (token) {
+    if (token || user) {
       dashboardLink.href = window.APP_CONFIG.routes.dashboard();
+      dashboardLink.textContent = 'Dashboard';
     } else {
       dashboardLink.href = window.APP_CONFIG.routes.login();
+      dashboardLink.textContent = 'Login';
     }
   }
 }
@@ -65,4 +73,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateNavDashboardLink();
   
   console.log(`Router initialized: ${ctaButtons.length} CTA buttons found`);
+  console.log('App URL:', window.APP_CONFIG.APP_URL);
 });

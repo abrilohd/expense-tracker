@@ -26,10 +26,15 @@ wheels/
 # Environment variables
 .env
 
+# Virtual environments
+.venv/
+venv/
+
 # Database
 *.db
 *.sqlite
 *.sqlite3
+backend/expenses.db
 
 # IDE
 .vscode/

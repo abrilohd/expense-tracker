@@ -1,6 +1,7 @@
 """
 FastAPI main application - Personal Expense Tracker API
 """
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
@@ -35,16 +36,16 @@ app = FastAPI(
 )
 
 # Configure CORS middleware for React frontends
+# Read allowed origins from environment variable or use defaults
+allowed_origins_str = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
+)
+allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000"
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
@@ -72,6 +73,17 @@ def read_root():
         "message": "Expense Tracker API",
         "version": "1.0.0",
         "status": "running"
+    }
+
+# Health check endpoint for Railway/Render
+@app.get("/health", tags=["Root"])
+async def health_check():
+    """
+    Health check endpoint for deployment platforms
+    """
+    return {
+        "status": "ok",
+        "service": "expense-tracker-api"
     }
 
 # OAuth config check endpoint (for debugging)

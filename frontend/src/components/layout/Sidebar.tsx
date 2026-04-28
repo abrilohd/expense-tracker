@@ -7,6 +7,7 @@ import { LayoutDashboard, CreditCard, PlusCircle, Sparkles, LogOut, UserCircle }
 import { useAuthStore } from '../../store/authStore';
 import { useDarkMode } from '../../hooks/useDarkMode';
 import { getLayoutStyles } from '../../utils/themeStyles';
+import { LANDING_URL } from '../../config/constants';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -45,8 +46,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <button
           onClick={() => {
             // Use environment variable for landing page URL
-            const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:8080';
-            window.location.href = landingUrl;
+            window.location.href = LANDING_URL;
           }}
           className="flex items-center gap-3 mb-6 group cursor-pointer bg-transparent border-0 p-0 w-full text-left hover:opacity-100"
           title="Go to Landing Page"

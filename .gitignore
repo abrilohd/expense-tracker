@@ -1,0 +1,49 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+dist/
+frontend/dist/
+build/
+*.egg-info/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+backend/venv/
+backend/.venv/
+venv/
+.venv/
+
+# Database - NEVER commit the database
+*.db
+*.sqlite
+*.sqlite3
+backend/expenses.db
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/

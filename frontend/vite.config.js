@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
+    outDir: 'dist',
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
@@ -46,7 +48,6 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 600,
-    sourcemap: false,
   },
   optimizeDeps: {
     include: [
@@ -65,5 +66,13 @@ export default defineConfig({
       'react-hot-toast',
       'lucide-react',
     ],
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
   },
 })

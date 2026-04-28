@@ -55,9 +55,6 @@ export const CATEGORIES = [
   },
 ] as const;
 
-// API configuration
-export const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-
 // Pagination defaults
 export const PAGE_SIZE = 10;
 

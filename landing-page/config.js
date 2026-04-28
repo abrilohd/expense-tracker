@@ -8,17 +8,27 @@ const CONFIG = {
   isDevelopment: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
   
   // App URLs (React Frontend)
+  // Can be overridden by setting window.ENV_APP_URL before this script loads
   get APP_URL() {
+    if (window.ENV_APP_URL) {
+      return window.ENV_APP_URL;
+    }
     return this.isDevelopment 
       ? 'http://localhost:5173' 
-      : 'https://app.yourapp.com';
+      : (window.location.origin.includes('vercel.app') 
+          ? 'https://expense-tracker-app.vercel.app'  // Update with your actual Vercel URL
+          : 'https://app.yourapp.com');
   },
   
   // API URLs (Backend)
+  // Can be overridden by setting window.ENV_API_URL before this script loads
   get API_URL() {
+    if (window.ENV_API_URL) {
+      return window.ENV_API_URL;
+    }
     return this.isDevelopment 
       ? 'http://localhost:8000' 
-      : 'https://api.yourapp.com';
+      : 'https://expense-tracker-api.up.railway.app';  // Update with your actual Railway URL
   },
   
   // Route helpers
@@ -27,7 +37,7 @@ const CONFIG = {
       return `${CONFIG.APP_URL}/login`;
     },
     signup() {
-      return `${CONFIG.APP_URL}/signup`;
+      return `${CONFIG.APP_URL}/register`;
     },
     dashboard() {
       return `${CONFIG.APP_URL}/dashboard`;

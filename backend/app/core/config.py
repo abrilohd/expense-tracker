@@ -3,9 +3,13 @@ Application configuration using Pydantic Settings
 Loads environment variables from .env file
 """
 import os
+import logging
 from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 # Get the backend directory (parent of app directory)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -47,8 +51,8 @@ class Settings(BaseSettings):
 # Create global settings instance
 settings = Settings()
 
-# Debug: Print to verify settings are loaded (remove in production)
+# Log OAuth configuration status
 if settings.google_client_id:
-    print(f"✅ OAuth configured: Client ID loaded ({settings.google_client_id[:20]}...)")
+    logger.info(f"OAuth configured: Client ID loaded ({settings.google_client_id[:20]}...)")
 else:
-    print(f"⚠️  WARNING: GOOGLE_CLIENT_ID not loaded from {ENV_FILE}")
+    logger.warning(f"GOOGLE_CLIENT_ID not loaded from {ENV_FILE}")

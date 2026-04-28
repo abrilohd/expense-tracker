@@ -1,6 +1,0 @@
-Requirement already satisfied: httpx in .\venv\Lib\site-packages (0.28.1)
-Requirement already satisfied: anyio in .\venv\Lib\site-packages (from httpx) (4.13.0)
-Requirement already satisfied: certifi in .\venv\Lib\site-packages (from httpx) (2026.4.22)
-Requirement already satisfied: httpcore==1.* in .\venv\Lib\site-packages (from httpx) (1.0.9)
-Requirement already satisfied: idna in .\venv\Lib\site-packages (from httpx) (3.13)
-Requirement already satisfied: h11>=0.16 in .\venv\Lib\site-packages (from httpcore==1.*->httpx) (0.16.0)

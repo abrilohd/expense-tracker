@@ -1,10 +1,13 @@
 """
 FastAPI exception handlers for consistent error responses
 """
+import logging
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from app.core.exceptions import AppException
+
+logger = logging.getLogger(__name__)
 
 async def handle_app_exception(request: Request, exc: AppException) -> JSONResponse:
     """
@@ -48,8 +51,8 @@ async def handle_generic_exception(request: Request, exc: Exception) -> JSONResp
     Handle all unhandled exceptions
     Prevents internal errors from being exposed to clients
     """
-    # Log the actual error for debugging (in production, use proper logging)
-    print(f"Unhandled exception: {type(exc).__name__}: {str(exc)}")
+    # Log the actual error for debugging
+    logger.error(f"Unhandled exception: {type(exc).__name__}: {str(exc)}", exc_info=True)
     
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
