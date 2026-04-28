@@ -70,7 +70,7 @@ const BudgetProgressBar = ({
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay: index * 0.08 }}
-      className="flex items-center gap-3"
+      className="flex items-center gap-3 transition-all duration-150 hover:bg-white/[0.03] rounded-lg"
       style={{
         padding: '12px 0',
         borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
@@ -122,6 +122,7 @@ const BudgetProgressBar = ({
               height: '100%',
               borderRadius: '9999px',
               backgroundColor: colors.barColor,
+              transition: 'width 0.8s ease-out',
             }}
           />
         </div>
@@ -131,7 +132,7 @@ const BudgetProgressBar = ({
           <span className="text-xs text-gray-600">
             {count} transaction{count !== 1 ? 's' : ''}
           </span>
-          <span className="text-xs text-gray-600">{percentage}% of total</span>
+          <span className="text-xs font-semibold text-right" style={{ color: '#A0AEC0' }}>{percentage}%</span>
         </div>
       </div>
 
@@ -141,6 +142,7 @@ const BudgetProgressBar = ({
         style={{
           color: colors.barColor,
           minWidth: '36px',
+          fontWeight: '600',
         }}
       >
         {percentage}%

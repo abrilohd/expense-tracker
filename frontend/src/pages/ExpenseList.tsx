@@ -1,21 +1,27 @@
 /**
- * Expense List page - view, filter, search, edit, and delete expenses
- * Updated to use Zustand store with Fundex-inspired dark design
+ * Expense List page - Premium financial interface
+ * High-end SaaS design with token-based styling
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Search,
   PlusCircle,
   X,
   ChevronLeft,
   ChevronRight,
+  Filter,
+  TrendingDown,
+  Receipt,
+  Edit2,
+  Trash2,
 } from 'lucide-react';
 import type { Expense, ExpenseCategory } from '../types';
 import { useExpenseList, useExpenseMutations } from '../hooks/useExpenses';
 import { CATEGORIES, PAGE_SIZE } from '../utils/constants';
-import TransactionRow from '../components/ui/TransactionRow';
 import ExpenseModal from '../components/ui/ExpenseModal';
 import DeleteConfirmModal from '../components/ui/DeleteConfirmModal';
+import { formatCurrency, formatDate, getCategoryEmoji } from '../utils/formatters';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ExpenseListPage = () => {
   // Zustand store hooks
@@ -42,6 +48,11 @@ const ExpenseListPage = () => {
   const [expenseToDelete, setExpenseToDelete] = useState<Expense | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  // Calculate total spent
+  const totalSpent = useMemo(() => {
+    return expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  }, [expenses]);
 
   // Debounced search - update store filters
   useEffect(() => {
@@ -107,394 +118,452 @@ const ExpenseListPage = () => {
     return pages;
   };
 
+  // Category color mapping
+  const categoryColors: Record<string, { bg: string; primary: string }> = {
+    Food: { bg: 'rgba(245, 158, 11, 0.12)', primary: '#F59E0B' },
+    Transport: { bg: 'rgba(59, 130, 246, 0.12)', primary: '#3B82F6' },
+    Housing: { bg: 'rgba(139, 92, 246, 0.12)', primary: '#8B5CF6' },
+    Entertainment: { bg: 'rgba(236, 72, 153, 0.12)', primary: '#EC4899' },
+    Health: { bg: 'rgba(16, 185, 129, 0.12)', primary: '#10B981' },
+    Shopping: { bg: 'rgba(249, 115, 22, 0.12)', primary: '#F97316' },
+    Education: { bg: 'rgba(99, 102, 241, 0.12)', primary: '#6366F1' },
+    Other: { bg: 'rgba(107, 114, 128, 0.12)', primary: '#6B7280' },
+  };
+
   return (
-    <div className="space-y-4 md:space-y-6 lg:space-y-8">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 md:gap-4">
-        <div className="flex items-center gap-2 md:gap-3">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Expenses</h1>
-          {total > 0 && (
-            <div className="px-2.5 py-0.5 md:px-3 md:py-1 rounded-full bg-purple-100 dark:bg-purple-900/15 text-purple-700 dark:text-purple-400">
-              <span className="text-xs md:text-sm font-semibold">{total}</span>
-            </div>
-          )}
+    <div className="space-y-6 md:space-y-8">
+      {/* Page Header with Summary Card */}
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
+              Expenses
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Track and manage your spending
+            </p>
+          </div>
+
+          {/* Add Expense Button */}
+          <button
+            onClick={() => {
+              setSelectedExpense(null);
+              setIsEditModalOpen(true);
+            }}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white transition-all duration-300 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+          >
+            <PlusCircle size={20} />
+            Add Expense
+          </button>
         </div>
 
-        {/* Add Expense Button */}
-        <button
-          onClick={() => {
-            setSelectedExpense(null);
-            setIsEditModalOpen(true);
-          }}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 md:px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-colors bg-purple-600 hover:bg-purple-700"
-        >
-          <PlusCircle size={18} className="md:w-5 md:h-5" />
-          Add Expense
-        </button>
+        {/* Total Spent Summary Card */}
+        {total > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-2xl p-6 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 border border-red-200 dark:border-red-900/30"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                  <TrendingDown className="text-red-600 dark:text-red-400" size={24} />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                    Total Spent (Current Page)
+                  </p>
+                  <p className="text-3xl font-bold text-red-600 dark:text-red-400 mt-1">
+                    {formatCurrency(totalSpent)}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-500 dark:text-gray-500">
+                  {total} transaction{total !== 1 ? 's' : ''}
+                </p>
+                {hasActiveFilters() && (
+                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
+                    {getActiveFilterCount()} filter{getActiveFilterCount() !== 1 ? 's' : ''} active
+                  </p>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
 
-      {/* Filters */}
-      <div className="rounded-2xl md:rounded-[20px] p-4 md:p-5 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
-        <div className="space-y-3">
+      {/* Filters - Enhanced Control Bar */}
+      <div className="rounded-2xl p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] shadow-sm">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+            <Filter className="text-purple-600 dark:text-purple-400" size={20} />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">Filters</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Refine your expense view</p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
           {/* Row 1: Search + Category */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Search */}
-            <div className="relative">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-600"
-                size={16}
-              />
-              <input
-                type="text"
-                placeholder="Search expenses..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-9 md:pl-10 pr-3 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
-              />
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Search
+              </label>
+              <div className="relative">
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  placeholder="Search by title or description..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="w-full pl-10 pr-3 py-3 rounded-xl text-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none transition-all bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20"
+                />
+              </div>
             </div>
 
             {/* Category */}
-            <select
-              value={filters.category || ''}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
-            >
-              <option value="" className="bg-white dark:bg-[#1A1D26]">
-                All Categories
-              </option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat.value} value={cat.value} className="bg-white dark:bg-[#1A1D26]">
-                  {cat.emoji} {cat.label}
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Category
+              </label>
+              <select
+                value={filters.category || ''}
+                onChange={(e) => handleCategoryChange(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl text-sm text-gray-900 dark:text-gray-200 focus:outline-none transition-all bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20"
+              >
+                <option value="" className="bg-white dark:bg-[#1A1D26]">
+                  All Categories
                 </option>
-              ))}
-            </select>
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value} className="bg-white dark:bg-[#1A1D26]">
+                    {cat.emoji} {cat.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          {/* Row 2: Dates + Sort + Clear */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Row 2: Dates + Sort */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Start Date */}
-            <input
-              type="date"
-              value={filters.start_date || ''}
-              onChange={(e) => {
-                setFilters({
-                  start_date: e.target.value || undefined,
-                });
-              }}
-              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
-            />
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Start Date
+              </label>
+              <input
+                type="date"
+                value={filters.start_date || ''}
+                onChange={(e) => {
+                  setFilters({
+                    start_date: e.target.value || undefined,
+                  });
+                }}
+                className="w-full px-4 py-3 rounded-xl text-sm text-gray-900 dark:text-gray-200 focus:outline-none transition-all bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20"
+              />
+            </div>
 
             {/* End Date */}
-            <input
-              type="date"
-              value={filters.end_date || ''}
-              onChange={(e) => {
-                setFilters({
-                  end_date: e.target.value || undefined,
-                });
-              }}
-              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
-            />
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                End Date
+              </label>
+              <input
+                type="date"
+                value={filters.end_date || ''}
+                onChange={(e) => {
+                  setFilters({
+                    end_date: e.target.value || undefined,
+                  });
+                }}
+                className="w-full px-4 py-3 rounded-xl text-sm text-gray-900 dark:text-gray-200 focus:outline-none transition-all bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20"
+              />
+            </div>
 
             {/* Sort */}
-            <select
-              value={`${filters.sort_by}-${filters.order}`}
-              onChange={(e) => handleSortChange(e.target.value)}
-              className="w-full px-3 md:px-4 py-2.5 rounded-xl text-sm text-gray-900 dark:text-gray-300 focus:outline-none transition-colors bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50"
-            >
-              <option value="date-desc" className="bg-white dark:bg-[#1A1D26]">
-                Date (Newest)
-              </option>
-              <option value="date-asc" className="bg-white dark:bg-[#1A1D26]">
-                Date (Oldest)
-              </option>
-              <option value="amount-desc" className="bg-white dark:bg-[#1A1D26]">
-                Amount (High)
-              </option>
-              <option value="amount-asc" className="bg-white dark:bg-[#1A1D26]">
-                Amount (Low)
-              </option>
-            </select>
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Sort By
+              </label>
+              <select
+                value={`${filters.sort_by}-${filters.order}`}
+                onChange={(e) => handleSortChange(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl text-sm text-gray-900 dark:text-gray-200 focus:outline-none transition-all bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] focus:border-purple-500 dark:focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20"
+              >
+                <option value="date-desc" className="bg-white dark:bg-[#1A1D26]">
+                  Date (Newest First)
+                </option>
+                <option value="date-asc" className="bg-white dark:bg-[#1A1D26]">
+                  Date (Oldest First)
+                </option>
+                <option value="amount-desc" className="bg-white dark:bg-[#1A1D26]">
+                  Amount (Highest)
+                </option>
+                <option value="amount-asc" className="bg-white dark:bg-[#1A1D26]">
+                  Amount (Lowest)
+                </option>
+              </select>
+            </div>
+          </div>
 
-            {/* Clear Filters */}
-            {hasActiveFilters() && (
+          {/* Clear Filters Button */}
+          {hasActiveFilters() && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+            >
               <button
                 onClick={clearFilters}
-                className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-red-600 dark:text-red-400 transition-colors border border-red-300 dark:border-red-800/30 hover:bg-red-100 dark:hover:bg-red-900/10"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 transition-all border border-red-200 dark:border-red-800/30 hover:bg-red-50 dark:hover:bg-red-900/10"
               >
-                <X size={14} />
-                Clear
+                <X size={16} />
+                Clear All Filters
               </button>
-            )}
-          </div>
+            </motion.div>
+          )}
         </div>
       </div>
 
-      {/* Expenses List */}
-      <div className="rounded-2xl md:rounded-[20px] overflow-hidden bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+      {/* Expenses List - Premium Card Design */}
+      <div className="rounded-2xl overflow-hidden bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] shadow-sm">
         {isLoading ? (
           // Loading state
-          <div className="px-3 md:px-4 py-2">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="flex gap-2 md:gap-3 items-center p-2 md:p-3">
-                {/* Circle skeleton */}
-                <div className="rounded-xl animate-pulse flex-shrink-0 w-10 h-10 md:w-11 md:h-11 bg-gray-200 dark:bg-white/[0.05]" />
-
-                {/* Middle block */}
-                <div className="flex-1 min-w-0">
-                  <div className="rounded animate-pulse mb-2 h-3 md:h-3.5 w-24 md:w-32 bg-gray-200 dark:bg-white/[0.05]" />
-                  <div className="rounded animate-pulse h-2.5 md:h-3 w-32 md:w-48 bg-gray-200 dark:bg-white/[0.05]" />
+          <div className="p-6 space-y-4">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="flex gap-4 items-center p-4 rounded-xl bg-gray-50 dark:bg-white/[0.02] animate-pulse"
+              >
+                <div className="rounded-xl flex-shrink-0 w-14 h-14 bg-gray-200 dark:bg-white/[0.05]" />
+                <div className="flex-1 space-y-2">
+                  <div className="rounded h-4 w-32 bg-gray-200 dark:bg-white/[0.05]" />
+                  <div className="rounded h-3 w-48 bg-gray-200 dark:bg-white/[0.05]" />
                 </div>
-
-                {/* Right block */}
-                <div className="ml-auto flex-shrink-0">
-                  <div className="rounded animate-pulse mb-2 h-3.5 md:h-4 w-12 md:w-16 bg-gray-200 dark:bg-white/[0.05]" />
-                  <div className="rounded animate-pulse h-2.5 md:h-3 w-10 md:w-12 bg-gray-200 dark:bg-white/[0.05]" />
+                <div className="space-y-2 text-right">
+                  <div className="rounded h-5 w-20 bg-gray-200 dark:bg-white/[0.05] ml-auto" />
+                  <div className="rounded h-3 w-16 bg-gray-200 dark:bg-white/[0.05] ml-auto" />
                 </div>
               </div>
             ))}
           </div>
         ) : error ? (
-          <div className="p-8 md:p-12 text-center">
-            <p className="text-sm md:text-base text-red-400">{error}</p>
+          <div className="p-12 text-center">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-red-100 dark:bg-red-900/20 flex items-center justify-center mb-4">
+              <X className="text-red-600 dark:text-red-400" size={32} />
+            </div>
+            <p className="text-base text-red-600 dark:text-red-400 font-medium">{error}</p>
             <button
               onClick={refetch}
-              className="mt-4 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
-              style={{
-                backgroundColor: '#8B5CF6',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#7C3AED';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#8B5CF6';
-              }}
+              className="mt-6 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 transition-colors"
             >
-              Retry
+              Try Again
             </button>
           </div>
         ) : expenses.length === 0 ? (
-          <div className="py-12 md:py-16 px-4 text-center">
+          <div className="py-16 px-6 text-center">
             {hasActiveFilters() ? (
               <>
-                {/* Empty state with filters */}
-                <div className="text-4xl md:text-5xl">🔍</div>
-                <h3 className="text-base md:text-lg font-semibold text-white mt-4">No results found</h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Try adjusting or clearing your filters
+                <div className="w-20 h-20 mx-auto rounded-2xl bg-gray-100 dark:bg-white/[0.05] flex items-center justify-center mb-6">
+                  <Search className="text-gray-400 dark:text-gray-600" size={40} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  No expenses found
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  Try adjusting your filters to see more results
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="mt-6 px-5 md:px-6 py-2.5 rounded-xl text-sm font-medium text-gray-400 transition-colors"
-                  style={{
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    backgroundColor: 'transparent',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                    e.currentTarget.style.color = '#FFFFFF';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                    e.currentTarget.style.color = '#9CA3AF';
-                  }}
+                  className="px-6 py-3 rounded-xl text-sm font-semibold text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800/30 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all"
                 >
-                  Clear Filters
+                  Clear All Filters
                 </button>
               </>
             ) : (
               <>
-                {/* Empty state no expenses */}
-                <div className="text-4xl md:text-5xl">💸</div>
-                <h3 className="text-base md:text-lg font-semibold text-white mt-4">No expenses yet</h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Start tracking your spending journey
+                <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/20 dark:to-purple-800/20 flex items-center justify-center mb-6">
+                  <Receipt className="text-purple-600 dark:text-purple-400" size={40} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  No expenses yet
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  Start tracking your spending journey today
                 </p>
                 <button
                   onClick={() => {
                     setSelectedExpense(null);
                     setIsEditModalOpen(true);
                   }}
-                  className="mt-6 inline-flex items-center gap-2 px-5 md:px-6 py-2.5 rounded-xl text-sm font-medium text-white transition-colors"
-                  style={{
-                    backgroundColor: '#8B5CF6',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#7C3AED';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#8B5CF6';
-                  }}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg hover:shadow-xl"
                 >
-                  <PlusCircle size={18} className="md:w-5 md:h-5" />
-                  Add First Expense
+                  <PlusCircle size={20} />
+                  Add Your First Expense
                 </button>
               </>
             )}
           </div>
         ) : (
           <>
-            {/* List Header */}
-            <div
-              className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 px-4 md:px-5 py-3 md:py-4"
-              style={{
-                borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-              }}
-            >
-              {/* Left: Transaction count + filter badge */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs md:text-sm text-gray-400">{total} transactions</span>
-                {hasActiveFilters() && (
-                  <span className="text-xs text-purple-400">
-                    ({getActiveFilterCount()} filter{getActiveFilterCount() !== 1 ? 's' : ''}{' '}
-                    active)
-                  </span>
-                )}
-              </div>
+            {/* Expense Cards */}
+            <div className="p-4 md:p-6 space-y-3">
+              <AnimatePresence>
+                {expenses.map((expense, index) => {
+                  const colors = categoryColors[expense.category] || categoryColors.Other;
+                  
+                  return (
+                    <motion.div
+                      key={expense.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: index * 0.05,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="group relative flex items-center gap-4 p-4 rounded-xl transition-all duration-300 cursor-pointer bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] border border-transparent hover:border-gray-200 dark:hover:border-white/[0.08] hover:shadow-md"
+                      onClick={() => {
+                        setSelectedExpense(expense);
+                        setIsEditModalOpen(true);
+                      }}
+                    >
+                      {/* Category Icon */}
+                      <div
+                        className="flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+                        style={{
+                          width: '56px',
+                          height: '56px',
+                          borderRadius: '14px',
+                          backgroundColor: colors.bg,
+                        }}
+                      >
+                        <span style={{ fontSize: '28px' }}>
+                          {getCategoryEmoji(expense.category)}
+                        </span>
+                      </div>
 
-              {/* Right: Sort indicator */}
-              <span className="text-xs text-gray-600">
-                Sort:{' '}
-                {filters.sort_by === 'date'
-                  ? filters.order === 'desc'
-                    ? 'Newest'
-                    : 'Oldest'
-                  : filters.order === 'desc'
-                  ? 'High to Low'
-                  : 'Low to High'}
-              </span>
-            </div>
+                      {/* Expense Details */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-bold text-gray-900 dark:text-white truncate mb-1">
+                          {expense.title}
+                        </h4>
+                        <div className="flex items-center gap-2 text-xs">
+                          <span
+                            className="font-medium px-2 py-0.5 rounded-md"
+                            style={{
+                              backgroundColor: colors.bg,
+                              color: colors.primary,
+                            }}
+                          >
+                            {expense.category}
+                          </span>
+                          <span className="text-gray-400 dark:text-gray-600">•</span>
+                          <span className="text-gray-500 dark:text-gray-400">
+                            {formatDate(expense.date)}
+                          </span>
+                        </div>
+                      </div>
 
-            {/* Transaction Rows */}
-            <div className="px-3 md:px-4 py-2">
-              {expenses.map((expense, index) => (
-                <TransactionRow
-                  key={expense.id}
-                  expense={expense}
-                  index={index}
-                  showActions={true}
-                  compact={false}
-                  onEdit={(e) => {
-                    setSelectedExpense(e);
-                    setIsEditModalOpen(true);
-                  }}
-                  onDelete={(e) => {
-                    setExpenseToDelete(e);
-                    setIsDeleteModalOpen(true);
-                  }}
-                />
-              ))}
+                      {/* Amount */}
+                      <div className="text-right flex-shrink-0 mr-12">
+                        <div className="text-lg font-bold text-red-600 dark:text-red-400">
+                          {formatCurrency(expense.amount)}
+                        </div>
+                      </div>
+
+                      {/* Quick Actions */}
+                      <div className="absolute right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedExpense(expense);
+                            setIsEditModalOpen(true);
+                          }}
+                          className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                          aria-label="Edit expense"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setExpenseToDelete(expense);
+                            setIsDeleteModalOpen(true);
+                          }}
+                          className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                          aria-label="Delete expense"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div
-                className="flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 px-4 md:px-5 py-3 md:py-4"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                }}
-              >
-                {/* Results info */}
-                <p className="text-xs text-gray-600">
-                  Showing {startIndex}–{endIndex} of {total}
-                </p>
+              <div className="border-t border-gray-200 dark:border-white/[0.06] px-6 py-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  {/* Results info */}
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Showing <span className="font-semibold text-gray-900 dark:text-white">{startIndex}–{endIndex}</span> of{' '}
+                    <span className="font-semibold text-gray-900 dark:text-white">{total}</span>
+                  </p>
 
-                {/* Page controls */}
-                <div className="flex items-center gap-2">
-                  {/* Previous button */}
-                  <button
-                    onClick={() => setPage(Math.max(1, currentPage - 1))}
-                    disabled={currentPage === 1}
-                    className="p-2 text-gray-400 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    style={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.06)',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (currentPage !== 1) {
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-                        e.currentTarget.style.color = '#FFFFFF';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (currentPage !== 1) {
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                        e.currentTarget.style.color = '#9CA3AF';
-                      }
-                    }}
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
+                  {/* Page controls */}
+                  <div className="flex items-center gap-2">
+                    {/* Previous button */}
+                    <button
+                      onClick={() => setPage(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                      className="p-2.5 rounded-lg text-gray-600 dark:text-gray-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-gray-100 dark:hover:bg-white/[0.05] border border-gray-200 dark:border-white/[0.06]"
+                      aria-label="Previous page"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
 
-                  {/* Page numbers - Hidden on mobile, show "Page X of Y" instead */}
-                  <div className="hidden sm:flex items-center gap-2">
-                    {getPageNumbers().map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => setPage(page)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                          page === currentPage ? '' : ''
-                        }`}
-                        style={
-                          page === currentPage
-                            ? {
-                                backgroundColor: '#8B5CF6',
-                                color: '#FFFFFF',
-                                border: '1px solid #8B5CF6',
-                              }
-                            : {
-                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                color: '#9CA3AF',
-                                border: '1px solid rgba(255, 255, 255, 0.06)',
-                              }
-                        }
-                        onMouseEnter={(e) => {
-                          if (page !== currentPage) {
-                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-                            e.currentTarget.style.color = '#FFFFFF';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (page !== currentPage) {
-                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                            e.currentTarget.style.color = '#9CA3AF';
-                          }
-                        }}
-                      >
-                        {page}
-                      </button>
-                    ))}
+                    {/* Page numbers - Hidden on mobile */}
+                    <div className="hidden sm:flex items-center gap-2">
+                      {getPageNumbers().map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => setPage(page)}
+                          className={`min-w-[40px] px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
+                            page === currentPage
+                              ? 'bg-purple-600 text-white shadow-md'
+                              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/[0.05] border border-gray-200 dark:border-white/[0.06]'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Mobile: Show "Page X of Y" */}
+                    <span className="sm:hidden text-sm text-gray-600 dark:text-gray-400 px-3">
+                      Page {currentPage} of {totalPages}
+                    </span>
+
+                    {/* Next button */}
+                    <button
+                      onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
+                      disabled={currentPage === totalPages}
+                      className="p-2.5 rounded-lg text-gray-600 dark:text-gray-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-gray-100 dark:hover:bg-white/[0.05] border border-gray-200 dark:border-white/[0.06]"
+                      aria-label="Next page"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
                   </div>
-
-                  {/* Mobile: Show "Page X of Y" */}
-                  <span className="sm:hidden text-xs text-gray-400 px-2">
-                    Page {currentPage} of {totalPages}
-                  </span>
-
-                  {/* Next button */}
-                  <button
-                    onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
-                    disabled={currentPage === totalPages}
-                    className="p-2 text-gray-400 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    style={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.06)',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (currentPage !== totalPages) {
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-                        e.currentTarget.style.color = '#FFFFFF';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (currentPage !== totalPages) {
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                        e.currentTarget.style.color = '#9CA3AF';
-                      }
-                    }}
-                  >
-                    <ChevronRight size={16} />
-                  </button>
                 </div>
               </div>
             )}

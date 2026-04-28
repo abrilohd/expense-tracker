@@ -14,6 +14,7 @@ import RegisterPage from './pages/Register';
 import DashboardPage from './pages/Dashboard';
 import ExpenseListPage from './pages/ExpenseList';
 import InsightsPage from './pages/Insights';
+import ProfilePage from './pages/Profile';
 import NotFoundPage from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -39,15 +40,18 @@ function App() {
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/signup" element={<RegisterPage />} />
           </Route>
 
           {/* Protected routes - require authentication */}
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route index element={<DashboardPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/expenses" element={<ExpenseListPage />} />
               <Route path="/expenses/add" element={<AddExpensePage />} />
               <Route path="/insights" element={<InsightsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Route>
           </Route>
 

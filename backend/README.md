@@ -5,6 +5,7 @@ A production-ready RESTful API for personal expense tracking with JWT authentica
 ## 🚀 Features
 
 - **User Authentication**: JWT-based authentication with secure password hashing
+- **Google OAuth**: Sign in with Google for seamless authentication
 - **Expense Management**: Full CRUD operations for expense tracking
 - **Advanced Filtering**: Search, filter, and sort expenses by multiple criteria
 - **Analytics Dashboard**: Comprehensive spending summary with category breakdown and trends
@@ -60,7 +61,11 @@ cp .env.example .env
 # Edit .env and update:
 # - SECRET_KEY (generate with: openssl rand -hex 32)
 # - DATABASE_URL (if using PostgreSQL)
+# - GOOGLE_CLIENT_ID (for Google OAuth)
+# - GOOGLE_CLIENT_SECRET (for Google OAuth)
 ```
+
+**For Google OAuth setup**, see: `../START-HERE-OAUTH.md` (5-minute quick fix)
 
 ### 5. Run the application
 
@@ -85,6 +90,8 @@ Interactive API documentation: `http://localhost:8000/docs`
 | POST | `/auth/register` | Register new user | No |
 | POST | `/auth/login` | Login and get JWT token | No |
 | GET | `/auth/me` | Get current user profile | Yes |
+| GET | `/auth/google/login` | Initiate Google OAuth flow | No |
+| GET | `/auth/google/callback` | Google OAuth callback | No |
 
 ### Expenses
 
@@ -147,6 +154,12 @@ Interactive API documentation: `http://localhost:8000/docs`
 | `SECRET_KEY` | JWT secret key | - | Yes |
 | `ALGORITHM` | JWT algorithm | `HS256` | Yes |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Token expiration time | `30` | Yes |
+| `GOOGLE_CLIENT_ID` | Google OAuth Client ID | - | For OAuth |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth Client Secret | - | For OAuth |
+| `GOOGLE_REDIRECT_URI` | OAuth callback URL | `http://localhost:8000/auth/google/callback` | For OAuth |
+| `FRONTEND_URL` | Frontend application URL | `http://localhost:5173` | For OAuth |
+
+**Setting up Google OAuth?** See: `../START-HERE-OAUTH.md` for step-by-step instructions.
 
 ## 📊 Database Schema
 

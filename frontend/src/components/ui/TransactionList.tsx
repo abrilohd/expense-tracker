@@ -30,16 +30,16 @@ const TransactionList = ({
   const displayExpenses = maxItems ? expenses.slice(0, maxItems) : expenses;
 
   return (
-    <div className="rounded-[20px] bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] p-5 md:p-6">
+    <div className="rounded-[20px] bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]" style={{ padding: '24px' }}>
       {/* Header row */}
       {title && (
         <>
           <div className="flex items-center justify-between mb-3">
             {/* Left: Title + count badge */}
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">{title}</h3>
+              <h3 className="text-white" style={{ fontSize: '16px', fontWeight: '600' }}>{title}</h3>
               <div className="px-2 py-0.5 rounded-full bg-gray-200 dark:bg-white/[0.06]">
-                <span className="text-xs text-gray-600 dark:text-gray-400">{expenses.length}</span>
+                <span style={{ fontSize: '12px', color: '#A0AEC0' }}>{expenses.length}</span>
               </div>
             </div>
 

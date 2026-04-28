@@ -46,3 +46,10 @@ class TokenData(BaseModel):
     Schema for decoded token data
     """
     email: Optional[str] = None
+
+class PasswordUpdate(BaseModel):
+    """
+    Schema for password update request
+    """
+    current_password: str = Field(..., min_length=1)
+    new_password: str = Field(..., min_length=6, max_length=100)

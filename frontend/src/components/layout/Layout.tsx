@@ -16,9 +16,10 @@ const getPageTitle = (pathname: string): string => {
     '/expenses': 'Expenses',
     '/expenses/add': 'Add Expense',
     '/insights': 'AI Insights',
+    '/profile': 'Profile',
   };
 
-  return titles[pathname] || 'ExpenseAI';
+  return titles[pathname] || 'ExpenseTracker';
 };
 
 const Layout = () => {

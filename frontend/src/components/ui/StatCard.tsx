@@ -24,28 +24,32 @@ interface StatCardProps {
 // Color scheme mapping for dark theme
 const colorSchemes = {
   blue: {
-    iconBg: '#1E3A5F',
+    iconBg: 'rgba(96, 165, 250, 0.15)',
     iconColor: '#60A5FA',
     accentGradient: 'radial-gradient(circle, rgba(96, 165, 250, 0.08) 0%, transparent 70%)',
     sparklineColor: '#60A5FA',
+    borderColor: 'rgba(96, 165, 250, 0.3)',
   },
   green: {
-    iconBg: '#14302A',
+    iconBg: 'rgba(52, 211, 153, 0.15)',
     iconColor: '#34D399',
     accentGradient: 'radial-gradient(circle, rgba(52, 211, 153, 0.08) 0%, transparent 70%)',
     sparklineColor: '#34D399',
+    borderColor: 'rgba(52, 211, 153, 0.3)',
   },
   red: {
-    iconBg: '#3B1219',
+    iconBg: 'rgba(248, 113, 113, 0.15)',
     iconColor: '#F87171',
     accentGradient: 'radial-gradient(circle, rgba(248, 113, 113, 0.08) 0%, transparent 70%)',
     sparklineColor: '#F87171',
+    borderColor: 'rgba(248, 113, 113, 0.3)',
   },
   purple: {
-    iconBg: '#2D1B69',
+    iconBg: 'rgba(167, 139, 250, 0.15)',
     iconColor: '#A78BFA',
     accentGradient: 'radial-gradient(circle, rgba(167, 139, 250, 0.08) 0%, transparent 70%)',
     sparklineColor: '#A78BFA',
+    borderColor: 'rgba(167, 139, 250, 0.3)',
   },
 };
 
@@ -67,7 +71,11 @@ const StatCard = ({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="relative overflow-hidden rounded-2xl p-5 transition-all duration-200 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.12]"
+      className="relative overflow-hidden rounded-2xl transition-all duration-200 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.12]"
+      style={{
+        padding: '24px',
+        borderTop: `1px solid ${colors.borderColor}`,
+      }}
     >
       {/* Decorative accent circle */}
       <div
@@ -103,8 +111,8 @@ const StatCard = ({
               <div
                 className="flex items-center justify-center rounded-xl"
                 style={{
-                  width: '40px',
-                  height: '40px',
+                  width: '44px',
+                  height: '44px',
                   backgroundColor: colors.iconBg,
                 }}
               >
@@ -137,7 +145,8 @@ const StatCard = ({
             <div
               className="font-bold text-gray-900 dark:text-white mb-1"
               style={{
-                fontSize: '1.75rem',
+                fontSize: '28px',
+                fontWeight: '700',
                 letterSpacing: '-0.02em',
               }}
             >
@@ -145,10 +154,10 @@ const StatCard = ({
             </div>
 
             {/* Title */}
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
+            <p className="text-gray-600 dark:text-gray-400" style={{ fontSize: '16px', fontWeight: '600' }}>{title}</p>
 
             {/* Subtitle */}
-            {subtitle && <p className="text-xs text-gray-500 dark:text-gray-600 mt-1">{subtitle}</p>}
+            {subtitle && <p className="text-gray-500 dark:text-gray-600" style={{ fontSize: '11px' }}>{subtitle}</p>}
 
             {/* Sparkline chart */}
             {sparklineData && sparklineData.length > 0 && (

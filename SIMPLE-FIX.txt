@@ -1,0 +1,87 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    OAUTH FIX - 3 SIMPLE STEPS                                ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+The problem: Backend is NOT running!
+The solution: Start it!
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: START BACKEND                                                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   Double-click:  START-BACKEND-NOW.bat
+
+   Wait for:      ✅ OAuth configured: Client ID loaded
+                  Application startup complete
+
+   Keep terminal open!
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: START FRONTEND                                                       │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   Open NEW terminal
+
+   Double-click:  START-FRONTEND-NOW.bat
+
+   Wait for:      Local: http://localhost:5173/
+
+   Keep terminal open!
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: TEST OAUTH                                                           │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   Open browser:  http://localhost:5173/login
+
+   Click:         "Continue with Google"
+
+   Result:        Google consent screen appears!
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║  ✅ DONE! OAuth will work once both servers are running!                     ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+Troubleshooting:
+───────────────
+
+❌ "Failed to fetch"
+   → Backend is not running. Go to Step 1.
+
+❌ "Missing required parameter: client_id"
+   → Check backend terminal. Should see: ✅ OAuth configured
+   → If not, restart backend (Ctrl+C, then run START-BACKEND-NOW.bat again)
+
+❌ Backend won't start
+   → Make sure you're in the project root directory
+   → Make sure Python is installed: python --version
+   → Check if port 8000 is free: netstat -ano | findstr :8000
+
+❌ Frontend won't start
+   → Make sure Node.js is installed: node --version
+   → Check if port 5173 is free: netstat -ano | findstr :5173
+
+
+Quick Verification:
+──────────────────
+
+Backend:   http://localhost:8000/docs       (should show API docs)
+Frontend:  http://localhost:5173            (should show login page)
+OAuth:     http://localhost:8000/auth/oauth-status  (should show config)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                    START WITH: START-BACKEND-NOW.bat
+
+═══════════════════════════════════════════════════════════════════════════════

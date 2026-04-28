@@ -8,7 +8,7 @@ from datetime import timedelta
 
 from app.db.database import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserResponse, Token
+from app.schemas.user import UserCreate, UserResponse, Token, PasswordUpdate
 from app.core.security import hash_password, verify_password, create_access_token, get_current_user
 from app.core.config import settings
 from app.core.exceptions import BadRequestException, UnauthorizedException, ForbiddenException
@@ -72,3 +72,23 @@ def get_current_user_profile(current_user: User = Depends(get_current_user)):
     Get current authenticated user profile
     """
     return current_user
+
+# UPDATE PASSWORD - Change user password
+@router.put("/update-password", response_model=dict, status_code=status.HTTP_200_OK)
+def update_user_password(
+    password_data: PasswordUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update user password - requires current password verification
+    """
+    # Verify current password
+    if not verify_password(password_data.current_password, current_user.hashed_password):
+        raise UnauthorizedException("Current password is incorrect")
+    
+    # Update to new password
+    current_user.hashed_password = hash_password(password_data.new_password)
+    db.commit()
+    
+    return {"message": "Password updated successfully"}

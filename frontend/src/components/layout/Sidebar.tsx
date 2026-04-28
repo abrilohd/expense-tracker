@@ -3,7 +3,7 @@
  * Supports both light and dark themes
  */
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, CreditCard, PlusCircle, Sparkles, LogOut } from 'lucide-react';
+import { LayoutDashboard, CreditCard, PlusCircle, Sparkles, LogOut, UserCircle } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useDarkMode } from '../../hooks/useDarkMode';
 import { getLayoutStyles } from '../../utils/themeStyles';
@@ -19,6 +19,7 @@ const navItems = [
   { label: 'Expenses', path: '/expenses', icon: CreditCard },
   { label: 'Add Expense', path: '/expenses/add', icon: PlusCircle },
   { label: 'AI Insights', path: '/insights', icon: Sparkles, badge: 'AI' },
+  { label: 'Profile', path: '/profile', icon: UserCircle },
 ];
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
@@ -41,20 +42,25 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     >
       {/* Logo Section */}
       <div className="px-5 pt-6 pb-8">
-        <div className="flex items-center gap-3 mb-6">
+        <button
+          onClick={() => {
+            // Use environment variable for landing page URL
+            const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:8080';
+            window.location.href = landingUrl;
+          }}
+          className="flex items-center gap-3 mb-6 group cursor-pointer bg-transparent border-0 p-0 w-full text-left hover:opacity-100"
+          title="Go to Landing Page"
+        >
           {/* Logo Circle */}
-          <div className="w-9 h-9 rounded-full flex items-center justify-center bg-purple-600">
-            <span className="text-white font-bold text-lg">E</span>
+          <div className="w-9 h-9 rounded-full flex items-center justify-center bg-purple-600 group-hover:bg-purple-700 transition-colors">
+            <span className="text-white font-bold text-lg">💰</span>
           </div>
 
           {/* App Name */}
           <div className="flex items-baseline">
-            <span className="text-gray-900 dark:text-white font-semibold text-lg">Expense</span>
-            <span className="font-bold text-lg text-purple-600 dark:text-purple-400">
-              AI
-            </span>
+            <span className="text-gray-900 dark:text-white font-semibold text-lg group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">ExpenseTracker</span>
           </div>
-        </div>
+        </button>
 
         {/* Divider */}
         <div className="h-px bg-gray-200 dark:bg-white/[0.06]" />

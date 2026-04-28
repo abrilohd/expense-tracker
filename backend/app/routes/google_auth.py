@@ -28,6 +28,19 @@ async def google_login():
     """
     Redirect user to Google OAuth consent screen
     """
+    # Debug: Print settings to verify they're loaded
+    print(f"🔍 Google OAuth Login Debug:")
+    print(f"   Client ID: {settings.google_client_id[:20] if settings.google_client_id else 'NOT SET'}...")
+    print(f"   Redirect URI: {settings.google_redirect_uri}")
+    
+    # Check if client_id is set
+    if not settings.google_client_id:
+        print("❌ ERROR: GOOGLE_CLIENT_ID is not set!")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="OAuth not configured: GOOGLE_CLIENT_ID missing"
+        )
+    
     # Build Google OAuth URL with required parameters
     params = {
         "client_id": settings.google_client_id,
@@ -39,6 +52,7 @@ async def google_login():
     }
     
     google_auth_url = f"{GOOGLE_AUTH_URL}?{urlencode(params)}"
+    print(f"   Redirecting to: {google_auth_url[:100]}...")
     
     return RedirectResponse(url=google_auth_url)
 

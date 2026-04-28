@@ -42,7 +42,7 @@ const BudgetOverviewCard = ({
   // Loading state
   if (isLoading) {
     return (
-      <div className="rounded-2xl md:rounded-[20px] p-5 md:p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+      <div className="rounded-2xl md:rounded-[20px] bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]" style={{ padding: '24px' }}>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="flex gap-2 md:gap-3 items-center py-2 md:py-3">
@@ -61,9 +61,9 @@ const BudgetOverviewCard = ({
   // Empty state
   if (!categories || categories.length === 0) {
     return (
-      <div className="rounded-2xl md:rounded-[20px] p-5 md:p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
-        <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white mb-1">Budget Overview</h3>
-        <p className="text-xs text-gray-600 dark:text-gray-500 mb-5 md:mb-6">Spending by category</p>
+      <div className="rounded-2xl md:rounded-[20px] bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]" style={{ padding: '24px' }}>
+        <h3 className="text-white" style={{ fontSize: '16px', fontWeight: '600' }}>Budget Overview</h3>
+        <p className="mt-0.5 mb-5 md:mb-6" style={{ fontSize: '12px', color: '#A0AEC0' }}>Spending by category</p>
 
         <div className="flex flex-col items-center justify-center py-6 md:py-8">
           <PieChart size={24} className="md:w-7 md:h-7 text-gray-400 dark:text-gray-700 mb-3" />
@@ -75,13 +75,13 @@ const BudgetOverviewCard = ({
   }
 
   return (
-    <div className="rounded-2xl md:rounded-[20px] p-5 md:p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+    <div className="rounded-2xl md:rounded-[20px] bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]" style={{ padding: '24px' }}>
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3 md:mb-4">
         {/* Left: Title + subtitle */}
         <div>
-          <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">Budget Overview</h3>
-          <p className="text-xs text-gray-600 dark:text-gray-500 mt-0.5">Spending by category</p>
+          <h3 className="text-white" style={{ fontSize: '16px', fontWeight: '600' }}>Budget Overview</h3>
+          <p className="mt-0.5" style={{ fontSize: '12px', color: '#A0AEC0' }}>Spending by category</p>
         </div>
 
         {/* Right: Total amount pill */}

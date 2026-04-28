@@ -56,6 +56,17 @@ export const getMe = async (): Promise<User> => {
   return response.data;
 };
 
+/**
+ * Update user password
+ */
+export const updatePassword = async (currentPassword: string, newPassword: string): Promise<{ message: string }> => {
+  const response = await apiClient.put<{ message: string }>('/auth/update-password', {
+    current_password: currentPassword,
+    new_password: newPassword,
+  });
+  return response.data;
+};
+
 // ============================================
 // EXPENSES
 // ============================================

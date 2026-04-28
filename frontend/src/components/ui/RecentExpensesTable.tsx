@@ -26,12 +26,12 @@ const RecentExpensesTable = ({
   // Loading state
   if (isLoading) {
     return (
-      <div className="rounded-2xl p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+      <div className="rounded-2xl bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]" style={{ padding: '24px' }}>
         {showHeader && (
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">Recent Transactions</h3>
-              <p className="text-xs text-gray-600 dark:text-gray-500 mt-0.5">Latest expense activity</p>
+              <h3 className="text-white" style={{ fontSize: '16px', fontWeight: '600' }}>Recent Transactions</h3>
+              <p className="mt-0.5" style={{ fontSize: '12px', color: '#A0AEC0' }}>Latest expense activity</p>
             </div>
           </div>
         )}
@@ -59,12 +59,12 @@ const RecentExpensesTable = ({
   // Empty state
   if (!expenses || expenses.length === 0) {
     return (
-      <div className="rounded-2xl p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+      <div className="rounded-2xl bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]" style={{ padding: '24px' }}>
         {showHeader && (
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">Recent Transactions</h3>
-              <p className="text-xs text-gray-600 dark:text-gray-500 mt-0.5">Latest expense activity</p>
+              <h3 className="text-white" style={{ fontSize: '16px', fontWeight: '600' }}>Recent Transactions</h3>
+              <p className="mt-0.5" style={{ fontSize: '12px', color: '#A0AEC0' }}>Latest expense activity</p>
             </div>
           </div>
         )}
@@ -93,13 +93,13 @@ const RecentExpensesTable = ({
   const displayExpenses = expenses.slice(0, maxItems);
 
   return (
-    <div className="rounded-2xl p-6 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
+    <div className="rounded-2xl bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]" style={{ padding: '24px' }}>
       {/* Header */}
       {showHeader && (
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h3 className="text-base font-semibold text-gray-900 dark:text-white">Recent Transactions</h3>
-            <p className="text-xs text-gray-600 dark:text-gray-500 mt-0.5">
+            <h3 className="text-white" style={{ fontSize: '16px', fontWeight: '600' }}>Recent Transactions</h3>
+            <p className="mt-0.5" style={{ fontSize: '12px', color: '#A0AEC0' }}>
               {expenses.length} transaction{expenses.length !== 1 ? 's' : ''}
             </p>
           </div>

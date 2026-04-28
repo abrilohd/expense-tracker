@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import App from './App';
 import './index.css';
+import './lib/chartSetup'; // Register Chart.js components once
 
 // Render React application
 ReactDOM.createRoot(document.getElementById('root')!).render(

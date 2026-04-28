@@ -241,3 +241,16 @@ select option {
   transform: translateY(0);
   transition: all 250ms ease;
 }
+
+/* ── Dashboard responsive grid ─────────────────── */
+@media (max-width: 1100px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .trends-donut-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

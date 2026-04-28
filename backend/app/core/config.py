@@ -2,8 +2,14 @@
 Application configuration using Pydantic Settings
 Loads environment variables from .env file
 """
+import os
+from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Get the backend directory (parent of app directory)
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+ENV_FILE = BASE_DIR / ".env"
 
 class Settings(BaseSettings):
     """
@@ -13,7 +19,7 @@ class Settings(BaseSettings):
     database_url: str = Field(default="sqlite:///./expenses.db", validation_alias="DATABASE_URL")
     
     # CORS configuration
-    cors_origins: list = ["http://localhost:5173"]
+    cors_origins: list = ["http://localhost:5173", "http://127.0.0.1:5173"]
     
     # API metadata
     app_name: str = "Personal Expense Tracker API"
@@ -32,10 +38,17 @@ class Settings(BaseSettings):
     frontend_url: str = Field(default="http://localhost:5173", validation_alias="FRONTEND_URL")
     
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(ENV_FILE),
+        env_file_encoding='utf-8',
         case_sensitive=False,
         extra="ignore"
     )
 
 # Create global settings instance
 settings = Settings()
+
+# Debug: Print to verify settings are loaded (remove in production)
+if settings.google_client_id:
+    print(f"✅ OAuth configured: Client ID loaded ({settings.google_client_id[:20]}...)")
+else:
+    print(f"⚠️  WARNING: GOOGLE_CLIENT_ID not loaded from {ENV_FILE}")

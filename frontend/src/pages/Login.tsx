@@ -318,7 +318,8 @@ const LoginPage = () => {
               className="google-button"
               onClick={() => {
                 // Redirect to backend Google OAuth endpoint
-                window.location.href = 'http://localhost:8000/auth/google/login';
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                window.location.href = `${apiUrl}/auth/google/login`;
               }}
             >
               <svg className="google-icon" viewBox="0 0 24 24">

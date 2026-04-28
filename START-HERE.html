@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Fix - Start Here</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .problem {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        .problem h2 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        .step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        .step h3 {
+            display: inline-block;
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        .step-content {
+            margin-left: 55px;
+            margin-top: 15px;
+        }
+        .command {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 15px 0;
+            display: block;
+        }
+        .wait-for {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .wait-for strong {
+            color: #155724;
+        }
+        .success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .success h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        .troubleshooting {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        .troubleshooting h3 {
+            color: #721c24;
+            margin-bottom: 15px;
+        }
+        .troubleshooting ul {
+            margin-left: 20px;
+        }
+        .troubleshooting li {
+            margin: 10px 0;
+            color: #721c24;
+        }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .links {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 OAuth Fix Guide</h1>
+            <p>Get your Google OAuth working in 3 simple steps</p>
+        </div>
+
+        <div class="content">
+            <div class="problem">
+                <h2>⚠️ The Problem</h2>
+                <p><strong>Your backend server is NOT running!</strong></p>
+                <p>That's why you're seeing "Failed to fetch" and "Missing required parameter: client_id" errors.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <h3>Start Backend Server</h3>
+                <div class="step-content">
+                    <p>Open a terminal and run:</p>
+                    <code class="command">START-BACKEND-NOW.bat</code>
+                    <div class="wait-for">
+                        <strong>✅ Wait for this line:</strong><br>
+                        OAuth configured: Client ID loaded (199412317897...)<br>
+                        Application startup complete
+                    </div>
+                    <p><strong>Keep this terminal window open!</strong></p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <h3>Start Frontend Server</h3>
+                <div class="step-content">
+                    <p>Open a <strong>NEW</strong> terminal and run:</p>
+                    <code class="command">START-FRONTEND-NOW.bat</code>
+                    <div class="wait-for">
+                        <strong>✅ Wait for this line:</strong><br>
+                        Local: http://localhost:5173/
+                    </div>
+                    <p><strong>Keep this terminal window open too!</strong></p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <h3>Test OAuth Login</h3>
+                <div class="step-content">
+                    <p>Open your browser and go to:</p>
+                    <code class="command">http://localhost:5173/login</code>
+                    <p>Click <strong>"Continue with Google"</strong></p>
+                    <div class="wait-for">
+                        <strong>✅ You should see:</strong><br>
+                        Google's consent screen (blue Google page)
+                    </div>
+                </div>
+            </div>
+
+            <div class="success">
+                <h2>🎉 That's It!</h2>
+                <p>Once both servers are running, OAuth will work perfectly!</p>
+            </div>
+
+            <div class="links">
+                <a href="http://localhost:8000/docs" class="btn" target="_blank">📚 Backend API Docs</a>
+                <a href="http://localhost:5173" class="btn" target="_blank">🚀 Frontend App</a>
+                <a href="http://localhost:8000/auth/oauth-status" class="btn" target="_blank">🔍 Check OAuth Status</a>
+            </div>
+
+            <div class="troubleshooting">
+                <h3>🐛 Troubleshooting</h3>
+                <ul>
+                    <li><strong>"Failed to fetch"</strong> → Backend is not running. Go to Step 1.</li>
+                    <li><strong>"Missing required parameter: client_id"</strong> → Check backend terminal. Should see "✅ OAuth configured"</li>
+                    <li><strong>Backend won't start</strong> → Make sure you're in the project root directory</li>
+                    <li><strong>Port already in use</strong> → Kill existing processes: <code>netstat -ano | findstr :8000</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

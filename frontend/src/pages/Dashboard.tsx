@@ -1,32 +1,24 @@
 /**
- * Dashboard page - Fundex-inspired redesign
- * Updated to use Zustand store with new visual layout
+ * Dashboard - Main overview page with financial statistics and charts
+ * Rebuilt with 2-column layout: main content + right panel
  */
-import { motion } from 'framer-motion';
-import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  Calendar,
-  TrendingUp,
-  Receipt,
-  AlertCircle,
-  ArrowUpRight,
-} from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useDashboardData } from '../hooks/useExpenses';
-import HeroCard from '../components/ui/HeroCard';
-import StatCard from '../components/ui/StatCard';
-import BudgetOverviewCard from '../components/ui/BudgetOverviewCard';
-import CategoryCard from '../components/ui/CategoryCard';
-import TransactionList from '../components/ui/TransactionList';
-import ExpenseAreaChart from '../components/charts/ExpenseAreaChart';
-import CategoryPieChart from '../components/charts/CategoryPieChart';
-import { formatCurrency, formatDate, getCategoryEmoji } from '../utils/formatters';
 import { PageLoader } from '../components/ui/LoadingSpinner';
 import { TOKEN_KEY } from '../utils/constants';
+import StatCards from '../components/dashboard/StatCards';
+import CashFlowChart from '../components/dashboard/CashFlowChart';
+import RightPanel from '../components/dashboard/RightPanel';
+import RecentTransactions from '../components/dashboard/RecentTransactions';
+import SpendingSummaryCards from '../components/dashboard/SpendingSummaryCards';
+import SpendingTrendsChart from '../components/dashboard/SpendingTrendsChart';
+import SpendingDonutChart from '../components/dashboard/SpendingDonutChart';
+import CategoryBreakdown from '../components/dashboard/CategoryBreakdown';
 
-const DashboardPage = () => {
+const Dashboard = () => {
   const { user } = useAuthStore();
   const { data, isLoading, error, refetch } = useDashboardData();
   const navigate = useNavigate();
@@ -36,64 +28,32 @@ const DashboardPage = () => {
   useEffect(() => {
     const token = searchParams.get('token');
     if (token) {
-      // Save token to localStorage
       localStorage.setItem(TOKEN_KEY, token);
-      
-      // Remove token from URL
       navigate('/dashboard', { replace: true });
-      
-      // Reload user data
       window.location.reload();
     }
   }, [searchParams, navigate]);
 
-  // Get time-based greeting
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning';
-    if (hour < 18) return 'Good afternoon';
-    return 'Good evening';
-  };
+  // Extract values from dashboard data with null checks
+  const currentMonthTotal = data?.current_month_total ?? 0;
+  const averageExpense = data?.average_expense ?? 0;
+  const highestExpense = data?.highest_expense ?? 0;
+  const totalCount = data?.total_count ?? 0;
+  const totalExpenses = data?.total_expenses ?? 0;
+  const categories = data?.categories ?? [];
+  const monthlyTrends = data?.monthly_trends ?? [];
+  const recentExpenses = data?.recent_expenses ?? [];
 
-  // Get user's first name from email
-  const getUserName = () => {
-    if (!user?.email) return 'there';
-    return user.email.split('@')[0];
-  };
+  // Get user name
+  const userName = user?.email?.split('@')[0] || 'User';
 
-  // Calculate last month total from monthly trends
-  const getLastMonthTotal = (): number => {
-    if (!data?.monthly_trends || data.monthly_trends.length < 2) return 0;
+  // Get highest expense title
+  const highestExpenseTitle =
+    recentExpenses.find((e) => e.amount === highestExpense)?.title || 'N/A';
 
-    const currentMonth = format(new Date(), 'yyyy-MM');
-    const lastMonth = data.monthly_trends.find((trend) => trend.month !== currentMonth);
-
-    return lastMonth?.total || 0;
-  };
-
-  // Calculate trend percentage for stat cards
-  const calculateTrend = (current: number, previous: number) => {
-    if (previous === 0) return null;
-    const change = ((current - previous) / previous) * 100;
-    return {
-      value: Math.abs(Math.round(change)),
-      isPositive: change < 0, // Spending less is positive
-    };
-  };
-
-  // Get category color for progress bars
-  const getCategoryColor = (category: string): string => {
-    const colors: Record<string, string> = {
-      Food: '#F59E0B',
-      Transport: '#3B82F6',
-      Housing: '#8B5CF6',
-      Entertainment: '#EC4899',
-      Health: '#10B981',
-      Shopping: '#EAB308',
-      Education: '#6366F1',
-      Other: '#6B7280',
-    };
-    return colors[category] || colors.Other;
+  // Navigation handler for expenses page
+  const handleSeeMore = () => {
+    navigate('/expenses');
   };
 
   // Loading state
@@ -112,7 +72,9 @@ const DashboardPage = () => {
               <h3 className="text-lg font-semibold text-red-700 dark:text-red-400 mb-1">
                 Failed to load dashboard
               </h3>
-              <p className="text-red-600 dark:text-red-300/80 mb-4">{error || 'An unexpected error occurred'}</p>
+              <p className="text-red-600 dark:text-red-300/80 mb-4">
+                {error || 'An unexpected error occurred'}
+              </p>
               <button
                 onClick={refetch}
                 className="px-4 py-2 rounded-lg font-medium transition-colors border border-red-300 dark:border-red-800/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/10"
@@ -126,253 +88,78 @@ const DashboardPage = () => {
     );
   }
 
-  const lastMonthTotal = getLastMonthTotal();
-  const thisMonthTrend = calculateTrend(data.current_month_total, lastMonthTotal);
-
-  // Generate sparkline data from monthly trends (last 7 months)
-  const sparklineData = data.monthly_trends.slice(-7).map((t) => t.total);
-  const countSparklineData = data.monthly_trends.slice(-7).map((t) => t.count);
-
   return (
-    <div className="space-y-4 md:space-y-6 lg:space-y-8">
-      {/* Quick Stats Pills */}
-      {!isLoading && data && (
-        <motion.div
-          className="flex gap-2 flex-wrap"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.5 }}
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0A0F1E]">
+      <div className="p-6 max-w-[1400px] mx-auto">
+        {/* Page Header */}
+        <div className="mb-6">
+          <h1 className="font-['Syne'] text-2xl font-bold text-gray-900 dark:text-white">
+            Dashboard Overview
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-[#6B7280] mt-1">
+            Track your money, performance, and trends — all in one place.
+          </p>
+        </div>
+
+        {/* Main grid */}
+        <div
+          className="dashboard-grid grid gap-5"
+          style={{ gridTemplateColumns: 'minmax(0, 1fr) 320px' }}
         >
-          {/* Pill 1: Total */}
-          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
-            <div className="rounded-full w-2 h-2 bg-purple-600" />
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-              Total: {formatCurrency(data.total_expenses)}
-            </span>
-          </div>
-
-          {/* Pill 2: Transactions */}
-          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
-            <div className="rounded-full w-2 h-2 bg-blue-600" />
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-              {data.total_count} transactions
-            </span>
-          </div>
-
-          {/* Pill 3: Average */}
-          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06]">
-            <div className="rounded-full w-2 h-2 bg-green-600" />
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-              Avg: {formatCurrency(data.average_expense)}
-            </span>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Page Header */}
-      <div>
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
-          {getGreeting()}, {getUserName()}! 👋
-        </h1>
-        <p className="text-sm md:text-base text-gray-600 dark:text-gray-500 mt-1 md:mt-2">
-          {format(new Date(), 'EEEE, MMMM d, yyyy')}
-        </p>
-      </div>
-
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 md:gap-6 lg:gap-8">
-        {/* Left Column */}
-        <div className="space-y-4 md:space-y-6 lg:space-y-8">
-          {/* Hero Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <HeroCard
-              totalSpent={data.total_expenses}
-              currentMonthTotal={data.current_month_total}
-              lastMonthTotal={lastMonthTotal}
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col gap-5 min-w-0">
+            <StatCards
+              currentMonthTotal={currentMonthTotal}
+              averageExpense={averageExpense}
+              highestExpense={highestExpense}
+              totalCount={totalCount}
+              highestExpenseTitle={highestExpenseTitle}
             />
-          </motion.div>
 
-          {/* Stats Row */}
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.1,
-                  delayChildren: 0.1,
-                },
-              },
-            }}
+            <CashFlowChart monthlyTrends={monthlyTrends} />
+
+            <RecentTransactions expenses={recentExpenses} onSeeMore={handleSeeMore} />
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="flex flex-col gap-4">
+            <RightPanel
+              totalExpenses={totalExpenses}
+              currentMonthTotal={currentMonthTotal}
+              categories={categories}
+              userName={userName}
+            />
+          </div>
+        </div>
+
+        {/* ─── BOTTOM SECTIONS ─── */}
+        <div className="mt-8 border-t border-gray-200 dark:border-white/[0.06] pt-8">
+          <SpendingSummaryCards
+            currentMonthTotal={data?.current_month_total ?? 0}
+            averageExpense={data?.average_expense ?? 0}
+            totalCount={data?.total_count ?? 0}
+          />
+
+          <div
+            className="trends-donut-grid grid gap-5 mb-5"
+            style={{ gridTemplateColumns: '1fr 340px' }}
           >
-            <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
-              <StatCard
-                title="This Month"
-                value={formatCurrency(data.current_month_total)}
-                subtitle={`${data.current_month_count} transactions`}
-                icon={Calendar}
-                colorScheme="blue"
-                trend={thisMonthTrend || undefined}
-                sparklineData={sparklineData}
-                sparklineColor="#60A5FA"
-              />
-            </motion.div>
+            <SpendingTrendsChart
+              categories={data?.categories ?? []}
+              totalExpenses={data?.total_expenses ?? 0}
+            />
 
-            <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
-              <StatCard
-                title="Avg Expense"
-                value={formatCurrency(data.average_expense)}
-                subtitle="Per transaction"
-                icon={TrendingUp}
-                colorScheme="purple"
-              />
-            </motion.div>
+            <SpendingDonutChart
+              categories={data?.categories ?? []}
+              totalExpenses={data?.total_expenses ?? 0}
+            />
+          </div>
 
-            <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
-              <StatCard
-                title="Highest"
-                value={formatCurrency(data.highest_expense)}
-                subtitle="Single expense"
-                icon={ArrowUpRight}
-                colorScheme="red"
-              />
-            </motion.div>
-
-            <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
-              <StatCard
-                title="Total Count"
-                value={data.total_count.toString()}
-                subtitle={`${data.current_month_count} this month`}
-                icon={Receipt}
-                colorScheme="green"
-                sparklineData={countSparklineData}
-                sparklineColor="#34D399"
-              />
-            </motion.div>
-          </motion.div>
+          <CategoryBreakdown categories={data?.categories ?? []} />
         </div>
-
-        {/* Right Column */}
-        <motion.div
-          className="space-y-4 md:space-y-6 lg:space-y-8"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-        >
-          {/* Budget Overview Card */}
-          <BudgetOverviewCard
-            categories={data.categories}
-            isLoading={isLoading}
-            totalSpent={data.total_expenses}
-          />
-
-          {/* Recent Transactions */}
-          <TransactionList
-            expenses={data.recent_expenses ?? []}
-            isLoading={isLoading}
-            title="Recent Transactions"
-            showViewAll={true}
-            showActions={false}
-            compact={false}
-            maxItems={5}
-            emptyMessage="No transactions yet"
-          />
-        </motion.div>
       </div>
-
-      {/* Income vs Expense Summary Row */}
-      <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-5 lg:gap-6"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.25 }}
-      >
-        {/* This Month Spending Card */}
-        <div className="rounded-2xl p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
-          <div className="flex items-center justify-center rounded-xl flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-red-100 dark:bg-[#3B1219]">
-            <TrendingUp size={20} className="md:w-6 md:h-6 text-red-500 dark:text-red-400" style={{ transform: 'rotate(180deg)' }} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-gray-600 dark:text-gray-500 mb-1">This Month Spending</p>
-            <p className="text-lg md:text-xl font-bold text-gray-900 dark:text-white truncate">
-              {formatCurrency(data.current_month_total)}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-600 mt-0.5">
-              {data.current_month_count} transactions
-            </p>
-          </div>
-        </div>
-
-        {/* Avg per Transaction Card */}
-        <div className="rounded-2xl p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-white dark:bg-[#141720] border border-gray-200 dark:border-white/[0.06]">
-          <div className="flex items-center justify-center rounded-xl flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-purple-100 dark:bg-[#2D1B69]">
-            <ArrowUpRight size={20} className="md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-gray-600 dark:text-gray-500 mb-1">Avg per Transaction</p>
-            <p className="text-lg md:text-xl font-bold text-gray-900 dark:text-white truncate">{formatCurrency(data.average_expense)}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-600 mt-0.5">
-              Based on {data.total_count} expenses
-            </p>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Charts Row */}
-      <motion.div
-        className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.3 }}
-      >
-        {/* Area Chart - Monthly Trends (spans 2 columns) */}
-        <div className="lg:col-span-2">
-          <ExpenseAreaChart data={data.monthly_trends} />
-        </div>
-
-        {/* Pie Chart - Categories */}
-        <CategoryPieChart data={data.categories} />
-      </motion.div>
-
-      {/* Category Spending Cards Section */}
-      {data.categories.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-        >
-          {/* Section header */}
-          <div className="mb-4 md:mb-5">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">Category Breakdown</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-500 mt-1">
-              Detailed spending by category
-            </p>
-          </div>
-
-          {/* Category cards grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-            {data.categories.slice(0, 8).map((category, index) => (
-              <CategoryCard
-                key={category.category}
-                category={category.category}
-                amount={category.total}
-                count={category.count}
-                percentage={category.percentage}
-                index={index}
-              />
-            ))}
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 };
 
-export default DashboardPage;
+export default Dashboard;

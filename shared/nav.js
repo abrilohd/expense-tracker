@@ -15,15 +15,18 @@ class SharedNav {
     nav.setAttribute('role', 'navigation');
     nav.setAttribute('aria-label', 'Main navigation');
     
+    // Get URLs from config if available
+    const appUrl = window.APP_CONFIG ? window.APP_CONFIG.APP_URL : 'http://localhost:5173';
+    
     nav.innerHTML = `
       <div class="shared-nav__container">
         <a href="/" class="shared-nav__logo">ExpenseTracker</a>
         
         <div class="shared-nav__links">
           <a href="/#features" class="shared-nav__link">Features</a>
-          <a href="/app" class="shared-nav__link">Dashboard</a>
+          <a href="${appUrl}/dashboard" class="shared-nav__link">Dashboard</a>
           <a href="/#stats" class="shared-nav__link">Testimonials</a>
-          <a href="/app" class="shared-nav__cta">Get Started</a>
+          <a href="${appUrl}/login" class="shared-nav__cta">Get Started</a>
         </div>
       </div>
     `;
@@ -51,7 +54,7 @@ class SharedNav {
    * @returns {string} - 'landing' or 'app'
    */
   static getContext() {
-    return window.location.pathname.startsWith('/app') ? 'app' : 'landing';
+    return window.location.port === '5173' ? 'app' : 'landing';
   }
 
   /**

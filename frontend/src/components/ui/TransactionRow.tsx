@@ -1,5 +1,5 @@
 /**
- * Transaction Row - Fundex-inspired transaction list item
+ * Transaction Row - Premium transaction list item
  * Individual row component for recent transactions
  */
 import { motion } from 'framer-motion';
@@ -10,6 +10,8 @@ interface TransactionRowProps {
   expense: Expense;
   index: number;
   onClick?: () => void;
+  showActions?: boolean;
+  compact?: boolean;
 }
 
 // Category color mapping
@@ -37,28 +39,22 @@ const TransactionRow = ({ expense, index, onClick }: TransactionRowProps) => {
         ease: 'easeOut',
       }}
       onClick={onClick}
-      className="flex items-center gap-4 p-3 rounded-lg transition-all duration-200 cursor-pointer"
+      className="flex items-center gap-4 p-3 rounded-lg transition-all duration-150 cursor-pointer hover:bg-white/[0.03]"
       style={{
         borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'transparent';
       }}
     >
       {/* Category icon circle */}
       <div
         className="flex items-center justify-center flex-shrink-0"
         style={{
-          width: '44px',
-          height: '44px',
-          borderRadius: '12px',
+          width: '36px',
+          height: '36px',
+          borderRadius: '10px',
           backgroundColor: colors.bg,
         }}
       >
-        <span style={{ fontSize: '20px' }}>{getCategoryEmoji(expense.category)}</span>
+        <span style={{ fontSize: '18px' }}>{getCategoryEmoji(expense.category)}</span>
       </div>
 
       {/* Title + Transaction ID */}
@@ -89,8 +85,8 @@ const TransactionRow = ({ expense, index, onClick }: TransactionRowProps) => {
       {/* Amount + Date */}
       <div className="text-right flex-shrink-0">
         <div
-          className="text-sm md:text-base font-bold"
-          style={{ color: '#F87171' }}
+          className="text-sm md:text-base"
+          style={{ color: '#F87171', fontWeight: '600' }}
         >
           {formatCurrency(expense.amount)}
         </div>

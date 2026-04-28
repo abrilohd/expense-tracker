@@ -15,7 +15,7 @@ const LoadingScreen = () => {
       
       {/* App name */}
       <h1 className="mt-6 text-2xl font-bold text-[var(--color-text-primary)]">
-        💰 ExpenseAI
+        💰 ExpenseTracker
       </h1>
       
       {/* Loading text */}

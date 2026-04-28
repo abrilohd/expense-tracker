@@ -14,11 +14,11 @@ function getAuthDestination() {
   
   if (token) {
     // User is authenticated, go to dashboard
-    return '/app';
+    return window.APP_CONFIG.routes.dashboard();
   }
   
-  // User is not authenticated, go to signup
-  return '/app/register';
+  // User is not authenticated, go to login
+  return window.APP_CONFIG.routes.login();
 }
 
 /**
@@ -40,9 +40,9 @@ function updateNavDashboardLink() {
   
   if (dashboardLink) {
     if (token) {
-      dashboardLink.href = '/app';
+      dashboardLink.href = window.APP_CONFIG.routes.dashboard();
     } else {
-      dashboardLink.href = '/app/login';
+      dashboardLink.href = window.APP_CONFIG.routes.login();
     }
   }
 }

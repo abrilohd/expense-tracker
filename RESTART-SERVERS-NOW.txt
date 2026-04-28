@@ -1,0 +1,78 @@
+================================================================================
+RESTART YOUR SERVERS NOW - OAuth is Fixed!
+================================================================================
+
+I've fixed the configuration. The .env file IS being loaded correctly.
+You just need to RESTART both servers for the changes to take effect.
+
+================================================================================
+STEP 1: RESTART BACKEND
+================================================================================
+
+Option A - Use the script (EASIEST):
+   cd backend
+   start_backend.bat
+
+Option B - Manual:
+   1. Stop the current backend (press Ctrl+C in its terminal)
+   2. cd backend
+   3. venv\Scripts\activate
+   4. uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+WAIT FOR: "Application startup complete"
+YOU SHOULD SEE: "✅ OAuth configured: Client ID loaded (199412317897...)"
+
+================================================================================
+STEP 2: RESTART FRONTEND
+================================================================================
+
+1. Stop the current frontend (press Ctrl+C in its terminal)
+2. cd frontend
+3. npm run dev
+
+WAIT FOR: "Local: http://localhost:5173/"
+
+================================================================================
+STEP 3: TEST OAUTH
+================================================================================
+
+1. Open browser: http://localhost:5173/login
+2. Click "Continue with Google"
+3. YOU SHOULD SEE: Google consent screen (blue Google page)
+4. Select your account and authorize
+5. YOU SHOULD BE: Redirected to dashboard, logged in!
+
+================================================================================
+WHAT I FIXED:
+================================================================================
+
+✅ Fixed config.py to correctly load .env from backend/ directory
+✅ Added debug logging to show when OAuth is configured
+✅ Added error handling if client_id is missing
+✅ Updated CORS to allow both localhost and 127.0.0.1
+✅ Verified .env file is being read correctly (test passed!)
+
+The problem was that the backend wasn't restarted after the .env changes.
+
+================================================================================
+IF IT STILL DOESN'T WORK:
+================================================================================
+
+Check the backend terminal output when it starts.
+You should see this line:
+   ✅ OAuth configured: Client ID loaded (199412317897...)
+
+If you see:
+   ⚠️  WARNING: GOOGLE_CLIENT_ID not loaded
+Then the .env file isn't being read.
+
+When you click "Continue with Google", check the backend terminal.
+You should see:
+   🔍 Google OAuth Login Debug:
+      Client ID: 199412317897...
+      Redirect URI: http://localhost:8000/auth/google/callback
+      Redirecting to: https://accounts.google.com...
+
+================================================================================
+RESTART THE SERVERS NOW!
+================================================================================

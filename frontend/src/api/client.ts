@@ -4,11 +4,12 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { TOKEN_KEY } from '../utils/constants';
+import { API_URL } from '../config/constants';
 import type { ApiError } from '../types';
 
 // Create axios instance with base configuration
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
