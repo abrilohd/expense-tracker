@@ -10,16 +10,25 @@ from app.core.config import settings
 # Get DATABASE_URL from settings
 DATABASE_URL = settings.database_url
 
-# Create engine with conditional connect_args for SQLite
-if DATABASE_URL.startswith("sqlite"):
+# Railway PostgreSQL fix — replace postgres:// with postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Create engine with conditional configuration for SQLite vs PostgreSQL
+if "sqlite" in DATABASE_URL:
     # SQLite requires check_same_thread=False for FastAPI
     engine = create_engine(
         DATABASE_URL,
         connect_args={"check_same_thread": False}
     )
 else:
-    # PostgreSQL and other databases don't need special connect_args
-    engine = create_engine(DATABASE_URL)
+    # PostgreSQL with connection pooling for production
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,  # Verify connections before using them
+        pool_size=5,         # Number of connections to maintain
+        max_overflow=10      # Maximum overflow connections
+    )
 
 # SessionLocal: factory for creating database sessions
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
