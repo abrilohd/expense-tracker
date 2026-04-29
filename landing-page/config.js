@@ -16,8 +16,8 @@ const CONFIG = {
     return this.isDevelopment 
       ? 'http://localhost:5173' 
       : (window.location.origin.includes('vercel.app') 
-          ? 'https://expense-tracker-app.vercel.app'  // Update with your actual Vercel URL
-          : 'https://app.yourapp.com');
+          ? 'https://expense-tracker-app-tau-rust.vercel.app'
+          : 'https://expense-tracker-app-tau-rust.vercel.app');
   },
   
   // API URLs (Backend)
@@ -28,7 +28,7 @@ const CONFIG = {
     }
     return this.isDevelopment 
       ? 'http://localhost:8000' 
-      : 'https://expense-tracker-api.up.railway.app';  // Update with your actual Railway URL
+      : 'https://expense-tracker-production-419e.up.railway.app';
   },
   
   // Route helpers
