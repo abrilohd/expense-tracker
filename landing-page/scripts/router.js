@@ -5,7 +5,9 @@ function getAuthDestination() {
     || localStorage.getItem('user')
     || localStorage.getItem('token')
   
-  return token ? APP_URL + '/dashboard' : APP_URL + '/auth/signup'
+  return token
+    ? APP_URL + '/dashboard'
+    : APP_URL + '/register'
 }
 
 function handleCTAClick(e) {
@@ -14,10 +16,10 @@ function handleCTAClick(e) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const ctaButtons = document.querySelectorAll('[data-cta], .btn-cta, #hero-cta, #footer-cta, .cta-button, [href="#get-started"]')
+  const ctaButtons = document.querySelectorAll('[data-cta], .btn-cta, #hero-cta, #footer-cta, .cta-button, [href="#get-started"], .hero-btn, .cta-btn')
   ctaButtons.forEach(btn => btn.addEventListener('click', handleCTAClick))
   
-  const navDashboard = document.querySelector('[href*="dashboard"], .nav-dashboard')
+  const navDashboard = document.querySelector('[href*="dashboard"], .nav-dashboard, [href*="app"]')
   if (navDashboard) {
     const token = localStorage.getItem('auth_token')
       || localStorage.getItem('user')
@@ -25,6 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     navDashboard.href = token
       ? APP_URL + '/dashboard'
-      : APP_URL + '/auth/login'
+      : APP_URL + '/login'
   }
 })
