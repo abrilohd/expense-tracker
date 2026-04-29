@@ -16,13 +16,3 @@ export const LANDING_URL = import.meta.env.VITE_LANDING_URL || 'http://localhost
 // Environment detection
 export const IS_DEVELOPMENT = import.meta.env.DEV;
 export const IS_PRODUCTION = import.meta.env.PROD;
-
-// Log configuration (development only)
-if (IS_DEVELOPMENT) {
-  console.log('Frontend Config:', {
-    appUrl: APP_URL,
-    apiUrl: API_URL,
-    landingUrl: LANDING_URL,
-    environment: IS_DEVELOPMENT ? 'development' : 'production'
-  });
-}

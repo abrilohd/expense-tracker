@@ -6,6 +6,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from datetime import timedelta
 import httpx
+import logging
 from urllib.parse import urlencode
 
 from app.db.database import get_db
@@ -13,6 +14,8 @@ from app.models.user import User
 from app.core.security import create_access_token
 from app.core.config import settings
 from app.core.exceptions import BadRequestException, UnauthorizedException
+
+logger = logging.getLogger(__name__)
 
 # Create router instance
 router = APIRouter()
@@ -28,14 +31,14 @@ async def google_login():
     """
     Redirect user to Google OAuth consent screen
     """
-    # Debug: Print settings to verify they're loaded
-    print(f"🔍 Google OAuth Login Debug:")
-    print(f"   Client ID: {settings.google_client_id[:20] if settings.google_client_id else 'NOT SET'}...")
-    print(f"   Redirect URI: {settings.google_redirect_uri}")
+    # Debug: Log settings to verify they're loaded
+    logger.info(f"Google OAuth Login Debug:")
+    logger.info(f"   Client ID: {settings.google_client_id[:20] if settings.google_client_id else 'NOT SET'}...")
+    logger.info(f"   Redirect URI: {settings.google_redirect_uri}")
     
     # Check if client_id is set
     if not settings.google_client_id:
-        print("❌ ERROR: GOOGLE_CLIENT_ID is not set!")
+        logger.error("GOOGLE_CLIENT_ID is not set!")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="OAuth not configured: GOOGLE_CLIENT_ID missing"
@@ -52,7 +55,7 @@ async def google_login():
     }
     
     google_auth_url = f"{GOOGLE_AUTH_URL}?{urlencode(params)}"
-    print(f"   Redirecting to: {google_auth_url[:100]}...")
+    logger.info(f"   Redirecting to: {google_auth_url[:100]}...")
     
     return RedirectResponse(url=google_auth_url)
 
@@ -177,6 +180,6 @@ async def google_callback(code: str = None, error: str = None, db: Session = Dep
         return RedirectResponse(url=error_url)
     except Exception as e:
         # Handle unexpected errors
-        print(f"Google OAuth error: {str(e)}")
+        logger.error(f"Google OAuth error: {str(e)}", exc_info=True)
         error_url = f"{settings.frontend_url}/login?error=authentication_failed"
         return RedirectResponse(url=error_url)
