@@ -8,6 +8,7 @@ import { AlertCircle } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useDashboardData } from '../hooks/useExpenses';
 import { PageLoader } from '../components/ui/LoadingSpinner';
+import { ApiDiagnostics } from '../components/ApiDiagnostics';
 import { TOKEN_KEY } from '../utils/constants';
 import StatCards from '../components/dashboard/StatCards';
 import CashFlowChart from '../components/dashboard/CashFlowChart';
@@ -81,6 +82,7 @@ const Dashboard = () => {
               >
                 Retry
               </button>
+              <ApiDiagnostics error={error} />
             </div>
           </div>
         </div>

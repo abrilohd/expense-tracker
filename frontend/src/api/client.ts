@@ -15,6 +15,15 @@ const apiClient = axios.create({
   },
 });
 
+// Log API configuration in development
+if (import.meta.env.DEV) {
+  console.log('🔧 API Client Configuration:', {
+    baseURL: API_URL,
+    isDev: import.meta.env.DEV,
+    isProd: import.meta.env.PROD,
+  });
+}
+
 // Request interceptor: Attach JWT token to all requests
 apiClient.interceptors.request.use(
   (config) => {
@@ -39,6 +48,12 @@ apiClient.interceptors.response.use(
     if (!error.response) {
       const isNetworkError = error.message === 'Network Error' || error.code === 'ERR_NETWORK';
       if (isNetworkError) {
+        console.error('❌ Backend Connection Error:', {
+          message: error.message,
+          code: error.code,
+          apiUrl: API_URL,
+          timestamp: new Date().toISOString(),
+        });
         toast.error('Backend server is offline. Please try again later.', {
           duration: 5000,
           icon: '🔌',
@@ -48,6 +63,10 @@ apiClient.interceptors.response.use(
       
       // Timeout error
       if (error.code === 'ECONNABORTED') {
+        console.error('⏱️ Request Timeout:', {
+          apiUrl: API_URL,
+          timestamp: new Date().toISOString(),
+        });
         toast.error('Request timed out. Please check your connection.', {
           duration: 4000,
         });
