@@ -3,11 +3,11 @@ Dashboard routes - spending summary and analytics for authenticated user
 """
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import func, extract
+from sqlalchemy import func, extract, cast, String
 from datetime import datetime, timedelta
 from typing import List
 
-from app.db.database import get_db
+from app.db.database import get_db, engine
 from app.models.expense import Expense
 from app.models.user import User
 from app.schemas.dashboard import DashboardResponse, CategorySummary, MonthlyTrend
@@ -16,6 +16,20 @@ from app.core.security import get_current_user
 
 # Create router instance
 router = APIRouter()
+
+# Helper function to format date as YYYY-MM for both SQLite and PostgreSQL
+def get_month_format(date_column):
+    """
+    Returns the appropriate SQL function to format date as YYYY-MM
+    Works with both SQLite (strftime) and PostgreSQL (to_char)
+    """
+    db_url = str(engine.url)
+    if "postgresql" in db_url or "postgres" in db_url:
+        # PostgreSQL uses to_char
+        return func.to_char(date_column, 'YYYY-MM')
+    else:
+        # SQLite uses strftime
+        return func.strftime('%Y-%m', date_column)
 
 @router.get("", response_model=DashboardResponse)
 def get_dashboard(
@@ -83,17 +97,21 @@ def get_dashboard(
     
     # Calculate monthly trends for last 6 months
     six_months_ago = datetime.now() - timedelta(days=180)
+    
+    # Get the appropriate month format function for the database
+    month_format = get_month_format(Expense.date)
+    
     monthly_data = db.query(
-        func.strftime('%Y-%m', Expense.date).label('month'),
+        month_format.label('month'),
         func.sum(Expense.amount).label('total'),
         func.count(Expense.id).label('count')
     ).filter(
         Expense.user_id == current_user.id,
         Expense.date >= six_months_ago.date()
     ).group_by(
-        func.strftime('%Y-%m', Expense.date)
+        month_format
     ).order_by(
-        func.strftime('%Y-%m', Expense.date).asc()
+        month_format.asc()
     ).all()
     
     # Build monthly trends list
