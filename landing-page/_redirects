@@ -1,9 +1,0 @@
-# Netlify/Vercel Redirects
-# Landing page is the root
-/                    /landing-page/index.html    200
-/app                 /frontend/index.html        200
-/app/*               /frontend/:splat            200
-/api/*               /backend/:splat             200
-
-# Fallback for SPA routing
-/app/*               /frontend/index.html        200
