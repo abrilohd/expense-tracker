@@ -1,11 +1,11 @@
 /**
  * Landing Page Router - Handles CTA button redirects
- * Version: 2.0.1 - Cache busted for production deployment
- * Last Updated: 2026-04-30 20:00 UTC
- * Build ID: 20260430-2000
+ * Version: 2.0.2 - Uses CONFIG.APP_URL from config.js
+ * Last Updated: 2026-04-30 20:10 UTC
  */
 
-const APP_URL = 'https://expense-tracker-app-tau-rust.vercel.app'
+// Use APP_URL from config.js (loaded before this script)
+const APP_URL = window.APP_CONFIG ? window.APP_CONFIG.APP_URL : 'https://expense-tracker-app-tau-rust.vercel.app'
 
 function getAuthDestination() {
   const token = localStorage.getItem('auth_token')
@@ -24,8 +24,8 @@ function handleCTAClick(e) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Log for debugging - Version 2.0.1
-  console.log('🚀 Landing Page Router v2.0.1 loaded')
+  // Log for debugging - Version 2.0.2
+  console.log('🚀 Landing Page Router v2.0.2 loaded')
   console.log('📍 APP_URL:', APP_URL)
   console.log('🔗 Expected register URL:', APP_URL + '/register')
   
