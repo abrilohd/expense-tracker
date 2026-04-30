@@ -2,6 +2,7 @@
 FastAPI main application - Personal Expense Tracker API
 """
 import os
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
@@ -16,6 +17,9 @@ from app.core.error_handlers import (
     handle_validation_error,
     handle_generic_exception
 )
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -42,6 +46,11 @@ allowed_origins_str = os.getenv(
     "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
 )
 allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
+
+# Log CORS configuration for debugging
+logger.info(f"🌐 CORS Configuration:")
+logger.info(f"   ALLOWED_ORIGINS env var: {os.getenv('ALLOWED_ORIGINS', 'NOT SET')}")
+logger.info(f"   Parsed origins: {allowed_origins}")
 
 app.add_middleware(
     CORSMiddleware,
@@ -98,6 +107,20 @@ def oauth_status():
         "client_id_preview": settings.google_client_id[:20] + "..." if settings.google_client_id else "NOT SET",
         "redirect_uri": settings.google_redirect_uri,
         "frontend_url": settings.frontend_url
+    }
+
+# CORS config check endpoint (for debugging)
+@app.get("/debug/cors", tags=["Root"])
+def cors_debug():
+    """
+    Check CORS configuration - shows what origins are allowed
+    """
+    allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "NOT SET")
+    return {
+        "allowed_origins_env": allowed_origins_str,
+        "allowed_origins_parsed": allowed_origins,
+        "frontend_url": settings.frontend_url,
+        "note": "If ALLOWED_ORIGINS is 'NOT SET', only localhost origins are allowed"
     }
 
 # PASSWORD UPDATE ENDPOINT - Added directly to main app
