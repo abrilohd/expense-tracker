@@ -4,7 +4,7 @@
 
 ### 1️⃣ Open Landing Page
 ```
-https://expense-tracker-landing-k4qsr35ie-abrsh067-7150s-projects.vercel.app
+https://expense-tracker-landing-three.vercel.app
 ```
 
 ### 2️⃣ Hard Refresh

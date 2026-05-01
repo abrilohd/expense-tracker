@@ -92,7 +92,7 @@ vercel --prod --force
 ## 🧪 Testing Checklist
 
 ### Test 1: Hard Refresh
-1. Go to: `https://expense-tracker-landing-k4qsr35ie-abrsh067-7150s-projects.vercel.app`
+1. Go to: `https://expense-tracker-landing-three.vercel.app`
 2. Hard refresh: `Ctrl + Shift + R` (Windows) or `Cmd + Shift + R` (Mac)
 3. Open Console (`F12`)
 

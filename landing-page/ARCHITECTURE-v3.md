@@ -327,8 +327,7 @@ Document Ready
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  Landing Page (Static)                                       │
-│  https://expense-tracker-landing-k4qsr35ie-abrsh067-7150s-  │
-│  projects.vercel.app                                         │
+│  https://expense-tracker-landing-three.vercel.app           │
 └─────────────────────────────────────────────────────────────┘
                             │
                             │ Redirects to

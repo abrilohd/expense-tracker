@@ -4,23 +4,22 @@
  * Last Updated: 2026-05-01
  */
 
-// CRITICAL: Get APP_URL with multiple fallback layers
-function getAppUrl() {
-  // Priority 1: Hardcoded in index.html
-  if (window.PRODUCTION_APP_URL) {
-    return window.PRODUCTION_APP_URL;
-  }
-  
-  // Priority 2: From config.js
-  if (window.APP_CONFIG && window.APP_CONFIG.APP_URL) {
-    return window.APP_CONFIG.APP_URL;
-  }
-  
-  // Priority 3: Hardcoded fallback (NEVER FAILS)
-  return 'https://expense-tracker-app-tau-rust.vercel.app';
+// ============================================================================
+// SINGLE SOURCE OF TRUTH — DO NOT CHANGE
+// This URL is LOCKED and cannot be overridden by any config or cache
+// ============================================================================
+const APP_URL = 'https://expense-tracker-app-tau-rust.vercel.app';
+
+// Override any config that might have wrong URL
+if (window.ExpenseTrackerConfig) {
+  window.ExpenseTrackerConfig.appUrl = APP_URL;
+}
+if (window.APP_CONFIG) {
+  window.APP_CONFIG.PRODUCTION_APP_URL = APP_URL;
 }
 
-const APP_URL = getAppUrl();
+console.log('🔒 APP_URL locked to:', APP_URL);
+// ============================================================================
 
 // Route builder functions
 function getRegisterUrl() {
