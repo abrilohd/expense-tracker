@@ -45,19 +45,21 @@ allowed_origins_str = os.getenv(
     "ALLOWED_ORIGINS",
     "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
 )
-allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
+allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",") if origin.strip()]
 
 # Log CORS configuration for debugging
 logger.info(f"🌐 CORS Configuration:")
 logger.info(f"   ALLOWED_ORIGINS env var: {os.getenv('ALLOWED_ORIGINS', 'NOT SET')}")
-logger.info(f"   Parsed origins: {allowed_origins}")
+logger.info(f"   Parsed origins ({len(allowed_origins)}): {allowed_origins}")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,  # Cache preflight requests for 1 hour
 )
 
 # Register exception handlers for consistent error responses
