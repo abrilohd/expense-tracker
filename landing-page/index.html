@@ -445,8 +445,17 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="config.js?v=2.0.2"></script>
-  <script src="scripts/router.js?v=2.0.2" defer></script>
+  <!-- CRITICAL: Set APP_URL before any scripts load -->
+  <script>
+    // Version 3.0.0 - Hardcoded production URL (NEVER CHANGES)
+    window.PRODUCTION_APP_URL = 'https://expense-tracker-app-tau-rust.vercel.app';
+    window.PRODUCTION_API_URL = 'https://expense-tracker-production-419e.up.railway.app';
+    console.log('✅ v3.0.0 Production URLs set');
+    console.log('   APP:', window.PRODUCTION_APP_URL);
+    console.log('   API:', window.PRODUCTION_API_URL);
+  </script>
+  <script src="config.js?v=3.0.0"></script>
+  <script src="scripts/router.js?v=3.0.0" defer></script>
   <script src="scripts/animations.js" defer></script>
   <script src="scripts/scroll-effects.js" defer></script>
   <script defer>
