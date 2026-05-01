@@ -11,7 +11,7 @@ export const APP_URL = import.meta.env.VITE_APP_URL || 'https://expense-tracker-
 export const API_URL = API_BASE_URL;
 
 // Landing Page URL
-export const LANDING_URL = import.meta.env.VITE_LANDING_URL || 'https://expense-tracker-landing-k4qsr35ie-abrsh067-7150s-projects.vercel.app';
+export const LANDING_URL = import.meta.env.VITE_LANDING_URL || 'https://expense-tracker-landing-three.vercel.app';
 
 // Environment detection
 export const IS_DEVELOPMENT = import.meta.env.DEV;

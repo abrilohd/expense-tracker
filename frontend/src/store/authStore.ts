@@ -98,8 +98,8 @@ export const useAuthStore = create<AuthState>()(
         state.error = null;
       });
 
-      // Redirect to landing page
-      window.location.href = 'https://expense-tracker-landing-k4qsr35ie-abrsh067-7150s-projects.vercel.app';
+      // Redirect to NEW landing page (v3.0.0)
+      window.location.href = 'https://expense-tracker-landing-three.vercel.app';
     },
 
     // Load user on app start
