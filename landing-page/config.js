@@ -1,12 +1,12 @@
 /**
- * Landing Page Configuration v3.0.0
+ * Landing Page Configuration v3.1.0
  * PRODUCTION-FIRST: Hardcoded URLs with localhost fallback only
  * Last Updated: 2026-05-01
  */
 
 const CONFIG = {
   // Version identifier
-  VERSION: '3.0.0',
+  VERSION: '3.1.0',
   
   // Detect environment
   isDevelopment: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
@@ -63,7 +63,7 @@ const CONFIG = {
 window.APP_CONFIG = CONFIG;
 
 // Enhanced logging for debugging
-console.log('🚀 Landing Page Config v3.0.0 loaded');
+console.log('🚀 Landing Page Config v3.1.0 loaded');
 console.log('📍 Environment:', CONFIG.isDevelopment ? 'development' : 'production');
 console.log('🔗 APP_URL:', CONFIG.APP_URL);
 console.log('🔗 API_URL:', CONFIG.API_URL);
