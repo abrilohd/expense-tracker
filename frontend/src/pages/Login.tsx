@@ -15,9 +15,11 @@ import {
   BarChart2, 
   AlertCircle, 
   Sun, 
-  Moon 
+  Moon,
+  ArrowLeft
 } from 'lucide-react';
 import '../styles/login.css';
+import { LANDING_URL } from '../config/constants';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -83,6 +85,15 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
+      {/* Back Button */}
+      <a 
+        href={window.location.hostname === 'localhost' ? 'http://localhost:5500' : LANDING_URL} 
+        className="back-button"
+      >
+        <ArrowLeft className="back-button-icon" />
+        <span>Back</span>
+      </a>
+
       {/* Theme Toggle */}
       <button
         onClick={toggleTheme}
@@ -124,7 +135,7 @@ const LoginPage = () => {
         <div className="brand-content">
           {/* Logo */}
           <div className="brand-logo">
-            <span className="brand-emoji">💰</span>
+            <span className="brand-emoji">💳</span>
           </div>
 
           {/* App name */}
@@ -163,7 +174,7 @@ const LoginPage = () => {
           {/* Logo for mobile */}
           <div className="mobile-brand">
             <div className="mobile-logo">
-              <span className="brand-emoji">💰</span>
+              <span className="brand-emoji">💳</span>
             </div>
             <h1 className="mobile-title">ExpenseTracker</h1>
           </div>
@@ -228,9 +239,17 @@ const LoginPage = () => {
 
             {/* Password field */}
             <div className="form-field">
-              <label htmlFor="password" className="field-label">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="password" className="field-label">
+                  Password
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <div className="password-wrapper">
                 <input
                   id="password"

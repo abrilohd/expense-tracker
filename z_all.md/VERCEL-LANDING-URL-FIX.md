@@ -43,7 +43,7 @@ The wrong URL is coming from a **Vercel preview deployment URL**. You need to up
 After Vercel redeploys:
 
 1. Go to: https://expense-tracker-app-tau-rust.vercel.app/dashboard
-2. Click **💰 ExpenseTracker** in the sidebar
+2. Click **💳 ExpenseTracker** in the sidebar
 3. Should redirect to: `https://expense-tracker-landing-three.vercel.app` ✅
 
 ---

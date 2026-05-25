@@ -1,5 +1,6 @@
 /**
- * Dark overlay for mobile sidebar drawer
+ * Mobile Overlay - Dark backdrop for sidebar drawer
+ * Only visible on mobile when sidebar is open
  */
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -16,8 +17,13 @@ const MobileOverlay = ({ isOpen, onClose }: MobileOverlayProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 z-30 lg:hidden"
+          style={{
+            background: 'rgba(0, 0, 0, 0.7)',
+            backdropFilter: 'blur(4px)',
+          }}
         />
       )}
     </AnimatePresence>

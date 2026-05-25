@@ -1,154 +1,81 @@
 /**
- * Budget Progress Bar - Fundex-inspired category spending bar
- * Shows category icon, name, amount, and visual progress indicator
+ * BudgetProgressBar - Visual progress bar for budget utilization
+ * Color-coded based on status: green (safe), yellow (warning), red (exceeded)
  */
 import { motion } from 'framer-motion';
-import { formatCurrency, getCategoryEmoji } from '../../utils/formatters';
+import type { BudgetStatus } from '../../types';
 
 interface BudgetProgressBarProps {
-  category: string;
+  utilization: number;
+  status: BudgetStatus;
   spent: number;
   total: number;
-  percentage: number;
-  count: number;
-  index: number;
-  maxPercentage?: number;
+  showLabels?: boolean;
 }
 
-// Category color mapping
-const categoryColors: Record<
-  string,
-  { barColor: string; bgColor: string }
-> = {
-  Food: {
-    barColor: '#F59E0B',
-    bgColor: 'rgba(245, 158, 11, 0.12)',
-  },
-  Transport: {
-    barColor: '#3B82F6',
-    bgColor: 'rgba(59, 130, 246, 0.12)',
-  },
-  Housing: {
-    barColor: '#8B5CF6',
-    bgColor: 'rgba(139, 92, 246, 0.12)',
-  },
-  Entertainment: {
-    barColor: '#EC4899',
-    bgColor: 'rgba(236, 72, 153, 0.12)',
-  },
-  Health: {
-    barColor: '#10B981',
-    bgColor: 'rgba(16, 185, 129, 0.12)',
-  },
-  Shopping: {
-    barColor: '#F97316',
-    bgColor: 'rgba(249, 115, 22, 0.12)',
-  },
-  Education: {
-    barColor: '#6366F1',
-    bgColor: 'rgba(99, 102, 241, 0.12)',
-  },
-  Other: {
-    barColor: '#6B7280',
-    bgColor: 'rgba(107, 114, 128, 0.12)',
-  },
-};
-
-const BudgetProgressBar = ({
-  category,
+export default function BudgetProgressBar({
+  utilization,
+  status,
   spent,
   total,
-  percentage,
-  count,
-  index,
-  maxPercentage,
-}: BudgetProgressBarProps) => {
-  const colors = categoryColors[category] || categoryColors.Other;
+  showLabels = true,
+}: BudgetProgressBarProps) {
+  // Cap utilization at 100% for display
+  const displayUtilization = Math.min(utilization, 100);
+
+  // Color based on status
+  const getColor = () => {
+    switch (status) {
+      case 'safe':
+        return 'from-green-500 to-emerald-500';
+      case 'warning':
+        return 'from-yellow-500 to-orange-500';
+      case 'exceeded':
+        return 'from-red-500 to-rose-500';
+      default:
+        return 'from-gray-500 to-gray-600';
+    }
+  };
+
+  const getBackgroundColor = () => {
+    switch (status) {
+      case 'safe':
+        return 'bg-green-100 dark:bg-green-900/20';
+      case 'warning':
+        return 'bg-yellow-100 dark:bg-yellow-900/20';
+      case 'exceeded':
+        return 'bg-red-100 dark:bg-red-900/20';
+      default:
+        return 'bg-gray-100 dark:bg-gray-800';
+    }
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.08 }}
-      className="flex items-center gap-3 transition-all duration-150 hover:bg-white/[0.03] rounded-lg"
-      style={{
-        padding: '12px 0',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
-      }}
-    >
-      {/* Category icon circle */}
-      <div
-        className="flex items-center justify-center flex-shrink-0"
-        style={{
-          width: '38px',
-          height: '38px',
-          borderRadius: '10px',
-          backgroundColor: colors.bgColor,
-        }}
-      >
-        <span style={{ fontSize: '18px' }}>{getCategoryEmoji(category)}</span>
+    <div className="space-y-2">
+      {/* Progress Bar */}
+      <div className={`relative h-3 rounded-full overflow-hidden ${getBackgroundColor()}`}>
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${displayUtilization}%` }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className={`h-full bg-gradient-to-r ${getColor()} rounded-full`}
+        />
       </div>
 
-      {/* Label + progress bar */}
-      <div className="flex-1 min-w-0">
-        {/* Top row: category name + amount */}
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs md:text-sm font-medium text-white truncate mr-2">
-            {category.length > 12 ? `${category.slice(0, 12)}...` : category}
+      {/* Labels */}
+      {showLabels && (
+        <div className="flex justify-between items-center text-sm">
+          <span className="text-gray-600 dark:text-gray-400">
+            ${spent.toFixed(2)} spent
           </span>
-          <span className="text-xs md:text-sm font-semibold text-white flex-shrink-0">
-            {formatCurrency(spent)}
+          <span className="font-medium text-gray-900 dark:text-white">
+            {utilization.toFixed(1)}%
+          </span>
+          <span className="text-gray-600 dark:text-gray-400">
+            ${total.toFixed(2)} total
           </span>
         </div>
-
-        {/* Progress bar */}
-        <div
-          className="relative overflow-hidden"
-          style={{
-            height: '6px',
-            borderRadius: '9999px',
-            backgroundColor: 'rgba(255, 255, 255, 0.06)',
-          }}
-        >
-          <motion.div
-            initial={{ width: '0%' }}
-            animate={{ width: `${percentage}%` }}
-            transition={{
-              duration: 0.8,
-              delay: index * 0.1,
-              ease: 'easeOut',
-            }}
-            style={{
-              height: '100%',
-              borderRadius: '9999px',
-              backgroundColor: colors.barColor,
-              transition: 'width 0.8s ease-out',
-            }}
-          />
-        </div>
-
-        {/* Bottom row: transaction count + percentage */}
-        <div className="flex items-center justify-between mt-1">
-          <span className="text-xs text-gray-600">
-            {count} transaction{count !== 1 ? 's' : ''}
-          </span>
-          <span className="text-xs font-semibold text-right" style={{ color: '#A0AEC0' }}>{percentage}%</span>
-        </div>
-      </div>
-
-      {/* Percentage badge */}
-      <div
-        className="text-xs font-bold text-right flex-shrink-0"
-        style={{
-          color: colors.barColor,
-          minWidth: '36px',
-          fontWeight: '600',
-        }}
-      >
-        {percentage}%
-      </div>
-    </motion.div>
+      )}
+    </div>
   );
-};
-
-export default BudgetProgressBar;
+}

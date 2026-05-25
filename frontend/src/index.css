@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── Base ─────────────────────────────────── */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BASE STYLES
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -11,28 +16,31 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: #F8FAFC;
-  color: #1E293B;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  font-size: 14px;
+  background: #0B0D14;
+  color: #F9FAFB;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
   line-height: 1.6;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
 }
 
-/* Dark mode body */
-.dark body {
-  background-color: #0D0F16;
-  color: #F9FAFB;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SELECTION & SCROLLBAR
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+::selection {
+  background: rgba(91,78,232,0.3);
+  color: #fff;
 }
 
-/* ── Scrollbar (Light Mode) ─────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -40,67 +48,46 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(255,255,255,0.16);
 }
 
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FOCUS STATES
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* ── Focus ─────────────────────────────────── */
 *:focus-visible {
-  outline: 2px solid #8B5CF6;
+  outline: 2px solid #5B4EE8;
   outline-offset: 2px;
   border-radius: 6px;
 }
 
-/* ── Selection ─────────────────────────────── */
-::selection {
-  background: rgba(139, 92, 246, 0.3);
-  color: #F9FAFB;
-}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FORM INPUTS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-.dark ::selection {
-  background: rgba(139, 92, 246, 0.3);
-  color: #F9FAFB;
-}
-
-/* ── Form inputs dark theme ─────────────────── */
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.5);
+  filter: invert(0.4);
   cursor: pointer;
 }
 
-.dark input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.5);
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button {
   opacity: 0.3;
 }
 
 select option {
-  background-color: #FFFFFF;
-  color: #1E293B;
-}
-
-.dark select option {
-  background-color: #1A1D26;
+  background: #1A1D28;
   color: #F9FAFB;
 }
 
-/* ── Animations ─────────────────────────────── */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ANIMATIONS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -109,33 +96,48 @@ select option {
 .shimmer {
   background: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.03) 25%,
-    rgba(0, 0, 0, 0.07) 50%,
-    rgba(0, 0, 0, 0.03) 75%
+    rgba(255,255,255,0.03) 25%,
+    rgba(255,255,255,0.07) 50%,
+    rgba(255,255,255,0.03) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s infinite;
 }
 
-.dark .shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(255, 255, 255, 0.07) 50%,
-    rgba(255, 255, 255, 0.03) 75%
-  );
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
-  50% { box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.1); }
+.fade-up {
+  animation: fadeUp 0.25s ease forwards;
 }
 
-.glow-pulse {
-  animation: pulse-glow 2s infinite;
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* ── Gradient text utility ───────────────────── */
+.scale-in {
+  animation: scaleIn 0.3s ease forwards;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   UTILITY CLASSES
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
 .gradient-text {
   background: linear-gradient(135deg, #A78BFA, #818CF8);
   -webkit-background-clip: text;
@@ -143,42 +145,41 @@ select option {
   background-clip: text;
 }
 
-/* ── Card utility ────────────────────────────── */
-.dark-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 20px;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CARD COMPONENT
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.card {
+  background: #0F1117;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
 }
 
-.dark .dark-card {
-  background: #141720;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.card:hover {
+  border-color: rgba(255,255,255,0.12);
 }
 
-.dark-card:hover {
-  border-color: rgba(0, 0, 0, 0.12);
-  transition: border-color 200ms ease;
-}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BUTTON COMPONENTS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-.dark .dark-card:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-/* ── Button utilities ────────────────────────── */
 .btn-primary {
-  background: #7C3AED;
-  color: white;
-  border-radius: 12px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 150ms ease;
+  background: #5B4EE8;
+  color: #fff;
   border: none;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 150ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .btn-primary:hover {
-  background: #6D28D9;
+  background: #4F44D4;
   transform: translateY(-1px);
 }
 
@@ -186,71 +187,99 @@ select option {
   transform: translateY(0);
 }
 
-.btn-ghost {
-  background: rgba(0, 0, 0, 0.05);
-  color: #6B7280;
-  border-radius: 12px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 150ms ease;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  cursor: pointer;
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.dark .btn-ghost {
-  background: rgba(255, 255, 255, 0.05);
-  color: #9CA3AF;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.btn-ghost {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.65);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .btn-ghost:hover {
-  background: rgba(0, 0, 0, 0.08);
-  color: #1E293B;
+  background: rgba(255,255,255,0.10);
+  color: #fff;
 }
 
-.dark .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #F9FAFB;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   INPUT COMPONENT
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.input-dark {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #fff;
+  transition: all 150ms;
+  font-family: 'Inter', sans-serif;
 }
 
-/* ── Toast overrides ─────────────────────────── */
+.input-dark::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+.input-dark:focus {
+  outline: none;
+  border-color: rgba(91,78,232,0.6);
+  background: rgba(255,255,255,0.07);
+}
+
+.input-dark.error {
+  border-color: rgba(248,113,113,0.5);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TREND PILLS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.trend-up {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(52,211,153,0.15);
+  color: #34D399;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.trend-down {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(248,113,113,0.15);
+  color: #F87171;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOAST NOTIFICATIONS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
 .react-hot-toast > div {
-  background: #FFFFFF !important;
-  color: #1E293B !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #1A1D28 !important;
+  color: #F9FAFB !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
   border-radius: 12px !important;
   font-size: 13px !important;
   font-family: 'Inter', sans-serif !important;
-}
-
-.dark .react-hot-toast > div {
-  background: #1A1D26 !important;
-  color: #F9FAFB !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-/* ── Page transition wrapper ─────────────────── */
-.page-enter {
-  opacity: 0;
-  transform: translateY(8px);
-}
-
-.page-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 250ms ease;
-}
-
-/* ── Dashboard responsive grid ─────────────────── */
-@media (max-width: 1100px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-@media (max-width: 900px) {
-  .trends-donut-grid {
-    grid-template-columns: 1fr !important;
-  }
 }

@@ -13,13 +13,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
     
-    {/* Toast notifications */}
+    {/* Toast notifications - Phase 9 Dark Theme */}
     <Toaster
       position="top-right"
       toastOptions={{
         duration: 3500,
         style: {
-          background: '#1A1D26',
+          background: '#1A1D28',
           color: '#F9FAFB',
           border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: '12px',
@@ -30,13 +30,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         success: {
           iconTheme: {
             primary: '#34D399',
-            secondary: '#1A1D26',
+            secondary: '#1A1D28',
           },
         },
         error: {
           iconTheme: {
             primary: '#F87171',
-            secondary: '#1A1D26',
+            secondary: '#1A1D28',
           },
         },
       }}

@@ -17,9 +17,10 @@ interface AuthState {
 
   // Actions
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => void;
   loadUser: () => Promise<void>;
+  setUser: (user: User) => void;
   clearError: () => void;
 }
 
@@ -65,7 +66,7 @@ export const useAuthStore = create<AuthState>()(
     },
 
     // Register action
-    register: async (email: string, password: string) => {
+    register: async (email: string, password: string, name?: string) => {
       set((state) => {
         state.isLoading = true;
         state.error = null;
@@ -73,7 +74,7 @@ export const useAuthStore = create<AuthState>()(
 
       try {
         // Call register API
-        await api.register(email, password);
+        await api.register(email, password, name);
 
         // Auto-login after successful registration
         await useAuthStore.getState().login(email, password);
@@ -98,8 +99,8 @@ export const useAuthStore = create<AuthState>()(
         state.error = null;
       });
 
-      // Redirect to NEW landing page (v3.0.0)
-      window.location.href = 'https://expense-tracker-landing-three.vercel.app';
+      // Redirect to login page
+      window.location.href = '/login';
     },
 
     // Load user on app start
@@ -139,6 +140,13 @@ export const useAuthStore = create<AuthState>()(
     clearError: () => {
       set((state) => {
         state.error = null;
+      });
+    },
+
+    // Set user (for profile updates)
+    setUser: (user: User) => {
+      set((state) => {
+        state.user = user;
       });
     },
   }))

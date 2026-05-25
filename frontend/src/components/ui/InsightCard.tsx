@@ -1,129 +1,162 @@
 /**
- * Insight card component for displaying AI-generated spending insights
+ * InsightCard Component - AI-powered insight display
+ * Shows warnings, tips, success messages with color-coded styling
  */
 import { motion } from 'framer-motion';
 import { AlertTriangle, TrendingDown, Lightbulb, Info, LucideIcon } from 'lucide-react';
-import type { Insight, InsightType } from '../../types';
-import { formatCurrency } from '../../utils/formatters';
+
+// Insight interface
+export interface Insight {
+  type: 'warning' | 'success' | 'tip' | 'info';
+  title: string;
+  message: string;
+  value?: number;
+}
+
+// Type to style mapping
+interface InsightStyle {
+  borderColor: string;
+  bgColor: string;
+  icon: LucideIcon;
+  iconColor: string;
+  pillBg: string;
+  pillColor: string;
+}
+
+const INSIGHT_STYLES: Record<Insight['type'], InsightStyle> = {
+  warning: {
+    borderColor: '#FBBF24',
+    bgColor: 'rgba(251, 191, 36, 0.07)',
+    icon: AlertTriangle,
+    iconColor: '#FBBF24',
+    pillBg: 'rgba(251, 191, 36, 0.15)',
+    pillColor: '#FBBF24',
+  },
+  success: {
+    borderColor: '#34D399',
+    bgColor: 'rgba(52, 211, 153, 0.07)',
+    icon: TrendingDown,
+    iconColor: '#34D399',
+    pillBg: 'rgba(52, 211, 153, 0.15)',
+    pillColor: '#34D399',
+  },
+  tip: {
+    borderColor: '#A78BFA',
+    bgColor: 'rgba(91, 78, 232, 0.10)',
+    icon: Lightbulb,
+    iconColor: '#A78BFA',
+    pillBg: 'rgba(91, 78, 232, 0.15)',
+    pillColor: '#A78BFA',
+  },
+  info: {
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    bgColor: 'rgba(255, 255, 255, 0.03)',
+    icon: Info,
+    iconColor: 'rgba(255, 255, 255, 0.4)',
+    pillBg: 'rgba(255, 255, 255, 0.08)',
+    pillColor: 'rgba(255, 255, 255, 0.6)',
+  },
+};
+
+// Format currency
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// INSIGHT CARD COMPONENT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 interface InsightCardProps {
   insight: Insight;
   index: number;
 }
 
-// Icon and color mapping by insight type
-const insightConfig: Record<
-  InsightType,
-  {
-    icon: LucideIcon;
-    iconColor: string;
-    iconBg: string;
-    borderColor: string;
-    badgeLabel: string;
-    badgeEmoji: string;
-    badgeBg: string;
-    badgeText: string;
-    valueBg: string;
-  }
-> = {
-  warning: {
-    icon: AlertTriangle,
-    iconColor: 'text-yellow-600 dark:text-yellow-400',
-    iconBg: 'bg-yellow-100 dark:bg-yellow-900/30',
-    borderColor: 'border-yellow-400',
-    badgeLabel: 'Warning',
-    badgeEmoji: '⚠️',
-    badgeBg: 'bg-yellow-100 dark:bg-yellow-900/30',
-    badgeText: 'text-yellow-700 dark:text-yellow-400',
-    valueBg: 'bg-yellow-50 dark:bg-yellow-900/20',
-  },
-  success: {
-    icon: TrendingDown,
-    iconColor: 'text-green-600 dark:text-green-400',
-    iconBg: 'bg-green-100 dark:bg-green-900/30',
-    borderColor: 'border-green-400',
-    badgeLabel: 'Good News',
-    badgeEmoji: '✅',
-    badgeBg: 'bg-green-100 dark:bg-green-900/30',
-    badgeText: 'text-green-700 dark:text-green-400',
-    valueBg: 'bg-green-50 dark:bg-green-900/20',
-  },
-  tip: {
-    icon: Lightbulb,
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-    borderColor: 'border-blue-400',
-    badgeLabel: 'Tip',
-    badgeEmoji: '💡',
-    badgeBg: 'bg-blue-100 dark:bg-blue-900/30',
-    badgeText: 'text-blue-700 dark:text-blue-400',
-    valueBg: 'bg-blue-50 dark:bg-blue-900/20',
-  },
-  info: {
-    icon: Info,
-    iconColor: 'text-gray-600 dark:text-gray-400',
-    iconBg: 'bg-gray-100 dark:bg-gray-700',
-    borderColor: 'border-gray-400',
-    badgeLabel: 'Info',
-    badgeEmoji: 'ℹ️',
-    badgeBg: 'bg-gray-100 dark:bg-gray-700',
-    badgeText: 'text-gray-700 dark:text-gray-400',
-    valueBg: 'bg-gray-50 dark:bg-gray-800',
-  },
-};
-
 const InsightCard = ({ insight, index }: InsightCardProps) => {
-  const config = insightConfig[insight.type];
-  const Icon = config.icon;
+  const style = INSIGHT_STYLES[insight.type];
+  const Icon = style.icon;
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
+      initial={{ opacity: 0, x: -16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
-        duration: 0.4,
-        delay: index * 0.1,
-        ease: 'easeOut',
+        duration: 0.3,
+        delay: index * 0.09,
+        ease: [0.25, 0.1, 0.25, 1],
       }}
-      whileHover={{
-        scale: 1.01,
-        transition: { duration: 0.15 },
+      className="flex gap-2.5"
+      style={{
+        background: style.bgColor,
+        borderLeft: `3px solid ${style.borderColor}`,
+        borderRadius: '10px',
+        padding: '12px 14px',
       }}
-      className={`bg-white dark:bg-gray-800 rounded-xl shadow-card hover:shadow-cardHover transition-shadow duration-200 p-5 border-l-4 ${config.borderColor}`}
     >
-      {/* Row layout: icon + content */}
-      <div className="flex gap-3">
-        {/* Icon circle */}
-        <div className={`w-10 h-10 ${config.iconBg} rounded-full flex items-center justify-center flex-shrink-0`}>
-          <Icon className={config.iconColor} size={20} />
-        </div>
+      {/* ICON */}
+      <div className="flex-shrink-0" style={{ marginTop: '1px' }}>
+        <Icon size={14} style={{ color: style.iconColor }} />
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          {/* Type badge */}
-          <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${config.badgeBg} ${config.badgeText}`}>
-            {config.badgeEmoji} {config.badgeLabel}
+      {/* CONTENT */}
+      <div className="flex-1 min-w-0">
+        {/* Type Pill */}
+        <span
+          className="inline-block px-2 py-0.5 rounded-full font-medium"
+          style={{
+            fontSize: '10px',
+            background: style.pillBg,
+            color: style.pillColor,
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+          }}
+        >
+          {insight.type}
+        </span>
+
+        {/* Title */}
+        <h4
+          className="font-medium"
+          style={{
+            fontSize: '13px',
+            color: '#FFFFFF',
+            marginTop: '4px',
+          }}
+        >
+          {insight.title}
+        </h4>
+
+        {/* Message */}
+        <p
+          style={{
+            fontSize: '11px',
+            color: 'rgba(255, 255, 255, 0.4)',
+            marginTop: '4px',
+            lineHeight: '1.6',
+          }}
+        >
+          {insight.message}
+        </p>
+
+        {/* Value Badge (if exists) */}
+        {insight.value !== undefined && (
+          <span
+            className="inline-block px-2 py-1 rounded-md font-bold"
+            style={{
+              fontSize: '10px',
+              background: style.pillBg,
+              color: style.pillColor,
+              marginTop: '8px',
+            }}
+          >
+            {formatCurrency(insight.value)}
           </span>
-
-          {/* Title */}
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-            {insight.title}
-          </h3>
-
-          {/* Message */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-            {insight.message}
-          </p>
-
-          {/* Value badge */}
-          {insight.value !== undefined && insight.value !== null && (
-            <div className="mt-2">
-              <span className={`inline-block text-xs font-bold px-2 py-1 rounded-md ${config.valueBg} ${config.badgeText}`}>
-                {typeof insight.value === 'number' ? `${insight.value}%` : insight.value}
-              </span>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </motion.div>
   );

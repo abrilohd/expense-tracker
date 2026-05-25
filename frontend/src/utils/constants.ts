@@ -1,7 +1,7 @@
 /**
  * Application constants and configuration
  */
-import { ExpenseCategory } from '../types';
+import { ExpenseCategory, IncomeSource } from '../types';
 
 // Expense categories with metadata
 export const CATEGORIES = [
@@ -52,6 +52,52 @@ export const CATEGORIES = [
     value: ExpenseCategory.Other,
     color: 'gray',
     emoji: '📦',
+  },
+] as const;
+
+// Income sources with metadata
+export const INCOME_SOURCES = [
+  {
+    label: 'Salary',
+    value: IncomeSource.Salary,
+    color: 'green',
+    emoji: '💼',
+  },
+  {
+    label: 'Business',
+    value: IncomeSource.Business,
+    color: 'purple',
+    emoji: '🏢',
+  },
+  {
+    label: 'Freelancing',
+    value: IncomeSource.Freelancing,
+    color: 'blue',
+    emoji: '💻',
+  },
+  {
+    label: 'Investment',
+    value: IncomeSource.Investment,
+    color: 'yellow',
+    emoji: '📈',
+  },
+  {
+    label: 'Gift',
+    value: IncomeSource.Gift,
+    color: 'pink',
+    emoji: '🎁',
+  },
+  {
+    label: 'Rental',
+    value: IncomeSource.Rental,
+    color: 'orange',
+    emoji: '🏠',
+  },
+  {
+    label: 'Other',
+    value: IncomeSource.Other,
+    color: 'gray',
+    emoji: '💳',
   },
 ] as const;
 

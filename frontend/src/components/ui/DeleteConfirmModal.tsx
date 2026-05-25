@@ -1,23 +1,42 @@
 /**
- * Delete confirmation modal for expenses
+ * DeleteConfirmModal - Phase 9 Dark Design
+ * Delete confirmation modal for expenses, income, and budgets
  */
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Loader2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import type { Expense } from '../../types';
+import type { Expense, Income } from '../../types';
 import { deleteExpense } from '../../api/expenses';
 import { formatCurrency, getCategoryEmoji } from '../../utils/formatters';
+import { INCOME_SOURCES } from '../../utils/constants';
 
-interface DeleteConfirmModalProps {
+export interface DeleteConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  expense: Expense | null;
-  onSuccess: () => void;
+  expense?: Expense | Income | null;
+  onSuccess?: () => void;
+  onConfirm?: () => void | Promise<void>;
+  isIncome?: boolean;
+  // Generic props for non-expense/income deletions (budgets, etc.)
+  title?: string;
+  message?: string;
 }
 
-const DeleteConfirmModal = ({ isOpen, onClose, expense, onSuccess }: DeleteConfirmModalProps) => {
+const DeleteConfirmModal = ({ 
+  isOpen, 
+  onClose, 
+  expense, 
+  onSuccess, 
+  onConfirm,
+  isIncome = false,
+  title,
+  message,
+}: DeleteConfirmModalProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Generic mode (for budgets, etc.)
+  const isGenericMode = !expense && title && message;
 
   // Handle escape key press
   useEffect(() => {
@@ -38,78 +57,116 @@ const DeleteConfirmModal = ({ isOpen, onClose, expense, onSuccess }: DeleteConfi
 
   // Handle delete action
   const handleDelete = async () => {
+    // Generic mode - just call onConfirm
+    if (isGenericMode && onConfirm) {
+      setIsDeleting(true);
+      try {
+        await onConfirm();
+        onClose();
+      } catch (error) {
+        // Error handling done by caller
+      } finally {
+        setIsDeleting(false);
+      }
+      return;
+    }
+
     if (!expense) return;
 
+    // If onConfirm is provided, use it (for Income page)
+    if (onConfirm) {
+      onConfirm();
+      return;
+    }
+
+    // Otherwise, use the default delete logic (for Expense page)
     setIsDeleting(true);
 
     try {
       await deleteExpense(expense.id);
-      toast.success('Expense deleted successfully');
-      onSuccess();
+      toast.success(isIncome ? 'Income deleted successfully' : 'Expense deleted successfully');
+      if (onSuccess) onSuccess();
       onClose();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete expense');
+      toast.error(error instanceof Error ? error.message : `Failed to delete ${isIncome ? 'income' : 'expense'}`);
     } finally {
       setIsDeleting(false);
     }
   };
 
-  if (!expense) return null;
+  if (!expense && !isGenericMode) return null;
+
+  // Get emoji for display
+  const getEmoji = () => {
+    if (isIncome && 'source' in expense) {
+      const source = INCOME_SOURCES.find((s) => s.value === expense.source);
+      return source?.emoji || '💳';
+    }
+    if ('category' in expense) {
+      return getCategoryEmoji(expense.category);
+    }
+    return '📌';
+  };
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={!isDeleting ? onClose : undefined}
-            className="fixed inset-0 bg-black/75 backdrop-blur-[8px] z-50"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
           />
 
           {/* Modal */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-[#1A1D26] border border-red-500/15 rounded-3xl w-full max-w-[400px]"
-              style={{ borderRadius: '24px', padding: '28px' }}
+              className="bg-[#1A1D28] border border-red-500/15 rounded-3xl w-full max-w-sm p-7"
             >
               {/* Content - Centered */}
               <div className="text-center">
                 {/* Warning Icon */}
-                <div className="w-16 h-16 mx-auto rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                  <AlertTriangle size={28} className="text-red-400" />
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                  <AlertTriangle size={24} className="text-red-400" />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-white text-center mt-4">
-                  Delete Transaction?
+                <h3 className="text-xl font-medium text-white text-center mt-4">
+                  {title || 'Delete transaction?'}
                 </h3>
 
                 {/* Message */}
-                <p className="text-gray-400 text-sm text-center mt-2">
-                  This will permanently delete
+                <p className="text-sm text-white/40 text-center mt-2">
+                  {message || 'This will permanently delete'}
                 </p>
 
-                {/* Expense Pill */}
-                <div className="inline-flex items-center gap-2 mx-auto mt-3 bg-white/[0.05] border border-white/[0.08] rounded-full px-4 py-2">
-                  <span className="text-base">{getCategoryEmoji(expense.category)}</span>
-                  <span className="text-sm font-medium text-white">{expense.title}</span>
-                  <span className="text-gray-500">·</span>
-                  <span className="text-sm font-bold text-red-400">
-                    {formatCurrency(expense.amount)}
-                  </span>
-                </div>
+                {/* Expense Pill - Only show if not generic mode */}
+                {!isGenericMode && expense && (
+                  <>
+                    <div className="inline-flex items-center gap-2 mx-auto mt-3 bg-white/5 border border-white/8 rounded-full px-4 py-2">
+                      <span className="text-base">{getEmoji()}</span>
+                      <span className="text-sm text-white">
+                        {expense.title || expense.description || 'Untitled'}
+                      </span>
+                      <span className="text-white/30">·</span>
+                      <span className={`text-sm font-medium ${isIncome ? 'text-green-400' : 'text-red-400'}`}>
+                        {formatCurrency(expense.amount)}
+                      </span>
+                    </div>
 
-                {/* Warning Note */}
-                <p className="mt-4 text-xs text-gray-600 text-center">
-                  This action cannot be undone
-                </p>
+                    {/* Warning Note */}
+                    <p className="mt-3 text-xs text-white/25 text-center">
+                      This cannot be undone
+                    </p>
+                  </>
+                )}
 
                 {/* Action Buttons */}
                 <div className="mt-6 flex gap-3">
@@ -125,7 +182,7 @@ const DeleteConfirmModal = ({ isOpen, onClose, expense, onSuccess }: DeleteConfi
                     type="button"
                     onClick={handleDelete}
                     disabled={isDeleting}
-                    className="flex-1 bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 text-red-400 rounded-xl py-2.5 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-1 bg-red-500/12 hover:bg-red-500/20 border border-red-500/25 text-red-400 rounded-xl py-2.5 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isDeleting ? (
                       <>

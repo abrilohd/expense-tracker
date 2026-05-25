@@ -1,4 +1,5 @@
 /**
+ * ErrorBoundary - Phase 9 Dark Design
  * Error Boundary component for catching React render errors
  * Displays a friendly error page with retry functionality
  */
@@ -60,24 +61,24 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         return this.props.fallback;
       }
 
-      // Default error UI
+      // Default error UI - Phase 9 Dark Design
       return (
-        <div className="min-h-screen bg-[#0D0F16] flex items-center justify-center p-8">
+        <div className="min-h-screen bg-[#0B0D14] flex items-center justify-center p-8">
           <div className="max-w-md text-center">
             {/* Warning Icon */}
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-red-500/10 p-4 rounded-2xl flex items-center justify-center">
-                <AlertTriangle size={48} className="text-red-400" />
+              <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center">
+                <AlertTriangle size={32} className="text-red-400" />
               </div>
             </div>
 
             {/* Title */}
-            <h1 className="text-xl font-semibold text-white mt-4 text-center">
+            <h1 className="text-xl font-medium text-white">
               Something went wrong
             </h1>
 
             {/* Message */}
-            <p className="text-gray-500 text-sm text-center mt-2">
+            <p className="text-sm text-white/35 mt-2 leading-relaxed">
               An unexpected error occurred. Please refresh the page to continue.
             </p>
 
@@ -86,12 +87,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               <div className="mt-4">
                 <button
                   onClick={this.toggleDetails}
-                  className="text-xs text-gray-700 hover:text-gray-600 transition-colors"
+                  className="text-xs text-white/25 hover:text-white/40 transition-colors"
                 >
                   {this.state.showDetails ? 'Hide details' : 'Show details'}
                 </button>
                 {this.state.showDetails && (
-                  <div className="bg-white/5 rounded-xl p-3 text-xs text-gray-500 font-mono mt-3 text-left overflow-auto max-h-40">
+                  <div className="bg-white/5 border border-white/8 rounded-xl p-3 text-xs text-white/40 font-mono mt-3 text-left overflow-auto max-h-40">
                     {this.state.error.message}
                   </div>
                 )}

@@ -1,6 +1,6 @@
 /**
- * 404 Not Found page
- * Displayed when user navigates to a non-existent route
+ * NotFound - Phase 9 Dark Design
+ * 404 page with decorative blurs and clean layout
  */
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, LayoutDashboard, Ghost } from 'lucide-react';
@@ -10,49 +10,46 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0D0F16] flex items-center justify-center p-8 relative overflow-hidden">
-      {/* Decorative background elements */}
+    <div className="min-h-screen bg-[#0B0D14] flex items-center justify-center p-8 relative overflow-hidden">
+      {/* Decorative blurs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute w-64 h-64 bg-purple-500/5 rounded-full blur-3xl top-1/4 left-1/4" />
-        <div className="absolute w-48 h-48 bg-blue-500/5 rounded-full blur-3xl bottom-1/3 right-1/4" />
-        <div className="absolute w-32 h-32 bg-pink-500/5 rounded-full blur-2xl top-1/3 right-1/3" />
+        <div className="absolute w-72 h-72 bg-purple-500/8 rounded-full blur-3xl top-1/4 left-1/3" />
+        <div className="absolute w-48 h-48 bg-blue-500/8 rounded-full blur-3xl bottom-1/3 right-1/4" />
       </div>
 
       {/* Content */}
-      <div className="max-w-md text-center relative z-10">
+      <div className="max-w-md text-center relative">
         {/* Animated 404 number */}
-        <motion.div
+        <motion.h1
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', damping: 15 }}
-          className="mb-6"
+          transition={{ type: 'spring', damping: 15, stiffness: 200 }}
+          className="text-[100px] font-medium gradient-text leading-none"
         >
-          <h1 className="text-[120px] font-black gradient-text leading-none">
-            404
-          </h1>
-        </motion.div>
+          404
+        </motion.h1>
 
         {/* Animated Ghost Icon */}
         <motion.div
-          animate={{ y: [0, -8, 0] }}
+          animate={{ y: [0, -10, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex justify-center mb-6"
+          className="flex justify-center my-2"
         >
-          <Ghost size={48} className="text-gray-700" />
+          <Ghost size={44} className="text-white/10" />
         </motion.div>
 
         {/* Title */}
-        <h2 className="text-xl font-semibold text-white mt-4 text-center">
+        <h2 className="text-xl font-medium text-white mt-2">
           Page not found
         </h2>
 
         {/* Message */}
-        <p className="text-gray-500 text-sm text-center mt-2 leading-relaxed">
+        <p className="text-sm text-white/35 mt-2 leading-relaxed">
           Looks like this page took an unexpected expense and disappeared.
         </p>
 
         {/* Buttons */}
-        <div className="mt-8 flex gap-3 justify-center">
+        <div className="flex gap-3 justify-center mt-8">
           <button
             onClick={() => navigate(-1)}
             className="btn-ghost flex items-center gap-2"

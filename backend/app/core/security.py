@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+import secrets
 
 from app.core.config import settings
 from app.db.database import get_db
@@ -29,6 +30,12 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Verify a plain text password against a hashed password
     """
     return pwd_context.verify(plain_password, hashed_password)
+
+def generate_reset_token() -> str:
+    """
+    Generate a secure random token for password reset
+    """
+    return secrets.token_urlsafe(32)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """
@@ -83,3 +90,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise ForbiddenException("Inactive user account")
     
     return user
+
+async def get_current_admin_user(current_user = Depends(get_current_user)):
+    """
+    Dependency to get the current authenticated admin user
+    Raises exception if user is not an admin
+    """
+    from app.core.exceptions import ForbiddenException
+    
+    if not current_user.is_admin:
+        raise ForbiddenException("Admin access required")
+    
+    return current_user

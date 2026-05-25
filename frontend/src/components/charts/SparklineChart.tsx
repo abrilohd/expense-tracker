@@ -1,7 +1,8 @@
 /**
- * Sparkline Chart - Mosaic-inspired mini chart
- * Tiny inline chart for use inside stat cards
+ * SparklineChart Component - Minimal inline trend visualization
+ * Tiny chart for showing trends in stat cards
  */
+import { useRef, useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,17 +17,36 @@ import { Line } from 'react-chartjs-2';
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler);
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SPARKLINE CHART COMPONENT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 interface SparklineChartProps {
   data: number[];
   color: string;
   height?: number;
-  isPositive?: boolean;
 }
 
-const SparklineChart = ({ data, color, height = 40, isPositive }: SparklineChartProps) => {
-  // Prepare chart data
+const SparklineChart = ({ data, color, height = 40 }: SparklineChartProps) => {
+  const chartRef = useRef<ChartJS<'line'>>(null);
+
+  // Create gradient
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) return;
+
+    const ctx = chart.ctx;
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, `${color}33`); // 20% opacity
+    gradient.addColorStop(1, `${color}00`); // 0% opacity
+
+    chart.data.datasets[0].backgroundColor = gradient;
+    chart.update('none');
+  }, [color, height]);
+
+  // Chart data
   const chartData = {
-    labels: data.map((_, index) => index.toString()),
+    labels: data.map((_, i) => i.toString()),
     datasets: [
       {
         data: data,
@@ -36,28 +56,17 @@ const SparklineChart = ({ data, color, height = 40, isPositive }: SparklineChart
         pointHoverRadius: 0,
         fill: true,
         tension: 0.4,
-        backgroundColor: (context: any) => {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
-
-          if (!chartArea) {
-            return `${color}40`; // 25% opacity fallback
-          }
-
-          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, `${color}40`); // 25% opacity at top
-          gradient.addColorStop(1, `${color}00`); // 0% opacity at bottom
-
-          return gradient;
-        },
+        backgroundColor: `${color}33`, // Will be replaced by gradient
       },
     ],
   };
 
-  // Minimal chart options - no interactions, no plugins
+  // Chart options - minimal, no interaction
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    events: [], // Disable all events
+    animation: false, // No animation for sparklines
     plugins: {
       legend: {
         display: false,
@@ -74,13 +83,16 @@ const SparklineChart = ({ data, color, height = 40, isPositive }: SparklineChart
         display: false,
       },
     },
-    events: [], // Disable all interactions
-    animation: false, // Instant render
+    elements: {
+      point: {
+        radius: 0,
+      },
+    },
   };
 
   return (
-    <div style={{ width: '80px', height: `${height}px` }}>
-      <Line data={chartData} options={options} />
+    <div style={{ width: '100%', height: `${height}px` }}>
+      <Line ref={chartRef} data={chartData} options={options} />
     </div>
   );
 };

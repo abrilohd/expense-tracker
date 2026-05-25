@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { API_URL } from '../config/constants';
+import { API_URL, LANDING_URL } from '../config/constants';
 import { 
   Eye, 
   EyeOff, 
@@ -15,7 +15,8 @@ import {
   BarChart2, 
   AlertCircle, 
   Sun, 
-  Moon 
+  Moon,
+  ArrowLeft
 } from 'lucide-react';
 import '../styles/login.css';
 
@@ -25,20 +26,19 @@ const RegisterPage = () => {
   const { isDark, toggle: toggleTheme } = useDarkMode();
 
   // Form state
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
+    fullName?: string;
     email?: string;
     password?: string;
-    confirmPassword?: string;
   }>({});
   const [touched, setTouched] = useState<{
+    fullName?: boolean;
     email?: boolean;
     password?: boolean;
-    confirmPassword?: boolean;
   }>({});
 
   // Clear errors when component unmounts
@@ -48,7 +48,13 @@ const RegisterPage = () => {
 
   // Validate form fields
   const validateForm = (): boolean => {
-    const errors: { email?: string; password?: string; confirmPassword?: string } = {};
+    const errors: { fullName?: string; email?: string; password?: string } = {};
+
+    if (!fullName) {
+      errors.fullName = 'Full name is required';
+    } else if (fullName.length < 2) {
+      errors.fullName = 'Name must be at least 2 characters';
+    }
 
     if (!email) {
       errors.email = 'Email is required';
@@ -64,12 +70,6 @@ const RegisterPage = () => {
       errors.password = 'Password must contain at least one number';
     }
 
-    if (!confirmPassword) {
-      errors.confirmPassword = 'Please confirm your password';
-    } else if (password !== confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
-
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -82,7 +82,7 @@ const RegisterPage = () => {
     if (!validateForm()) return;
 
     try {
-      await register(email, password);
+      await register(email, password, fullName);
       navigate('/');
     } catch (err) {
       // Error is handled by store
@@ -90,17 +90,26 @@ const RegisterPage = () => {
   };
 
   // Handle field blur
-  const handleBlur = (field: 'email' | 'password' | 'confirmPassword') => {
+  const handleBlur = (field: 'fullName' | 'email' | 'password') => {
     setTouched({ ...touched, [field]: true });
   };
 
   // Check if field has error and is touched
-  const showFieldError = (field: 'email' | 'password' | 'confirmPassword') => {
+  const showFieldError = (field: 'fullName' | 'email' | 'password') => {
     return touched[field] && fieldErrors[field];
   };
 
   return (
     <div className="login-container">
+      {/* Back Button */}
+      <a 
+        href={window.location.hostname === 'localhost' ? 'http://localhost:5500' : LANDING_URL} 
+        className="back-button"
+      >
+        <ArrowLeft className="back-button-icon" />
+        <span>Back</span>
+      </a>
+
       {/* Theme Toggle */}
       <button
         onClick={toggleTheme}
@@ -142,7 +151,7 @@ const RegisterPage = () => {
         <div className="brand-content">
           {/* Logo */}
           <div className="brand-logo">
-            <span className="brand-emoji">💰</span>
+            <span className="brand-emoji">💳</span>
           </div>
 
           {/* App name */}
@@ -181,7 +190,7 @@ const RegisterPage = () => {
           {/* Logo for mobile */}
           <div className="mobile-brand">
             <div className="mobile-logo">
-              <span className="brand-emoji">💰</span>
+              <span className="brand-emoji">💳</span>
             </div>
             <h1 className="mobile-title">ExpenseTracker</h1>
           </div>
@@ -210,6 +219,40 @@ const RegisterPage = () => {
 
           {/* Registration form */}
           <form onSubmit={handleSubmit} className="login-form">
+            {/* Full Name field */}
+            <div className="form-field">
+              <label htmlFor="fullName" className="field-label">
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                autoComplete="name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                onBlur={() => handleBlur('fullName')}
+                className={`field-input ${showFieldError('fullName') ? 'field-error' : ''}`}
+                placeholder="Enter your full name"
+                aria-invalid={showFieldError('fullName') ? 'true' : 'false'}
+                aria-describedby={showFieldError('fullName') ? 'fullName-error' : undefined}
+              />
+              <AnimatePresence>
+                {showFieldError('fullName') && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="field-error-message"
+                    id="fullName-error"
+                  >
+                    <AlertCircle className="field-error-icon" />
+                    <span>{fieldErrors.fullName}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {/* Email field */}
             <div className="form-field">
               <label htmlFor="email" className="field-label">
@@ -305,72 +348,6 @@ const RegisterPage = () => {
                   >
                     <AlertCircle className="field-error-icon" />
                     <span>{fieldErrors.password}</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Confirm password field */}
-            <div className="form-field">
-              <label htmlFor="confirmPassword" className="field-label">
-                Confirm Password
-              </label>
-              <div className="password-wrapper">
-                <input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  onBlur={() => handleBlur('confirmPassword')}
-                  className={`field-input ${showFieldError('confirmPassword') ? 'field-error' : ''}`}
-                  placeholder="Confirm your password"
-                  aria-invalid={showFieldError('confirmPassword') ? 'true' : 'false'}
-                  aria-describedby={showFieldError('confirmPassword') ? 'password-confirm-error' : undefined}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="password-toggle"
-                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                >
-                  <AnimatePresence mode="wait">
-                    {showConfirmPassword ? (
-                      <motion.div
-                        key="eye-off"
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.8, opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        <EyeOff size={16} />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="eye"
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.8, opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        <Eye size={16} />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </button>
-              </div>
-              <AnimatePresence>
-                {showFieldError('confirmPassword') && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="field-error-message"
-                    id="password-confirm-error"
-                  >
-                    <AlertCircle className="field-error-icon" />
-                    <span>{fieldErrors.confirmPassword}</span>
                   </motion.div>
                 )}
               </AnimatePresence>

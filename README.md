@@ -1,4 +1,4 @@
-# 💰 ExpenseAI - Smart Expense Tracker
+# 💳 Expenset - Smart Expense Tracker
 
 A modern, full-stack expense tracking application with AI-powered insights, dual theme support, and responsive design.
 
