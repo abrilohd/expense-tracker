@@ -135,7 +135,7 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50"
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
           />
 
           {/* Modal */}
@@ -147,11 +147,45 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="w-full max-w-md pointer-events-auto overflow-hidden"
               style={{
-                background: '#1A1D28',
+                background: 'var(--modal-bg)',
                 borderRadius: '24px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                border: '1px solid var(--modal-border)',
               }}
             >
+              <style>{`
+                :root {
+                  --modal-bg: #FFFFFF;
+                  --modal-border: rgba(0, 0, 0, 0.1);
+                  --modal-text: #1F2937;
+                  --modal-text-secondary: rgba(0, 0, 0, 0.6);
+                  --label-color: rgba(0, 0, 0, 0.7);
+                  --input-bg: rgba(0, 0, 0, 0.05);
+                  --input-border: rgba(0, 0, 0, 0.1);
+                  --input-text: #000000;
+                  --hover-bg: rgba(0, 0, 0, 0.05);
+                  --hover-color: rgba(0, 0, 0, 0.7);
+                  --text-secondary: rgba(0, 0, 0, 0.4);
+                  --button-text: rgba(0, 0, 0, 0.7);
+                  --button-bg: rgba(0, 0, 0, 0.05);
+                  --button-border: rgba(0, 0, 0, 0.1);
+                }
+                .dark {
+                  --modal-bg: #1A1D28;
+                  --modal-border: rgba(255, 255, 255, 0.1);
+                  --modal-text: #FFFFFF;
+                  --modal-text-secondary: rgba(255, 255, 255, 0.45);
+                  --label-color: rgba(255, 255, 255, 0.7);
+                  --input-bg: rgba(255, 255, 255, 0.05);
+                  --input-border: rgba(255, 255, 255, 0.1);
+                  --input-text: #FFFFFF;
+                  --hover-bg: rgba(255, 255, 255, 0.05);
+                  --hover-color: rgba(255, 255, 255, 0.7);
+                  --text-secondary: rgba(255, 255, 255, 0.4);
+                  --button-text: rgba(255, 255, 255, 0.7);
+                  --button-bg: rgba(255, 255, 255, 0.05);
+                  --button-border: rgba(255, 255, 255, 0.1);
+                }
+              `}</style>
               {/* Decorative gradient bar */}
               <div
                 style={{
@@ -177,19 +211,18 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                   </div>
                   <div className="flex-1">
                     <h2
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '20px',
-                        color: '#FFFFFF',
                         letterSpacing: '-0.4px',
                       }}
                     >
                       {isEditMode ? 'Edit Budget' : 'Create Budget'}
                     </h2>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                         marginTop: '2px',
                       }}
                     >
@@ -203,19 +236,28 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                   onClick={handleClose}
                   disabled={isSubmitting}
                   aria-label="Close"
-                  className="absolute top-5 right-5 p-2 rounded-lg transition-colors"
-                  style={{
-                    color: 'rgba(255, 255, 255, 0.4)',
-                  }}
+                  className="absolute top-5 right-5 p-2 rounded-lg transition-colors text-gray-400 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-600 dark:hover:text-white/70"
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
+                    e.currentTarget.style.background = 'var(--hover-bg)';
+                    e.currentTarget.style.color = 'var(--hover-color)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
+                    e.currentTarget.style.color = 'var(--text-secondary)';
                   }}
                 >
+                  <style>{`
+                    :root {
+                      --hover-bg: rgba(0, 0, 0, 0.05);
+                      --hover-color: rgba(0, 0, 0, 0.7);
+                      --text-secondary: rgba(0, 0, 0, 0.4);
+                    }
+                    .dark {
+                      --hover-bg: rgba(255, 255, 255, 0.05);
+                      --hover-color: rgba(255, 255, 255, 0.7);
+                      --text-secondary: rgba(255, 255, 255, 0.4);
+                    }
+                  `}</style>
                   <X size={20} />
                 </button>
               </div>
@@ -229,10 +271,9 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                   transition={{ delay: 0.1 }}
                 >
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Category <span style={{ color: '#F87171' }}>*</span>
@@ -249,17 +290,13 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                     )}
                     <select
                       disabled={isEditMode}
-                      className="w-full px-4 py-3 rounded-xl appearance-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl appearance-none transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                       style={{
                         paddingLeft: selectedCategoryData ? '3rem' : '1rem',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: errors.category
-                          ? '1px solid #F87171'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
                         cursor: isEditMode ? 'not-allowed' : 'pointer',
                         opacity: isEditMode ? 0.6 : 1,
+                        borderColor: errors.category ? '#F87171' : undefined,
                       }}
                       {...register('category')}
                     >
@@ -271,8 +308,7 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                       ))}
                     </select>
                     <div
-                      className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
-                      style={{ color: 'rgba(255, 255, 255, 0.3)' }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/30"
                     >
                       <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
                         <path
@@ -307,19 +343,17 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                   transition={{ delay: 0.15 }}
                 >
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Budget Limit <span style={{ color: '#F87171' }}>*</span>
                   </label>
                   <div className="relative">
                     <div
-                      className="absolute left-4 top-1/2 -translate-y-1/2 font-medium"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-medium text-purple-600 dark:text-purple-400"
                       style={{
-                        color: '#A78BFA',
                         fontSize: '18px',
                       }}
                     >
@@ -331,24 +365,10 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                       min="0"
                       placeholder="0.00"
                       autoFocus={!isEditMode}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl font-medium transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl font-medium transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: errors.amount
-                          ? '1px solid #F87171'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '20px',
-                      }}
-                      onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#5B4EE8';
-                        e.currentTarget.style.background = 'rgba(91, 78, 232, 0.08)';
-                      }}
-                      onBlur={(e) => {
-                        e.currentTarget.style.borderColor = errors.amount
-                          ? '#F87171'
-                          : 'rgba(255, 255, 255, 0.1)';
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                        borderColor: errors.amount ? '#F87171' : undefined,
                       }}
                       {...register('amount', { valueAsNumber: true })}
                     />
@@ -379,18 +399,9 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all"
+                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/8"
                     style={{
                       fontSize: '14px',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
                     }}
                   >
                     Cancel
@@ -398,20 +409,9 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
-                      background: 'linear-gradient(135deg, #5B4EE8 0%, #7C3AED 100%)',
-                      border: 'none',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background =
-                        'linear-gradient(135deg, #4F44D4 0%, #6D28D9 100%)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background =
-                        'linear-gradient(135deg, #5B4EE8 0%, #7C3AED 100%)';
                     }}
                   >
                     {isSubmitting ? (

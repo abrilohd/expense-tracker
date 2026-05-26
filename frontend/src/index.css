@@ -29,6 +29,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Light mode body */
+body:not(.dark) {
+  background: #FFFFFF;
+  color: #1F2937;
+}
+
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    SELECTION & SCROLLBAR
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -82,6 +88,12 @@ input[type="number"]::-webkit-inner-spin-button {
 select option {
   background: #1A1D28;
   color: #F9FAFB;
+}
+
+/* Light mode select options */
+:not(.dark) select option {
+  background: #FFFFFF;
+  color: #1F2937;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -159,6 +171,16 @@ select option {
   border-color: rgba(255,255,255,0.12);
 }
 
+/* Light mode card */
+:not(.dark) .card {
+  background: #FFFFFF;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+:not(.dark) .card:hover {
+  border-color: rgba(0,0,0,0.12);
+}
+
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    BUTTON COMPONENTS
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -213,6 +235,18 @@ select option {
   color: #fff;
 }
 
+/* Light mode button ghost */
+:not(.dark) .btn-ghost {
+  background: rgba(0,0,0,0.04);
+  color: rgba(0,0,0,0.7);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+:not(.dark) .btn-ghost:hover {
+  background: rgba(0,0,0,0.08);
+  color: #000;
+}
+
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    INPUT COMPONENT
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -241,6 +275,22 @@ select option {
 
 .input-dark.error {
   border-color: rgba(248,113,113,0.5);
+}
+
+/* Light mode input */
+:not(.dark) .input-dark {
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #1F2937;
+}
+
+:not(.dark) .input-dark::placeholder {
+  color: rgba(0,0,0,0.4);
+}
+
+:not(.dark) .input-dark:focus {
+  border-color: rgba(91,78,232,0.6);
+  background: rgba(91,78,232,0.05);
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

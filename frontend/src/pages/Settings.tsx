@@ -80,7 +80,7 @@ const defaultSettings: AppSettings = {
 };
 
 const Settings = () => {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDark, toggle } = useDarkMode();
   const { expenses } = useExpenseList();
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
@@ -180,19 +180,18 @@ const Settings = () => {
         className="mb-6"
       >
         <h1
-          className="font-medium"
+          className="font-medium text-gray-900 dark:text-white"
           style={{
             fontSize: '22px',
-            color: '#FFFFFF',
             letterSpacing: '-0.4px',
           }}
         >
           Settings
         </h1>
         <p
+          className="text-gray-500 dark:text-white/45"
           style={{
             fontSize: '13px',
-            color: 'rgba(255, 255, 255, 0.45)',
             marginTop: '2px',
           }}
         >
@@ -209,10 +208,9 @@ const Settings = () => {
         >
           <Card padding="lg">
             <h3
-              className="font-medium mb-5"
+              className="font-medium mb-5 text-gray-900 dark:text-white"
               style={{
                 fontSize: '16px',
-                color: '#FFFFFF',
               }}
             >
               Appearance
@@ -231,7 +229,7 @@ const Settings = () => {
                       background: 'rgba(91, 78, 232, 0.15)',
                     }}
                   >
-                    {isDarkMode ? (
+                    {isDark ? (
                       <Moon size={20} style={{ color: '#A78BFA' }} />
                     ) : (
                       <Sun size={20} style={{ color: '#A78BFA' }} />
@@ -239,60 +237,54 @@ const Settings = () => {
                   </div>
                   <div>
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '14px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Dark Mode
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Toggle dark theme
                     </p>
                   </div>
                 </div>
-                <ToggleSwitch checked={isDarkMode} onChange={toggleDarkMode} />
+                <ToggleSwitch checked={isDark} onChange={toggle} />
               </div>
 
               {/* Currency Selector */}
               <div
-                className="pt-4"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                }}
+                className="pt-4 border-t border-gray-200 dark:border-white/[0.06]"
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div
-                    className="flex items-center justify-center"
+                    className="flex items-center justify-center bg-green-100 dark:bg-green-500/15"
                     style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'rgba(52, 211, 153, 0.15)',
                     }}
                   >
                     <DollarSign size={20} style={{ color: '#34D399' }} />
                   </div>
                   <div>
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '14px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Currency
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Display currency preference
@@ -305,21 +297,13 @@ const Settings = () => {
                     <button
                       key={currency}
                       onClick={() => updateCurrency(currency)}
-                      className="flex-1 py-2.5 rounded-lg font-medium transition-all"
+                      className={`flex-1 py-2.5 rounded-lg font-medium transition-all ${
+                        settings.currency === currency
+                          ? 'bg-green-100 dark:bg-green-500/15 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-500/20'
+                          : 'bg-gray-100 dark:bg-white/[0.05] text-gray-600 dark:text-white/50 border border-gray-200 dark:border-white/10'
+                      }`}
                       style={{
                         fontSize: '13px',
-                        background:
-                          settings.currency === currency
-                            ? 'rgba(52, 211, 153, 0.15)'
-                            : 'rgba(255, 255, 255, 0.05)',
-                        color:
-                          settings.currency === currency
-                            ? '#34D399'
-                            : 'rgba(255, 255, 255, 0.5)',
-                        border:
-                          settings.currency === currency
-                            ? '1px solid rgba(52, 211, 153, 0.2)'
-                            : '1px solid rgba(255, 255, 255, 0.1)',
                       }}
                     >
                       {currency}
@@ -330,38 +314,33 @@ const Settings = () => {
 
               {/* Language Selector */}
               <div
-                className="pt-4"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                }}
+                className="pt-4 border-t border-gray-200 dark:border-white/[0.06]"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex items-center justify-center"
+                      className="flex items-center justify-center bg-yellow-100 dark:bg-yellow-500/15"
                       style={{
                         width: '40px',
                         height: '40px',
                         borderRadius: '10px',
-                        background: 'rgba(251, 191, 36, 0.15)',
                       }}
                     >
                       <Globe size={20} style={{ color: '#FBBF24' }} />
                     </div>
                     <div>
                       <p
-                        className="font-medium"
+                        className="font-medium text-gray-900 dark:text-white"
                         style={{
                           fontSize: '14px',
-                          color: '#FFFFFF',
                         }}
                       >
                         Language
                       </p>
                       <p
+                        className="text-gray-500 dark:text-white/45"
                         style={{
                           fontSize: '12px',
-                          color: 'rgba(255, 255, 255, 0.45)',
                         }}
                       >
                         English only (more coming soon)
@@ -369,11 +348,9 @@ const Settings = () => {
                     </div>
                   </div>
                   <span
-                    className="px-3 py-1.5 rounded-lg font-medium"
+                    className="px-3 py-1.5 rounded-lg font-medium bg-gray-100 dark:bg-white/[0.05] text-gray-600 dark:text-white/50"
                     style={{
                       fontSize: '12px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: 'rgba(255, 255, 255, 0.5)',
                     }}
                   >
                     English
@@ -392,10 +369,9 @@ const Settings = () => {
         >
           <Card padding="lg">
             <h3
-              className="font-medium mb-5"
+              className="font-medium mb-5 text-gray-900 dark:text-white"
               style={{
                 fontSize: '16px',
-                color: '#FFFFFF',
               }}
             >
               Notifications
@@ -406,30 +382,28 @@ const Settings = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
-                    className="flex items-center justify-center"
+                    className="flex items-center justify-center bg-red-100 dark:bg-red-500/15"
                     style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'rgba(248, 113, 113, 0.15)',
                     }}
                   >
                     <Bell size={20} style={{ color: '#F87171' }} />
                   </div>
                   <div>
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '14px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Budget Exceeded Alerts
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Get notified when you exceed budget limits
@@ -444,37 +418,32 @@ const Settings = () => {
 
               {/* Weekly Summary Email */}
               <div
-                className="flex items-center justify-between pt-4"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                }}
+                className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-white/[0.06]"
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className="flex items-center justify-center"
+                    className="flex items-center justify-center bg-purple-100 dark:bg-purple-500/15"
                     style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'rgba(91, 78, 232, 0.15)',
                     }}
                   >
                     <Bell size={20} style={{ color: '#A78BFA' }} />
                   </div>
                   <div>
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '14px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Weekly Summary Email
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Receive weekly spending summaries
@@ -489,37 +458,32 @@ const Settings = () => {
 
               {/* Monthly Report */}
               <div
-                className="flex items-center justify-between pt-4"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                }}
+                className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-white/[0.06]"
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className="flex items-center justify-center"
+                    className="flex items-center justify-center bg-green-100 dark:bg-green-500/15"
                     style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'rgba(52, 211, 153, 0.15)',
                     }}
                   >
                     <Bell size={20} style={{ color: '#34D399' }} />
                   </div>
                   <div>
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '14px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Monthly Report
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Get detailed monthly financial reports
@@ -534,37 +498,32 @@ const Settings = () => {
 
               {/* Savings Goal Reminders */}
               <div
-                className="flex items-center justify-between pt-4"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                }}
+                className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-white/[0.06]"
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className="flex items-center justify-center"
+                    className="flex items-center justify-center bg-yellow-100 dark:bg-yellow-500/15"
                     style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'rgba(251, 191, 36, 0.15)',
                     }}
                   >
                     <Bell size={20} style={{ color: '#FBBF24' }} />
                   </div>
                   <div>
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '14px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Savings Goal Reminders
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Reminders for upcoming savings deadlines
@@ -588,10 +547,9 @@ const Settings = () => {
         >
           <Card padding="lg">
             <h3
-              className="font-medium mb-5"
+              className="font-medium mb-5 text-gray-900 dark:text-white"
               style={{
                 fontSize: '16px',
-                color: '#FFFFFF',
               }}
             >
               Data & Privacy
@@ -601,43 +559,31 @@ const Settings = () => {
               {/* Export All Data */}
               <button
                 onClick={exportAllData}
-                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left"
-                style={{
-                  background: 'rgba(52, 211, 153, 0.08)',
-                  border: '1px solid rgba(52, 211, 153, 0.15)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(52, 211, 153, 0.12)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(52, 211, 153, 0.08)';
-                }}
+                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-green-50 dark:bg-green-500/8 border border-green-200 dark:border-green-500/15 hover:bg-green-100 dark:hover:bg-green-500/12"
               >
                 <div
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center bg-green-100 dark:bg-green-500/15"
                   style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
-                    background: 'rgba(52, 211, 153, 0.15)',
                   }}
                 >
                   <Download size={20} style={{ color: '#34D399' }} />
                 </div>
                 <div>
                   <p
-                    className="font-medium"
+                    className="font-medium text-gray-900 dark:text-white"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
                     }}
                   >
                     Export All Data
                   </p>
                   <p
+                    className="text-gray-500 dark:text-white/45"
                     style={{
                       fontSize: '12px',
-                      color: 'rgba(255, 255, 255, 0.45)',
                     }}
                   >
                     Download all your expenses as CSV
@@ -648,43 +594,31 @@ const Settings = () => {
               {/* Clear All Expenses */}
               <button
                 onClick={() => setIsClearModalOpen(true)}
-                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left"
-                style={{
-                  background: 'rgba(248, 113, 113, 0.08)',
-                  border: '1px solid rgba(248, 113, 113, 0.15)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(248, 113, 113, 0.12)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(248, 113, 113, 0.08)';
-                }}
+                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-red-50 dark:bg-red-500/8 border border-red-200 dark:border-red-500/15 hover:bg-red-100 dark:hover:bg-red-500/12"
               >
                 <div
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center bg-red-100 dark:bg-red-500/15"
                   style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
-                    background: 'rgba(248, 113, 113, 0.15)',
                   }}
                 >
                   <Trash2 size={20} style={{ color: '#F87171' }} />
                 </div>
                 <div>
                   <p
-                    className="font-medium"
+                    className="font-medium text-gray-900 dark:text-white"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
                     }}
                   >
                     Clear All Expenses
                   </p>
                   <p
+                    className="text-gray-500 dark:text-white/45"
                     style={{
                       fontSize: '12px',
-                      color: 'rgba(255, 255, 255, 0.45)',
                     }}
                   >
                     Permanently delete all expense records
@@ -695,43 +629,31 @@ const Settings = () => {
               {/* Privacy Policy */}
               <button
                 onClick={() => toast('Privacy policy coming soon!', { icon: '📄' })}
-                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left"
-                style={{
-                  background: 'rgba(91, 78, 232, 0.08)',
-                  border: '1px solid rgba(91, 78, 232, 0.15)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(91, 78, 232, 0.12)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(91, 78, 232, 0.08)';
-                }}
+                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-purple-50 dark:bg-purple-500/8 border border-purple-200 dark:border-purple-500/15 hover:bg-purple-100 dark:hover:bg-purple-500/12"
               >
                 <div
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center bg-purple-100 dark:bg-purple-500/15"
                   style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
-                    background: 'rgba(91, 78, 232, 0.15)',
                   }}
                 >
                   <FileText size={20} style={{ color: '#A78BFA' }} />
                 </div>
                 <div>
                   <p
-                    className="font-medium"
+                    className="font-medium text-gray-900 dark:text-white"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
                     }}
                   >
                     Privacy Policy
                   </p>
                   <p
+                    className="text-gray-500 dark:text-white/45"
                     style={{
                       fontSize: '12px',
-                      color: 'rgba(255, 255, 255, 0.45)',
                     }}
                   >
                     View our privacy policy and terms
@@ -759,21 +681,19 @@ const Settings = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-md pointer-events-auto"
+                className="w-full max-w-md pointer-events-auto bg-white dark:bg-[#1A1D28] border border-red-200 dark:border-red-500/20"
                 style={{
-                  background: '#1A1D28',
                   borderRadius: '20px',
                   padding: '24px',
-                  border: '1px solid rgba(248, 113, 113, 0.2)',
                 }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div
+                    className="bg-red-100 dark:bg-red-500/15"
                     style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'rgba(248, 113, 113, 0.15)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -783,10 +703,9 @@ const Settings = () => {
                   </div>
                   <div>
                     <h3
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '18px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Clear All Expenses
@@ -795,9 +714,9 @@ const Settings = () => {
                 </div>
 
                 <p
+                  className="text-gray-700 dark:text-white/70"
                   style={{
                     fontSize: '14px',
-                    color: 'rgba(255, 255, 255, 0.7)',
                     marginBottom: '16px',
                   }}
                 >
@@ -805,9 +724,9 @@ const Settings = () => {
                 </p>
 
                 <p
+                  className="text-gray-600 dark:text-white/60"
                   style={{
                     fontSize: '13px',
-                    color: 'rgba(255, 255, 255, 0.6)',
                     marginBottom: '12px',
                   }}
                 >
@@ -819,11 +738,8 @@ const Settings = () => {
                   value={clearConfirmText}
                   onChange={(e) => setClearConfirmText(e.target.value)}
                   placeholder="Type CLEAR"
-                  className="w-full px-4 py-3 rounded-xl mb-4"
+                  className="w-full px-4 py-3 rounded-xl mb-4 bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    color: '#FFFFFF',
                     fontSize: '14px',
                   }}
                 />
@@ -834,12 +750,9 @@ const Settings = () => {
                       setIsClearModalOpen(false);
                       setClearConfirmText('');
                     }}
-                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                     style={{
                       fontSize: '14px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                   >
                     Cancel

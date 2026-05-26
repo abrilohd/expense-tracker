@@ -196,7 +196,7 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
           >
             {/* Modal */}
             <motion.div
@@ -205,27 +205,27 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-[#1A1D28] border border-white/8 rounded-t-3xl sm:rounded-3xl p-6 relative"
+              className="w-full max-w-md bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/8 rounded-t-3xl sm:rounded-3xl p-6 relative"
             >
               {/* Mobile drag handle */}
-              <div className="w-10 h-1 bg-white/15 rounded-full mx-auto mb-5 sm:hidden" />
+              <div className="w-10 h-1 bg-gray-300 dark:bg-white/15 rounded-full mx-auto mb-5 sm:hidden" />
 
               {/* Header */}
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h2 className="text-lg font-medium text-white">
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-white">
                     {isEditMode ? 'Edit Expense' : 'Add Expense'}
                   </h2>
-                  <p className="text-xs text-white/35 mt-0.5">
+                  <p className="text-xs text-gray-500 dark:text-white/35 mt-0.5">
                     Track your spending
                   </p>
                 </div>
                 <button
                   onClick={handleClose}
                   disabled={isSubmitting}
-                  className="w-[30px] h-[30px] flex items-center justify-center bg-white/7 hover:bg-white/12 rounded-xl transition-colors"
+                  className="w-[30px] h-[30px] flex items-center justify-center bg-gray-100 dark:bg-white/7 hover:bg-gray-200 dark:hover:bg-white/12 rounded-xl transition-colors"
                 >
-                  <X size={15} className="text-white/60" />
+                  <X size={15} className="text-gray-600 dark:text-white/60" />
                 </button>
               </div>
 
@@ -233,45 +233,49 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Transaction details section */}
                 <div className="space-y-3">
-                  <p className="text-[10px] text-white/25 uppercase tracking-widest font-medium">
+                  <p className="text-[10px] text-gray-400 dark:text-white/25 uppercase tracking-widest font-medium">
                     Transaction details
                   </p>
 
                   {/* Amount */}
                   <div>
-                    <label className="block text-xs text-white/40 font-medium mb-1.5">
+                    <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
                       Amount
                     </label>
                     <div className="relative">
-                      <DollarSign size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
+                      <DollarSign size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40" />
                       <input
                         type="number"
                         step="0.01"
                         min="0"
                         placeholder="0.00"
                         autoFocus
-                        className={`input-dark w-full pl-10 ${errors.amount ? 'border-red-500/50' : ''}`}
+                        className={`w-full pl-10 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
+                          errors.amount ? 'border-red-500' : 'border-gray-200 dark:border-white/10'
+                        }`}
                         {...register('amount', { valueAsNumber: true })}
                       />
                     </div>
                     {errors.amount && (
-                      <p className="text-xs text-red-400 mt-1.5">{errors.amount.message}</p>
+                      <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">{errors.amount.message}</p>
                     )}
                   </div>
 
                   {/* Title */}
                   <div>
-                    <label className="block text-xs text-white/40 font-medium mb-1.5">
+                    <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
                       Title
                     </label>
                     <input
                       type="text"
                       placeholder="e.g., Morning Coffee"
-                      className={`input-dark w-full ${errors.title ? 'border-red-500/50' : ''}`}
+                      className={`w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
+                        errors.title ? 'border-red-500' : 'border-gray-200 dark:border-white/10'
+                      }`}
                       {...register('title')}
                     />
                     {errors.title && (
-                      <p className="text-xs text-red-400 mt-1.5">{errors.title.message}</p>
+                      <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">{errors.title.message}</p>
                     )}
                   </div>
 
@@ -279,7 +283,7 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {/* Category */}
                     <div>
-                      <label className="block text-xs text-white/40 font-medium mb-1.5">
+                      <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
                         Category
                       </label>
                       <div className="relative">
@@ -289,7 +293,9 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                           </span>
                         )}
                         <select
-                          className={`input-dark w-full appearance-none ${selectedCategory ? 'pl-9' : ''} ${errors.category ? 'border-red-500/50' : ''}`}
+                          className={`w-full appearance-none px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
+                            selectedCategory ? 'pl-9' : ''
+                          } ${errors.category ? 'border-red-500' : 'border-gray-200 dark:border-white/10'}`}
                           {...register('category')}
                         >
                           <option value="">Select</option>
@@ -299,30 +305,32 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                             </option>
                           ))}
                         </select>
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white/40">
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/40">
                           <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
                             <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </div>
                       </div>
                       {errors.category && (
-                        <p className="text-xs text-red-400 mt-1.5">Required</p>
+                        <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">Required</p>
                       )}
                     </div>
 
                     {/* Date */}
                     <div>
-                      <label className="block text-xs text-white/40 font-medium mb-1.5">
+                      <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
                         Date
                       </label>
                       <input
                         type="date"
                         max={getTodayDate()}
-                        className={`input-dark w-full ${errors.date ? 'border-red-500/50' : ''}`}
+                        className={`w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
+                          errors.date ? 'border-red-500' : 'border-gray-200 dark:border-white/10'
+                        }`}
                         {...register('date')}
                       />
                       {errors.date && (
-                        <p className="text-xs text-red-400 mt-1.5">{errors.date.message}</p>
+                        <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">{errors.date.message}</p>
                       )}
                     </div>
                   </div>
@@ -365,41 +373,41 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
 
                 {/* More info section */}
                 <div className="space-y-3 pt-1">
-                  <p className="text-[10px] text-white/25 uppercase tracking-widest font-medium">
+                  <p className="text-[10px] text-gray-400 dark:text-white/25 uppercase tracking-widest font-medium">
                     More info
                   </p>
 
                   {/* Description */}
                   <div>
-                    <label className="block text-xs text-white/40 font-medium mb-1.5">
-                      Notes <span className="text-white/25 font-normal">(Optional)</span>
+                    <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
+                      Notes <span className="text-gray-400 dark:text-white/25 font-normal">(Optional)</span>
                     </label>
                     <textarea
                       rows={3}
                       placeholder="Add any details..."
-                      className="input-dark w-full resize-none"
+                      className="w-full px-4 py-3 rounded-xl resize-none transition-all bg-white dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                       {...register('description')}
                     />
                   </div>
                 </div>
 
                 {/* Footer */}
-                <div className="border-t border-white/6 pt-6 mt-6 flex gap-3">
+                <div className="border-t border-gray-200 dark:border-white/6 pt-6 mt-6 flex gap-3">
                   <button
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="btn-ghost flex-1"
+                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`flex-1 flex items-center justify-center gap-2 ${
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all text-white ${
                       budgetWarning && budgetWarning.remaining < 0
                         ? 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600'
-                        : 'btn-primary'
+                        : 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
                     }`}
                   >
                     {isSubmitting ? (

@@ -147,7 +147,7 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50"
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
           />
 
           {/* Modal */}
@@ -157,11 +157,9 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-2xl pointer-events-auto overflow-hidden"
+              className="w-full max-w-2xl pointer-events-auto overflow-hidden bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/10"
               style={{
-                background: '#1A1D28',
                 borderRadius: '24px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
                 maxHeight: '90vh',
                 overflowY: 'auto',
               }}
@@ -191,19 +189,18 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   </div>
                   <div className="flex-1">
                     <h2
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '20px',
-                        color: '#FFFFFF',
                         letterSpacing: '-0.4px',
                       }}
                     >
                       {mode === 'create' ? 'Create Recurring' : 'Edit Recurring'}
                     </h2>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                         marginTop: '2px',
                       }}
                     >
@@ -217,17 +214,14 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   onClick={handleClose}
                   disabled={isSubmitting}
                   aria-label="Close"
-                  className="absolute top-5 right-5 p-2 rounded-lg transition-colors"
-                  style={{
-                    color: 'rgba(255, 255, 255, 0.4)',
-                  }}
+                  className="absolute top-5 right-5 p-2 rounded-lg transition-colors text-gray-400 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-600 dark:hover:text-white/70"
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
+                    e.currentTarget.style.background = document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+                    e.currentTarget.style.color = document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
+                    e.currentTarget.style.color = document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)';
                   }}
                 >
                   <X size={20} />
@@ -243,20 +237,19 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   transition={{ delay: 0.1 }}
                 >
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Transaction Type <span style={{ color: '#F87171' }}>*</span>
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <label
-                      className="relative flex items-center justify-center p-4 rounded-xl cursor-pointer transition-all"
+                      className="relative flex items-center justify-center p-4 rounded-xl cursor-pointer transition-all bg-white dark:bg-white/5 border-2"
                       style={{
-                        background: transactionType === 'expense' ? 'rgba(248, 113, 113, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-                        border: transactionType === 'expense' ? '2px solid #F87171' : '2px solid rgba(255, 255, 255, 0.1)',
+                        background: transactionType === 'expense' ? 'rgba(248, 113, 113, 0.15)' : undefined,
+                        borderColor: transactionType === 'expense' ? '#F87171' : 'var(--border-color)',
                       }}
                     >
                       <input
@@ -268,18 +261,17 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                       <div className="text-center">
                         <TrendingDown size={24} style={{ color: '#F87171', margin: '0 auto 8px' }} />
                         <span
-                          className="block font-medium"
+                          className="block font-medium text-gray-900 dark:text-white"
                           style={{
                             fontSize: '14px',
-                            color: '#FFFFFF',
                           }}
                         >
                           Expense
                         </span>
                         <span
+                          className="text-gray-500 dark:text-white/45"
                           style={{
                             fontSize: '11px',
-                            color: 'rgba(255, 255, 255, 0.45)',
                           }}
                         >
                           Money out
@@ -287,10 +279,10 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                       </div>
                     </label>
                     <label
-                      className="relative flex items-center justify-center p-4 rounded-xl cursor-pointer transition-all"
+                      className="relative flex items-center justify-center p-4 rounded-xl cursor-pointer transition-all bg-white dark:bg-white/5 border-2"
                       style={{
-                        background: transactionType === 'income' ? 'rgba(52, 211, 153, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-                        border: transactionType === 'income' ? '2px solid #34D399' : '2px solid rgba(255, 255, 255, 0.1)',
+                        background: transactionType === 'income' ? 'rgba(52, 211, 153, 0.15)' : undefined,
+                        borderColor: transactionType === 'income' ? '#34D399' : 'var(--border-color)',
                       }}
                     >
                       <input
@@ -302,18 +294,17 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                       <div className="text-center">
                         <TrendingUp size={24} style={{ color: '#34D399', margin: '0 auto 8px' }} />
                         <span
-                          className="block font-medium"
+                          className="block font-medium text-gray-900 dark:text-white"
                           style={{
                             fontSize: '14px',
-                            color: '#FFFFFF',
                           }}
                         >
                           Income
                         </span>
                         <span
+                          className="text-gray-500 dark:text-white/45"
                           style={{
                             fontSize: '11px',
-                            color: 'rgba(255, 255, 255, 0.45)',
                           }}
                         >
                           Money in
@@ -330,10 +321,9 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   transition={{ delay: 0.15 }}
                 >
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Title <span style={{ color: '#F87171' }}>*</span>
@@ -342,24 +332,10 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                     type="text"
                     placeholder="e.g., Monthly Rent, Weekly Salary"
                     autoFocus
-                    className="w-full px-4 py-3 rounded-xl transition-all"
+                    className="w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8"
                     style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: errors.title
-                        ? '1px solid #F87171'
-                        : '1px solid rgba(255, 255, 255, 0.1)',
-                      color: '#FFFFFF',
                       fontSize: '14px',
-                    }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.borderColor = '#A78BFA';
-                      e.currentTarget.style.background = 'rgba(167, 139, 250, 0.08)';
-                    }}
-                    onBlur={(e) => {
-                      e.currentTarget.style.borderColor = errors.title
-                        ? '#F87171'
-                        : 'rgba(255, 255, 255, 0.1)';
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                      borderColor: errors.title ? '#F87171' : undefined,
                     }}
                     {...register('title')}
                   />
@@ -385,19 +361,17 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   transition={{ delay: 0.2 }}
                 >
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Amount <span style={{ color: '#F87171' }}>*</span>
                   </label>
                   <div className="relative">
                     <div
-                      className="absolute left-4 top-1/2 -translate-y-1/2 font-medium"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-medium text-purple-600 dark:text-purple-400"
                       style={{
-                        color: '#A78BFA',
                         fontSize: '18px',
                       }}
                     >
@@ -408,24 +382,10 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                       step="0.01"
                       min="0"
                       placeholder="0.00"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl font-medium transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl font-medium transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: errors.amount
-                          ? '1px solid #F87171'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '20px',
-                      }}
-                      onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#A78BFA';
-                        e.currentTarget.style.background = 'rgba(167, 139, 250, 0.08)';
-                      }}
-                      onBlur={(e) => {
-                        e.currentTarget.style.borderColor = errors.amount
-                          ? '#F87171'
-                          : 'rgba(255, 255, 255, 0.1)';
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                        borderColor: errors.amount ? '#F87171' : undefined,
                       }}
                       {...register('amount', { valueAsNumber: true })}
                     />
@@ -454,20 +414,16 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                     transition={{ delay: 0.25 }}
                   >
                     <label
-                      className="block font-medium mb-2"
+                      className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       {transactionType === 'expense' ? 'Category' : 'Source'} <span style={{ color: '#F87171' }}>*</span>
                     </label>
                     <select
-                      className="w-full px-4 py-3 rounded-xl transition-all"
+                      className="w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
                       }}
                       {...register('category_or_source')}
@@ -507,20 +463,16 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                     transition={{ delay: 0.3 }}
                   >
                     <label
-                      className="block font-medium mb-2"
+                      className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       Frequency <span style={{ color: '#F87171' }}>*</span>
                     </label>
                     <select
-                      className="w-full px-4 py-3 rounded-xl transition-all"
+                      className="w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
                       }}
                       {...register('frequency')}
@@ -543,21 +495,17 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                     transition={{ delay: 0.35 }}
                   >
                     <label
-                      className="block font-medium mb-2"
+                      className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       Start Date <span style={{ color: '#F87171' }}>*</span>
                     </label>
                     <input
                       type="date"
-                      className="w-full px-4 py-3 rounded-xl transition-all"
+                      className="w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
                       }}
                       {...register('start_date')}
@@ -584,17 +532,16 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                     transition={{ delay: 0.4 }}
                   >
                     <label
-                      className="block font-medium mb-2"
+                      className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       End Date{' '}
                       <span
+                        className="text-gray-400 dark:text-white/35"
                         style={{
                           fontSize: '11px',
-                          color: 'rgba(255, 255, 255, 0.35)',
                           fontWeight: 400,
                         }}
                       >
@@ -603,19 +550,16 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                     </label>
                     <input
                       type="date"
-                      className="w-full px-4 py-3 rounded-xl transition-all"
+                      className="w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
                       }}
                       {...register('end_date')}
                     />
                     <p
+                      className="text-gray-400 dark:text-white/35"
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.35)',
                         marginTop: '6px',
                       }}
                     >
@@ -631,17 +575,16 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   transition={{ delay: 0.45 }}
                 >
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Description{' '}
                     <span
+                      className="text-gray-400 dark:text-white/35"
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.35)',
                         fontWeight: 400,
                       }}
                     >
@@ -651,20 +594,9 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   <textarea
                     rows={3}
                     placeholder="Add notes about this recurring transaction..."
-                    className="w-full px-4 py-3 rounded-xl transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl transition-all resize-none bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8"
                     style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      color: '#FFFFFF',
                       fontSize: '14px',
-                    }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.borderColor = '#A78BFA';
-                      e.currentTarget.style.background = 'rgba(167, 139, 250, 0.08)';
-                    }}
-                    onBlur={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
                     }}
                     {...register('description')}
                   />
@@ -681,18 +613,9 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all"
+                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/8"
                     style={{
                       fontSize: '14px',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
                     }}
                   >
                     Cancel
@@ -700,20 +623,9 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
-                      background: 'linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%)',
-                      border: 'none',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background =
-                        'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background =
-                        'linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%)';
                     }}
                   >
                     {isSubmitting ? (

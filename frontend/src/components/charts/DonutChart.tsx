@@ -112,7 +112,7 @@ const DonutChart = ({ data, isLoading = false }: DonutChartProps) => {
       legend: {
         position: 'bottom' as const,
         labels: {
-          color: 'rgba(255, 255, 255, 0.4)',
+          color: '#9CA3AF',
           font: {
             size: 11,
             family: 'Inter',
@@ -126,8 +126,8 @@ const DonutChart = ({ data, isLoading = false }: DonutChartProps) => {
         },
       },
       tooltip: {
-        backgroundColor: '#1A1D28',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+        borderColor: 'rgba(156, 163, 175, 0.2)',
         borderWidth: 1,
         titleColor: '#9CA3AF',
         bodyColor: '#FFFFFF',
@@ -158,19 +158,17 @@ const DonutChart = ({ data, isLoading = false }: DonutChartProps) => {
     return (
       <Card padding="lg">
         <h3
-          className="font-medium mb-2"
+          className="font-medium mb-2 text-gray-900 dark:text-white"
           style={{
             fontSize: '14px',
-            color: '#FFFFFF',
           }}
         >
           Category Breakdown
         </h3>
         <div
-          className="flex items-center justify-center"
+          className="flex items-center justify-center text-gray-400 dark:text-white/30"
           style={{
             height: '300px',
-            color: 'rgba(255, 255, 255, 0.3)',
             fontSize: '13px',
           }}
         >
@@ -184,10 +182,9 @@ const DonutChart = ({ data, isLoading = false }: DonutChartProps) => {
     <Card padding="lg">
       {/* Title */}
       <h3
-        className="font-medium mb-4"
+        className="font-medium mb-4 text-gray-900 dark:text-white"
         style={{
           fontSize: '14px',
-          color: '#FFFFFF',
         }}
       >
         Category Breakdown

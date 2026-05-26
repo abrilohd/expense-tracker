@@ -10,11 +10,11 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0B0D14] flex items-center justify-center p-8 relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-[#0B0D14] flex items-center justify-center p-8 relative overflow-hidden">
       {/* Decorative blurs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute w-72 h-72 bg-purple-500/8 rounded-full blur-3xl top-1/4 left-1/3" />
-        <div className="absolute w-48 h-48 bg-blue-500/8 rounded-full blur-3xl bottom-1/3 right-1/4" />
+        <div className="absolute w-72 h-72 bg-purple-500/8 dark:bg-purple-500/8 rounded-full blur-3xl top-1/4 left-1/3" />
+        <div className="absolute w-48 h-48 bg-blue-500/8 dark:bg-blue-500/8 rounded-full blur-3xl bottom-1/3 right-1/4" />
       </div>
 
       {/* Content */}
@@ -35,16 +35,16 @@ const NotFoundPage = () => {
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           className="flex justify-center my-2"
         >
-          <Ghost size={44} className="text-white/10" />
+          <Ghost size={44} className="text-gray-200 dark:text-white/10" />
         </motion.div>
 
         {/* Title */}
-        <h2 className="text-xl font-medium text-white mt-2">
+        <h2 className="text-xl font-medium text-gray-900 dark:text-white mt-2">
           Page not found
         </h2>
 
         {/* Message */}
-        <p className="text-sm text-white/35 mt-2 leading-relaxed">
+        <p className="text-sm text-gray-500 dark:text-white/35 mt-2 leading-relaxed">
           Looks like this page took an unexpected expense and disappeared.
         </p>
 

@@ -155,7 +155,7 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50"
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
           />
 
           {/* Modal */}
@@ -165,11 +165,9 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-md pointer-events-auto overflow-hidden"
+              className="w-full max-w-md pointer-events-auto overflow-hidden bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/10"
               style={{
-                background: '#1A1D28',
                 borderRadius: '24px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
               }}
             >
               {/* Decorative gradient bar */}
@@ -197,19 +195,18 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                   </div>
                   <div className="flex-1">
                     <h2
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '20px',
-                        color: '#FFFFFF',
                         letterSpacing: '-0.4px',
                       }}
                     >
                       {isEditMode ? 'Edit Goal' : 'Create Savings Goal'}
                     </h2>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                         marginTop: '2px',
                       }}
                     >
@@ -223,17 +220,14 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                   onClick={handleClose}
                   disabled={isSubmitting}
                   aria-label="Close"
-                  className="absolute top-5 right-5 p-2 rounded-lg transition-colors"
-                  style={{
-                    color: 'rgba(255, 255, 255, 0.4)',
-                  }}
+                  className="absolute top-5 right-5 p-2 rounded-lg transition-colors text-gray-400 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-600 dark:hover:text-white/70"
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
+                    e.currentTarget.style.background = document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+                    e.currentTarget.style.color = document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
+                    e.currentTarget.style.color = document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)';
                   }}
                 >
                   <X size={20} />

@@ -8,6 +8,18 @@ A modern, full-stack expense tracking application with AI-powered insights, dual
 
 ---
 
+## 📚 Documentation
+
+- **[Quick Start](#-quick-start)** - Get up and running in minutes
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Complete development guide with examples
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture and design patterns
+- **[API.md](./API.md)** - Complete API reference with examples
+- **[ENVIRONMENT.md](./ENVIRONMENT.md)** - Environment variables configuration
+- **[TESTING.md](./TESTING.md)** - Testing guide and QA procedures
+- **[API Documentation](http://localhost:8000/docs)** - Interactive API docs (when running)
+
+---
+
 ## ✨ Features
 
 ### 🔐 **Authentication**
@@ -98,33 +110,15 @@ Frontend runs on: **http://localhost:5173**
 
 ```
 expense-tracker/
-├── backend/                 # FastAPI backend
-│   ├── app/
-│   │   ├── core/           # Config, security, exceptions
-│   │   ├── db/             # Database setup
-│   │   ├── models/         # SQLAlchemy models
-│   │   ├── routes/         # API endpoints
-│   │   ├── schemas/        # Pydantic schemas
-│   │   ├── services/       # Business logic
-│   │   └── main.py         # FastAPI application
-│   ├── expenses.db         # SQLite database
-│   └── requirements.txt    # Python dependencies
-│
-└── frontend/               # React frontend
-    ├── src/
-    │   ├── api/           # API client functions
-    │   ├── components/    # React components
-    │   │   ├── charts/   # Chart components
-    │   │   ├── layout/   # Layout components
-    │   │   └── ui/       # UI components
-    │   ├── hooks/        # Custom React hooks
-    │   ├── pages/        # Page components
-    │   ├── store/        # Zustand state management
-    │   ├── types/        # TypeScript types
-    │   ├── utils/        # Utility functions
-    │   └── main.tsx      # Application entry point
-    └── package.json      # Node dependencies
+├── frontend/          # React + TypeScript frontend
+├── backend/           # FastAPI backend
+├── landing-page/      # Marketing landing page
+├── ARCHITECTURE.md    # System architecture documentation
+├── DEVELOPMENT.md     # Development guide
+└── README.md          # This file
 ```
+
+For detailed structure, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ---
 
@@ -334,35 +328,47 @@ VITE_API_URL=http://localhost:8000
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
 ---
 
-## 📄 License
+## 📝 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Design inspired by Fundex
-- Icons from Lucide React
-- Charts powered by Chart.js
-- Animations by Framer Motion
+- Design inspired by modern fintech applications
+- Icons from [Lucide React](https://lucide.dev/)
+- Charts powered by [Chart.js](https://www.chartjs.org/)
+- Animations by [Framer Motion](https://www.framer.com/motion/)
+- Built with [FastAPI](https://fastapi.tiangolo.com/) and [React](https://react.dev/)
 
 ---
 
 ## 📞 Support
 
 For issues and questions:
-- Open an issue on GitHub
-- Check the testing checklist
-- Review the project status document
+- 📖 Check the [documentation](./DEVELOPMENT.md)
+- 🐛 [Report bugs](https://github.com/yourusername/expense-tracker/issues)
+- 💡 [Request features](https://github.com/yourusername/expense-tracker/issues)
+- 💬 [Join discussions](https://github.com/yourusername/expense-tracker/discussions)
+
+---
+
+## 🗺️ Roadmap
+
+See [CHANGELOG.md](./CHANGELOG.md) for planned features and version history.
 
 ---
 

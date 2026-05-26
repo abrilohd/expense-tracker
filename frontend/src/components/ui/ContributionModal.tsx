@@ -101,7 +101,7 @@ const ContributionModal = ({ isOpen, onClose, goal, onSuccess }: ContributionMod
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50"
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
           />
 
           {/* Modal */}

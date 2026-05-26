@@ -186,19 +186,18 @@ const RecurringTransactionsPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1
-              className="font-medium"
+              className="font-medium text-gray-900 dark:text-white"
               style={{
                 fontSize: '20px',
-                color: '#FFFFFF',
                 letterSpacing: '-0.4px',
               }}
             >
               Recurring
             </h1>
             <p
+              className="text-gray-500 dark:text-white/45"
               style={{
                 fontSize: '12px',
-                color: 'rgba(255, 255, 255, 0.45)',
                 marginTop: '2px',
               }}
             >
@@ -231,9 +230,9 @@ const RecurringTransactionsPage = () => {
         <Card padding="sm">
           <div className="text-center">
             <p
+              className="text-gray-500 dark:text-white/35"
               style={{
                 fontSize: '10px',
-                color: 'rgba(255, 255, 255, 0.35)',
                 marginBottom: '4px',
               }}
             >
@@ -256,9 +255,9 @@ const RecurringTransactionsPage = () => {
         <Card padding="sm">
           <div className="text-center">
             <p
+              className="text-gray-500 dark:text-white/35"
               style={{
                 fontSize: '10px',
-                color: 'rgba(255, 255, 255, 0.35)',
                 marginBottom: '4px',
               }}
             >
@@ -281,19 +280,18 @@ const RecurringTransactionsPage = () => {
         <Card padding="sm">
           <div className="text-center">
             <p
+              className="text-gray-500 dark:text-white/35"
               style={{
                 fontSize: '10px',
-                color: 'rgba(255, 255, 255, 0.35)',
                 marginBottom: '4px',
               }}
             >
               Paused
             </p>
             <h3
-              className="font-medium"
+              className="font-medium text-gray-500 dark:text-white/45"
               style={{
                 fontSize: '20px',
-                color: 'rgba(255, 255, 255, 0.45)',
                 letterSpacing: '-0.4px',
               }}
             >
@@ -315,9 +313,9 @@ const RecurringTransactionsPage = () => {
             {/* Status Filter */}
             <div>
               <p
+                className="text-gray-500 dark:text-white/35"
                 style={{
                   fontSize: '10px',
-                  color: 'rgba(255, 255, 255, 0.35)',
                   marginBottom: '6px',
                 }}
               >
@@ -345,9 +343,9 @@ const RecurringTransactionsPage = () => {
             {/* Type Filter */}
             <div>
               <p
+                className="text-gray-500 dark:text-white/35"
                 style={{
                   fontSize: '10px',
-                  color: 'rgba(255, 255, 255, 0.35)',
                   marginBottom: '6px',
                 }}
               >
@@ -465,18 +463,17 @@ const RecurringTransactionsPage = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3
-                            className="font-medium truncate"
+                            className="font-medium truncate text-gray-900 dark:text-white"
                             style={{
                               fontSize: '16px',
-                              color: '#FFFFFF',
                             }}
                           >
                             {item.title}
                           </h3>
                           <p
+                            className="text-gray-500 dark:text-white/45"
                             style={{
                               fontSize: '12px',
-                              color: 'rgba(255, 255, 255, 0.45)',
                             }}
                           >
                             {item.category_or_source} • {frequencyIcon} {getFrequencyLabel(item.frequency)}
@@ -489,9 +486,9 @@ const RecurringTransactionsPage = () => {
                         {/* Amount */}
                         <div>
                           <p
+                            className="text-gray-500 dark:text-white/35"
                             style={{
                               fontSize: '10px',
-                              color: 'rgba(255, 255, 255, 0.35)',
                               marginBottom: '4px',
                             }}
                           >
@@ -511,18 +508,18 @@ const RecurringTransactionsPage = () => {
                         {/* Start Date */}
                         <div>
                           <p
+                            className="text-gray-500 dark:text-white/35"
                             style={{
                               fontSize: '10px',
-                              color: 'rgba(255, 255, 255, 0.35)',
                               marginBottom: '4px',
                             }}
                           >
                             Started
                           </p>
                           <p
+                            className="text-gray-700 dark:text-white/70"
                             style={{
                               fontSize: '13px',
-                              color: 'rgba(255, 255, 255, 0.7)',
                             }}
                           >
                             {new Date(item.start_date).toLocaleDateString()}
@@ -532,9 +529,9 @@ const RecurringTransactionsPage = () => {
                         {/* Next Occurrence */}
                         <div>
                           <p
+                            className="text-gray-500 dark:text-white/35"
                             style={{
                               fontSize: '10px',
-                              color: 'rgba(255, 255, 255, 0.35)',
                               marginBottom: '4px',
                             }}
                           >
@@ -563,9 +560,9 @@ const RecurringTransactionsPage = () => {
                       {/* Description */}
                       {item.description && (
                         <p
+                          className="text-gray-500 dark:text-white/45"
                           style={{
                             fontSize: '12px',
-                            color: 'rgba(255, 255, 255, 0.45)',
                             marginTop: '8px',
                           }}
                         >
@@ -666,21 +663,19 @@ const RecurringTransactionsPage = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-md pointer-events-auto"
+                className="w-full max-w-md pointer-events-auto bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/10"
                 style={{
-                  background: '#1A1D28',
                   borderRadius: '20px',
                   padding: '24px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
                 }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div
+                    className="bg-red-100 dark:bg-red-500/15"
                     style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'rgba(248, 113, 113, 0.15)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -690,10 +685,9 @@ const RecurringTransactionsPage = () => {
                   </div>
                   <div>
                     <h3
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '18px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Delete Recurring?
@@ -701,9 +695,9 @@ const RecurringTransactionsPage = () => {
                   </div>
                 </div>
                 <p
+                  className="text-gray-700 dark:text-white/70"
                   style={{
                     fontSize: '14px',
-                    color: 'rgba(255, 255, 255, 0.7)',
                     marginBottom: '24px',
                   }}
                 >
@@ -712,12 +706,9 @@ const RecurringTransactionsPage = () => {
                 <div className="flex gap-3">
                   <button
                     onClick={() => setDeletingId(null)}
-                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                     style={{
                       fontSize: '14px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                   >
                     Cancel

@@ -159,19 +159,18 @@ const Profile = () => {
         className="mb-6"
       >
         <h1
-          className="font-medium"
+          className="font-medium text-gray-900 dark:text-white"
           style={{
             fontSize: '22px',
-            color: '#FFFFFF',
             letterSpacing: '-0.4px',
           }}
         >
           Profile & Settings
         </h1>
         <p
+          className="text-gray-500 dark:text-white/45"
           style={{
             fontSize: '13px',
-            color: 'rgba(255, 255, 255, 0.45)',
             marginTop: '2px',
           }}
         >
@@ -207,10 +206,9 @@ const Profile = () => {
 
               {/* Name */}
               <h2
-                className="font-medium"
+                className="font-medium text-gray-900 dark:text-white"
                 style={{
                   fontSize: '18px',
-                  color: '#FFFFFF',
                   marginBottom: '4px',
                 }}
               >
@@ -219,9 +217,9 @@ const Profile = () => {
 
               {/* Email */}
               <p
+                className="text-gray-500 dark:text-white/45"
                 style={{
                   fontSize: '13px',
-                  color: 'rgba(255, 255, 255, 0.45)',
                   marginBottom: '12px',
                 }}
               >
@@ -251,16 +249,13 @@ const Profile = () => {
 
             {/* Member Since */}
             <div
-              className="flex items-center gap-2 mb-4 pb-4"
-              style={{
-                borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-              }}
+              className="flex items-center gap-2 mb-4 pb-4 border-b border-gray-200 dark:border-white/[0.06]"
             >
-              <Calendar size={16} style={{ color: 'rgba(255, 255, 255, 0.35)' }} />
+              <Calendar size={16} className="text-gray-400 dark:text-white/35" />
               <span
+                className="text-gray-700 dark:text-white/70"
                 style={{
                   fontSize: '12px',
-                  color: 'rgba(255, 255, 255, 0.7)',
                 }}
               >
                 Member since {getMemberSince()}
@@ -271,18 +266,17 @@ const Profile = () => {
             <div className="space-y-3 mb-5">
               <div className="flex items-center justify-between">
                 <span
+                  className="text-gray-500 dark:text-white/45"
                   style={{
                     fontSize: '12px',
-                    color: 'rgba(255, 255, 255, 0.45)',
                   }}
                 >
                   Total Expenses
                 </span>
                 <span
-                  className="font-medium"
+                  className="font-medium text-gray-900 dark:text-white"
                   style={{
                     fontSize: '13px',
-                    color: '#FFFFFF',
                   }}
                 >
                   {dashboard?.total_count || 0}
@@ -291,18 +285,17 @@ const Profile = () => {
 
               <div className="flex items-center justify-between">
                 <span
+                  className="text-gray-500 dark:text-white/45"
                   style={{
                     fontSize: '12px',
-                    color: 'rgba(255, 255, 255, 0.45)',
                   }}
                 >
                   Total Amount
                 </span>
                 <span
-                  className="font-medium"
+                  className="font-medium text-gray-900 dark:text-white"
                   style={{
                     fontSize: '13px',
-                    color: '#FFFFFF',
                   }}
                 >
                   {formatCurrency(dashboard?.total_expenses || 0)}
@@ -311,18 +304,17 @@ const Profile = () => {
 
               <div className="flex items-center justify-between">
                 <span
+                  className="text-gray-500 dark:text-white/45"
                   style={{
                     fontSize: '12px',
-                    color: 'rgba(255, 255, 255, 0.45)',
                   }}
                 >
                   Months Active
                 </span>
                 <span
-                  className="font-medium"
+                  className="font-medium text-gray-900 dark:text-white"
                   style={{
                     fontSize: '13px',
-                    color: '#FFFFFF',
                   }}
                 >
                   {getMonthsActive()}
@@ -351,10 +343,9 @@ const Profile = () => {
           >
             <Card padding="lg">
               <h3
-                className="font-medium mb-5"
+                className="font-medium mb-5 text-gray-900 dark:text-white"
                 style={{
                   fontSize: '16px',
-                  color: '#FFFFFF',
                 }}
               >
                 Personal Information
@@ -364,18 +355,16 @@ const Profile = () => {
                 {/* Full Name */}
                 <div>
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Full Name
                   </label>
                   <div className="relative">
                     <div
-                      className="absolute left-4 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(255, 255, 255, 0.35)' }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35"
                     >
                       <User size={18} />
                     </div>
@@ -383,14 +372,9 @@ const Profile = () => {
                       type="text"
                       placeholder="Enter your name"
                       disabled
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white cursor-not-allowed opacity-60"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
-                        cursor: 'not-allowed',
-                        opacity: 0.6,
                       }}
                       {...registerProfile('name')}
                     />
@@ -411,40 +395,33 @@ const Profile = () => {
                 {/* Email */}
                 <div>
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Email Address
                   </label>
                   <div className="relative">
                     <div
-                      className="absolute left-4 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(255, 255, 255, 0.35)' }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35"
                     >
                       <Mail size={18} />
                     </div>
                     <input
                       type="email"
                       disabled
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white cursor-not-allowed opacity-60"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
-                        cursor: 'not-allowed',
-                        opacity: 0.6,
                       }}
                       {...registerProfile('email')}
                     />
                   </div>
                   <p
+                    className="text-gray-500 dark:text-white/35"
                     style={{
                       fontSize: '11px',
-                      color: 'rgba(255, 255, 255, 0.35)',
                       marginTop: '6px',
                     }}
                   >
@@ -524,10 +501,9 @@ const Profile = () => {
           >
             <Card padding="lg">
               <h3
-                className="font-medium mb-5"
+                className="font-medium mb-5 text-gray-900 dark:text-white"
                 style={{
                   fontSize: '16px',
-                  color: '#FFFFFF',
                 }}
               >
                 Change Password
@@ -537,33 +513,35 @@ const Profile = () => {
                 {/* Current Password */}
                 <div>
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Current Password
                   </label>
                   <div className="relative">
                     <div
-                      className="absolute left-4 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(255, 255, 255, 0.35)' }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35"
                     >
                       <Lock size={18} />
                     </div>
                     <input
                       type="password"
                       placeholder="Enter current password"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
+                        fontSize: '14px',
                         border: passwordErrors.current_password
                           ? '1px solid #F87171'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
-                        fontSize: '14px',
+                          : '1px solid',
+                        borderColor: passwordErrors.current_password ? '#F87171' : undefined,
                       }}
+                      className={`w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white ${
+                        passwordErrors.current_password
+                          ? 'border border-red-500'
+                          : 'border border-gray-200 dark:border-white/10'
+                      }`}
                       {...registerPassword('current_password')}
                     />
                   </div>
@@ -769,21 +747,19 @@ const Profile = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-md pointer-events-auto"
+                className="w-full max-w-md pointer-events-auto bg-white dark:bg-[#1A1D28] border border-red-200 dark:border-red-500/20"
                 style={{
-                  background: '#1A1D28',
                   borderRadius: '20px',
                   padding: '24px',
-                  border: '1px solid rgba(239, 68, 68, 0.2)',
                 }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div
+                    className="bg-red-100 dark:bg-red-500/15"
                     style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'rgba(239, 68, 68, 0.15)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -793,10 +769,9 @@ const Profile = () => {
                   </div>
                   <div>
                     <h3
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '18px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Delete Account
@@ -805,9 +780,9 @@ const Profile = () => {
                 </div>
 
                 <p
+                  className="text-gray-700 dark:text-white/70"
                   style={{
                     fontSize: '14px',
-                    color: 'rgba(255, 255, 255, 0.7)',
                     marginBottom: '16px',
                   }}
                 >
@@ -815,9 +790,9 @@ const Profile = () => {
                 </p>
 
                 <p
+                  className="text-gray-600 dark:text-white/60"
                   style={{
                     fontSize: '13px',
-                    color: 'rgba(255, 255, 255, 0.6)',
                     marginBottom: '12px',
                   }}
                 >
@@ -829,11 +804,8 @@ const Profile = () => {
                   value={deleteConfirmText}
                   onChange={(e) => setDeleteConfirmText(e.target.value)}
                   placeholder="Type DELETE"
-                  className="w-full px-4 py-3 rounded-xl mb-4"
+                  className="w-full px-4 py-3 rounded-xl mb-4 bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    color: '#FFFFFF',
                     fontSize: '14px',
                   }}
                 />
@@ -844,12 +816,9 @@ const Profile = () => {
                       setIsDeleteModalOpen(false);
                       setDeleteConfirmText('');
                     }}
-                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                     style={{
                       fontSize: '14px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                   >
                     Cancel

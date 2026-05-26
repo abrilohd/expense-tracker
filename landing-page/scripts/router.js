@@ -61,7 +61,7 @@
    * Initialize router - attach event listeners to all CTA buttons
    */
   function init() {
-    console.log('🔧 Initializing CTA buttons...');
+    console.log(' Initializing CTA buttons...');
     
     // Select all possible CTA buttons
     var buttons = document.querySelectorAll(

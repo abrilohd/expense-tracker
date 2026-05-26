@@ -5,10 +5,13 @@ from sqlalchemy.orm import Session
 from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from typing import List, Optional
+import logging
 
 from app.models.recurring_transaction import RecurringTransaction, Frequency, TransactionType
 from app.models.expense import Expense
 from app.models.income import Income
+
+logger = logging.getLogger(__name__)
 
 class RecurringService:
     """Service for managing recurring transactions"""
@@ -117,7 +120,7 @@ class RecurringService:
             
         except Exception as e:
             db.rollback()
-            print(f"Error generating transaction from recurring {recurring.id}: {e}")
+            logger.error(f"Error generating transaction from recurring {recurring.id}: {e}")
             return False
     
     @staticmethod

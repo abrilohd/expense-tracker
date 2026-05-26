@@ -106,7 +106,7 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-50"
           />
 
           {/* Modal */}
@@ -145,13 +145,13 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
                   <div className="relative">
                     <Target
                       size={18}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
                     />
                     <input
                       type="text"
                       {...register('name')}
                       placeholder="e.g., Emergency Fund, Vacation, New Car"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all"
                     />
                   </div>
                   {errors.name && (
@@ -167,14 +167,14 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
                   <div className="relative">
                     <DollarSign
                       size={18}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
                     />
                     <input
                       type="number"
                       step="0.01"
                       {...register('target_amount', { valueAsNumber: true })}
                       placeholder="0.00"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all"
                     />
                   </div>
                   {errors.target_amount && (
@@ -191,14 +191,14 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
                     <div className="relative">
                       <DollarSign
                         size={18}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
                       />
                       <input
                         type="number"
                         step="0.01"
                         {...register('current_amount', { valueAsNumber: true })}
                         placeholder="0.00"
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all"
                       />
                     </div>
                     {errors.current_amount && (
@@ -215,7 +215,7 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
                   <div className="relative">
                     <Calendar
                       size={18}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
                     />
                     <input
                       type="date"

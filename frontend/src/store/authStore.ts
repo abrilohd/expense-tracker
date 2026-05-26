@@ -21,6 +21,7 @@ interface AuthState {
   logout: () => void;
   loadUser: () => Promise<void>;
   setUser: (user: User) => void;
+  setToken: (token: string) => void;
   clearError: () => void;
 }
 
@@ -147,6 +148,13 @@ export const useAuthStore = create<AuthState>()(
     setUser: (user: User) => {
       set((state) => {
         state.user = user;
+      });
+    },
+
+    // Set token (for OAuth callbacks)
+    setToken: (token: string) => {
+      set((state) => {
+        state.token = token;
       });
     },
   }))

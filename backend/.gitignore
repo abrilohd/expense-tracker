@@ -34,7 +34,7 @@ venv/
 *.db
 *.sqlite
 *.sqlite3
-backend/expenses.db
+expenses.db
 
 # IDE
 .vscode/

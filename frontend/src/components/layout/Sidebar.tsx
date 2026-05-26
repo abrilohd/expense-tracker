@@ -1,6 +1,6 @@
 /**
  * Sidebar Navigation - World-class fintech design
- * ALWAYS dark (#0F1117), never changes with theme
+ * Adapts to light/dark theme
  */
 import { NavLink } from 'react-router-dom';
 import {
@@ -62,19 +62,16 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen w-60 flex flex-col z-40 lg:z-20 overflow-y-auto overflow-x-hidden transition-transform duration-[280ms] ${
+      className={`fixed left-0 top-0 h-screen w-60 flex flex-col z-40 lg:z-20 overflow-y-auto overflow-x-hidden transition-transform duration-[280ms] bg-white dark:bg-[#0F1117] border-r border-gray-200 dark:border-white/6 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0`}
       style={{
-        background: '#0F1117',
-        borderRight: '1px solid rgba(255, 255, 255, 0.06)',
         transitionTimingFunction: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
       }}
     >
       {/* Logo Section */}
       <div
-        className="px-5 py-5"
-        style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}
+        className="px-5 py-5 border-b border-gray-200 dark:border-white/6"
       >
         <div className="flex items-center gap-2.5">
           {/* Logo Icon */}
@@ -93,20 +90,18 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           {/* Logo Text */}
           <div className="flex items-baseline gap-0.5">
             <span
-              className="font-semibold"
+              className="font-semibold text-gray-900 dark:text-white"
               style={{
                 fontSize: '15px',
-                color: '#FFFFFF',
                 letterSpacing: '-0.3px',
               }}
             >
               Expense
             </span>
             <span
-              className="font-bold"
+              className="font-bold text-purple-600 dark:text-[#A78BFA]"
               style={{
                 fontSize: '15px',
-                color: '#A78BFA',
                 letterSpacing: '-0.3px',
               }}
             >
@@ -121,10 +116,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         {/* MAIN MENU Section */}
         <div className="px-2 mb-1.5">
           <span
-            className="tracking-widest font-medium"
+            className="tracking-widest font-medium text-gray-400 dark:text-white/25"
             style={{
               fontSize: '10px',
-              color: 'rgba(255, 255, 255, 0.25)',
             }}
           >
             MAIN MENU
@@ -140,32 +134,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               onClick={onClose}
               className={({ isActive }) =>
                 `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
-                  isActive ? 'font-medium' : ''
+                  isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-[#A78BFA]' : 'text-gray-600 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white/80'
                 }`
               }
-              style={({ isActive }) =>
-                isActive
-                  ? {
-                      background: 'rgba(91, 78, 232, 0.15)',
-                      color: '#A78BFA',
-                      boxShadow: 'inset 2px 0 0 #5B4EE8',
-                    }
-                  : {
-                      color: 'rgba(255, 255, 255, 0.4)',
-                    }
-              }
-              onMouseEnter={(e) => {
-                if (!e.currentTarget.classList.contains('active')) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!e.currentTarget.classList.contains('active')) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
-                }
-              }}
             >
               <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
               <span style={{ fontSize: '13px' }}>{item.label}</span>
@@ -174,11 +145,10 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 {({ isActive }) =>
                   isActive ? (
                     <div
-                      className="ml-auto rounded-full"
+                      className="ml-auto rounded-full bg-purple-600 dark:bg-[#A78BFA]"
                       style={{
                         width: '5px',
                         height: '5px',
-                        background: '#A78BFA',
                       }}
                     />
                   ) : null
@@ -191,10 +161,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         {/* TOOLS Section */}
         <div className="px-2 mb-1.5">
           <span
-            className="tracking-widest font-medium"
+            className="tracking-widest font-medium text-gray-400 dark:text-white/25"
             style={{
               fontSize: '10px',
-              color: 'rgba(255, 255, 255, 0.25)',
             }}
           >
             TOOLS
@@ -209,43 +178,18 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               onClick={onClose}
               className={({ isActive }) =>
                 `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
-                  isActive ? 'font-medium' : ''
+                  isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-[#A78BFA]' : 'text-gray-600 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white/80'
                 }`
               }
-              style={({ isActive }) =>
-                isActive
-                  ? {
-                      background: 'rgba(91, 78, 232, 0.15)',
-                      color: '#A78BFA',
-                      boxShadow: 'inset 2px 0 0 #5B4EE8',
-                    }
-                  : {
-                      color: 'rgba(255, 255, 255, 0.4)',
-                    }
-              }
-              onMouseEnter={(e) => {
-                if (!e.currentTarget.classList.contains('active')) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!e.currentTarget.classList.contains('active')) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
-                }
-              }}
             >
               <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
               <span style={{ fontSize: '13px' }}>{item.label}</span>
               {/* AI Badge or Active dot */}
               {item.badge ? (
                 <span
-                  className="ml-auto px-1.5 py-0.5 rounded-full font-medium"
+                  className="ml-auto px-1.5 py-0.5 rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-[#A78BFA]"
                   style={{
                     fontSize: '10px',
-                    background: 'rgba(91, 78, 232, 0.2)',
-                    color: '#A78BFA',
                   }}
                 >
                   {item.badge}
@@ -255,11 +199,10 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   {({ isActive }) =>
                     isActive ? (
                       <div
-                        className="ml-auto rounded-full"
+                        className="ml-auto rounded-full bg-purple-600 dark:bg-[#A78BFA]"
                         style={{
                           width: '5px',
                           height: '5px',
-                          background: '#A78BFA',
                         }}
                       />
                     ) : null
@@ -273,10 +216,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         {/* ACCOUNT Section */}
         <div className="px-2 mb-1.5">
           <span
-            className="tracking-widest font-medium"
+            className="tracking-widest font-medium text-gray-400 dark:text-white/25"
             style={{
               fontSize: '10px',
-              color: 'rgba(255, 255, 255, 0.25)',
             }}
           >
             ACCOUNT
@@ -291,32 +233,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               onClick={onClose}
               className={({ isActive }) =>
                 `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
-                  isActive ? 'font-medium' : ''
+                  isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-[#A78BFA]' : 'text-gray-600 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white/80'
                 }`
               }
-              style={({ isActive }) =>
-                isActive
-                  ? {
-                      background: 'rgba(91, 78, 232, 0.15)',
-                      color: '#A78BFA',
-                      boxShadow: 'inset 2px 0 0 #5B4EE8',
-                    }
-                  : {
-                      color: 'rgba(255, 255, 255, 0.4)',
-                    }
-              }
-              onMouseEnter={(e) => {
-                if (!e.currentTarget.classList.contains('active')) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!e.currentTarget.classList.contains('active')) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
-                }
-              }}
             >
               <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
               <span style={{ fontSize: '13px' }}>{item.label}</span>
@@ -325,11 +244,10 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 {({ isActive }) =>
                   isActive ? (
                     <div
-                      className="ml-auto rounded-full"
+                      className="ml-auto rounded-full bg-purple-600 dark:bg-[#A78BFA]"
                       style={{
                         width: '5px',
                         height: '5px',
-                        background: '#A78BFA',
                       }}
                     />
                   ) : null
@@ -349,40 +267,15 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 onClick={onClose}
                 className={({ isActive }) =>
                   `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
-                    isActive ? 'font-medium' : ''
+                    isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-300' : 'text-gray-600 dark:text-white/40 hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:text-purple-600 dark:hover:text-purple-300'
                   }`
                 }
-                style={({ isActive }) =>
-                  isActive
-                    ? {
-                        background: 'rgba(168, 85, 247, 0.15)',
-                        color: '#C084FC',
-                        boxShadow: 'inset 2px 0 0 #A855F7',
-                      }
-                    : {
-                        color: 'rgba(255, 255, 255, 0.4)',
-                      }
-                }
-                onMouseEnter={(e) => {
-                  if (!e.currentTarget.classList.contains('active')) {
-                    e.currentTarget.style.background = 'rgba(168, 85, 247, 0.1)';
-                    e.currentTarget.style.color = 'rgba(192, 132, 252, 0.8)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!e.currentTarget.classList.contains('active')) {
-                    e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
-                  }
-                }}
               >
                 <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
                 <span style={{ fontSize: '13px' }}>{item.label}</span>
                 <span 
-                  className="ml-auto text-xs px-1.5 py-0.5 rounded"
+                  className="ml-auto text-xs px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-300"
                   style={{ 
-                    background: 'rgba(168, 85, 247, 0.2)',
-                    color: '#C084FC',
                     fontSize: '10px',
                     fontWeight: '600'
                   }}
@@ -397,20 +290,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
       {/* Bottom Section */}
       <div
-        className="mt-auto px-3 pb-4"
-        style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)', paddingTop: '16px' }}
+        className="mt-auto px-3 pb-4 pt-4 border-t border-gray-200 dark:border-white/6"
       >
         {/* User Info */}
         {user && (
           <div
-            className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] cursor-pointer transition-all duration-150 mb-0.5"
-            style={{ background: 'transparent' }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-            }}
+            className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] cursor-pointer transition-all duration-150 mb-0.5 hover:bg-gray-100 dark:hover:bg-white/4"
           >
             {/* Avatar */}
             <div
@@ -435,18 +320,17 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             {/* User Details */}
             <div className="flex-1 min-w-0">
               <p
-                className="font-medium truncate"
+                className="font-medium truncate text-gray-900 dark:text-white"
                 style={{
                   fontSize: '13px',
-                  color: '#FFFFFF',
                 }}
               >
                 {user.name || user.email.split('@')[0]}
               </p>
               <p
+                className="text-gray-400 dark:text-white/25"
                 style={{
                   fontSize: '10px',
-                  color: 'rgba(255, 255, 255, 0.25)',
                 }}
               >
                 {user.is_admin ? 'Admin' : 'Free Plan'}
@@ -456,8 +340,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             {/* Chevron */}
             <ChevronDown
               size={13}
-              className="flex-shrink-0"
-              style={{ color: 'rgba(255, 255, 255, 0.2)' }}
+              className="flex-shrink-0 text-gray-300 dark:text-white/20"
             />
           </div>
         )}
@@ -465,20 +348,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         {/* Logout Button */}
         <button
           onClick={logout}
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-150 my-0.5"
+          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-150 my-0.5 text-gray-500 dark:text-white/35 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/6"
           style={{
             fontSize: '13px',
-            color: 'rgba(255, 255, 255, 0.35)',
             background: 'transparent',
             border: 'none',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#F87171';
-            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.06)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.35)';
-            e.currentTarget.style.background = 'transparent';
           }}
         >
           <LogOut size={14} className="flex-shrink-0" />

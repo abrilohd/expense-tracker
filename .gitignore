@@ -1,15 +1,18 @@
-# Environment
+# Environment Variables
 .env
 .env.local
 .env.*.local
+*.env.backup
 
 # Dependencies
 node_modules/
 frontend/node_modules/
+landing-page/node_modules/
 
-# Build outputs
+# Build Outputs
 dist/
 frontend/dist/
+landing-page/dist/
 build/
 *.egg-info/
 
@@ -21,29 +24,66 @@ __pycache__/
 .Python
 backend/venv/
 backend/.venv/
+backend/__pycache__/
 venv/
 .venv/
+*.py[cod]
+*$py.class
+*.so
 
-# Database - NEVER commit the database
+# Database - NEVER commit databases
 *.db
 *.sqlite
 *.sqlite3
 backend/expenses.db
+expenses.db
 
-# OS files
+# OS Files
 .DS_Store
 Thumbs.db
 *.swp
+*.swo
+*~
+desktop.ini
 
-# IDE
+# IDE & Editors
 .vscode/settings.json
 .idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.c9/
+*.launch
+.settings/
 
 # Logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
-# Test artifacts
+# Test Artifacts
 .pytest_cache/
 .coverage
 htmlcov/
+coverage/
+*.cover
+.hypothesis/
+.tox/
+
+# Temporary Files
+*.tmp
+*.temp
+.cache/
+.parcel-cache/
+
+# Documentation (generated)
+docs/_build/
+
+# Package Manager Locks (keep package-lock.json, remove others if needed)
+# yarn.lock
+# pnpm-lock.yaml
+

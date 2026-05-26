@@ -1,26 +1,126 @@
 """
-Email service using Resend API
+Email service using Resend API or Gmail SMTP
 Handles sending password reset emails and other notifications
 """
 import os
-import resend
-from typing import Optional
-from app.core.config import settings
+import logging
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from typing import Optional, Dict, Any
 
-# Initialize Resend with API key
-resend.api_key = os.getenv("RESEND_API_KEY", "")
+logger = logging.getLogger(__name__)
+
+# Try to import resend, but handle if not configured
+try:
+    import resend
+    RESEND_AVAILABLE = True
+    resend.api_key = os.getenv("RESEND_API_KEY", "")
+except ImportError:
+    RESEND_AVAILABLE = False
+    logger.warning("Resend package not available")
 
 class EmailService:
     """
     Email service for sending transactional emails
+    Supports both Resend API and Gmail SMTP
     """
+    
+    @staticmethod
+    def get_email_service() -> str:
+        """Get configured email service (resend or smtp)"""
+        return os.getenv("EMAIL_SERVICE", "resend").lower()
+    
+    @staticmethod
+    def is_configured() -> bool:
+        """Check if email service is properly configured"""
+        service = EmailService.get_email_service()
+        
+        if service == "smtp":
+            # Check SMTP configuration
+            smtp_host = os.getenv("SMTP_HOST", "")
+            smtp_user = os.getenv("SMTP_USER", "")
+            smtp_password = os.getenv("SMTP_PASSWORD", "")
+            return smtp_host and smtp_user and smtp_password
+        else:
+            # Check Resend configuration
+            api_key = os.getenv("RESEND_API_KEY", "")
+            return RESEND_AVAILABLE and api_key and api_key != ""
+    
+    @staticmethod
+    def send_via_smtp(to_email: str, subject: str, html_content: str, text_content: str) -> Dict[str, Any]:
+        """Send email via Gmail SMTP"""
+        try:
+            smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com")
+            smtp_port = int(os.getenv("SMTP_PORT", "587"))
+            smtp_user = os.getenv("SMTP_USER", "")
+            smtp_password = os.getenv("SMTP_PASSWORD", "")
+            from_email = os.getenv("SMTP_FROM_EMAIL", smtp_user)
+            
+            # Create message
+            message = MIMEMultipart("alternative")
+            message["Subject"] = subject
+            message["From"] = from_email
+            message["To"] = to_email
+            
+            # Add text and HTML parts
+            part1 = MIMEText(text_content, "plain")
+            part2 = MIMEText(html_content, "html")
+            message.attach(part1)
+            message.attach(part2)
+            
+            # Send email
+            with smtplib.SMTP(smtp_host, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.sendmail(from_email, to_email, message.as_string())
+            
+            return {
+                "success": True,
+                "message": "Email sent successfully via SMTP",
+                "email_id": "smtp_" + to_email
+            }
+            
+        except Exception as e:
+            logger.error(f"SMTP error: {str(e)}")
+            return {
+                "success": False,
+                "message": "Failed to send email via SMTP",
+                "error": str(e)
+            }
+    
+    @staticmethod
+    def send_via_resend(to_email: str, subject: str, html_content: str, text_content: str, from_email: str) -> Dict[str, Any]:
+        """Send email via Resend API"""
+        try:
+            response = resend.Emails.send({
+                "from": from_email,
+                "to": to_email,
+                "subject": subject,
+                "html": html_content,
+                "text": text_content
+            })
+            
+            return {
+                "success": True,
+                "message": "Password reset email sent successfully",
+                "email_id": response.get("id")
+            }
+            
+        except Exception as e:
+            logger.error(f"Resend error: {str(e)}")
+            return {
+                "success": False,
+                "message": "Failed to send email",
+                "error": str(e)  # Include actual error for debugging
+            }
     
     @staticmethod
     def send_password_reset_email(
         to_email: str,
         reset_token: str,
         user_name: Optional[str] = None
-    ) -> dict:
+    ) -> Dict[str, Any]:
         """
         Send password reset email with reset link
         
@@ -30,8 +130,18 @@ class EmailService:
             user_name: Optional user name for personalization
             
         Returns:
-            dict: Response from Resend API
+            dict: Response with success status and message/error
         """
+        # Check if email service is configured
+        if not EmailService.is_configured():
+            logger.warning(f"Email service not configured. Reset token for {to_email}: {reset_token}")
+            return {
+                "success": False,
+                "error": "Email service not configured",
+                "reset_token": reset_token,  # Include token for development/testing
+                "message": "Email service is not configured. In production, configure RESEND_API_KEY."
+            }
+        
         # Get configuration from environment
         from_email = os.getenv("RESEND_FROM_EMAIL", "onboarding@resend.dev")
         app_name = os.getenv("APP_NAME", "ExpenseTracker")
@@ -150,28 +260,33 @@ This email was sent by {app_name}
         """
         
         try:
-            # Send email using Resend
-            response = resend.Emails.send({
-                "from": from_email,
-                "to": to_email,
-                "subject": f"Reset Your {app_name} Password",
-                "html": html_content,
-                "text": text_content
-            })
+            # Send email using configured service
+            service = EmailService.get_email_service()
             
-            return {
-                "success": True,
-                "message": "Password reset email sent successfully",
-                "email_id": response.get("id")
-            }
+            if service == "smtp":
+                # Send via Gmail SMTP
+                return EmailService.send_via_smtp(
+                    to_email=to_email,
+                    subject=f"Reset Your {app_name} Password",
+                    html_content=html_content,
+                    text_content=text_content
+                )
+            else:
+                # Send via Resend API
+                return EmailService.send_via_resend(
+                    to_email=to_email,
+                    subject=f"Reset Your {app_name} Password",
+                    html_content=html_content,
+                    text_content=text_content,
+                    from_email=from_email
+                )
             
         except Exception as e:
-            # Log error but don't expose details to user
-            print(f"Error sending email: {str(e)}")
+            logger.error(f"Email error: {str(e)}")
             return {
                 "success": False,
                 "message": "Failed to send email",
-                "error": str(e)
+                "error": str(e)  # Include actual error for debugging
             }
     
     @staticmethod
@@ -268,7 +383,7 @@ This email was sent by {app_name}
             }
             
         except Exception as e:
-            print(f"Error sending welcome email: {str(e)}")
+            logger.error(f"Error sending welcome email: {str(e)}")
             return {
                 "success": False,
                 "message": "Failed to send welcome email",

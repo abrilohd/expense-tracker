@@ -17,7 +17,7 @@ const apiClient = axios.create({
 
 // Log API configuration in development
 if (import.meta.env.DEV) {
-  console.log('🔧 API Client Configuration:', {
+  console.log(' API Client Configuration:', {
     baseURL: API_URL,
     isDev: import.meta.env.DEV,
     isProd: import.meta.env.PROD,

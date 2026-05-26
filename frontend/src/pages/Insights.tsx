@@ -188,10 +188,9 @@ const InsightsPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1
-              className="font-medium flex items-center gap-2"
+              className="font-medium flex items-center gap-2 text-gray-900 dark:text-white"
               style={{
                 fontSize: '20px',
-                color: '#FFFFFF',
                 letterSpacing: '-0.4px',
               }}
             >
@@ -199,9 +198,9 @@ const InsightsPage = () => {
               AI Insights
             </h1>
             <p
+              className="text-gray-500 dark:text-white/45"
               style={{
                 fontSize: '12px',
-                color: 'rgba(255, 255, 255, 0.45)',
                 marginTop: '2px',
               }}
             >
@@ -218,9 +217,9 @@ const InsightsPage = () => {
                 className="px-3 py-2 rounded-lg font-medium transition-all"
                 style={{
                   fontSize: '12px',
-                  background: selectedDays === days ? 'rgba(167, 139, 250, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                  color: selectedDays === days ? '#A78BFA' : 'rgba(255, 255, 255, 0.7)',
-                  border: selectedDays === days ? '1px solid rgba(167, 139, 250, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: selectedDays === days ? 'rgba(167, 139, 250, 0.2)' : 'var(--button-bg)',
+                  color: selectedDays === days ? '#A78BFA' : 'var(--button-text)',
+                  border: selectedDays === days ? '1px solid rgba(167, 139, 250, 0.3)' : '1px solid var(--button-border)',
                 }}
               >
                 {days}d
@@ -229,6 +228,19 @@ const InsightsPage = () => {
           </div>
         </div>
       </motion.div>
+
+      <style>{`
+        :root {
+          --button-bg: rgba(0, 0, 0, 0.05);
+          --button-text: rgba(0, 0, 0, 0.7);
+          --button-border: rgba(0, 0, 0, 0.1);
+        }
+        .dark {
+          --button-bg: rgba(255, 255, 255, 0.05);
+          --button-text: rgba(255, 255, 255, 0.7);
+          --button-border: rgba(255, 255, 255, 0.1);
+        }
+      `}</style>
 
       {/* Loading State */}
       {isLoading && (
@@ -250,25 +262,29 @@ const InsightsPage = () => {
         <Card padding="md">
           <div className="flex items-start gap-3">
             <AlertTriangle size={24} style={{ color: '#F87171' }} />
-            <div className="flex-1">
-              <h3 style={{ fontSize: '14px', color: '#FFFFFF', marginBottom: '4px' }}>
-                Failed to load insights
-              </h3>
-              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '12px' }}>
-                {error}
-              </p>
-              <button
-                onClick={loadData}
-                className="px-4 py-2 rounded-lg font-medium transition-all"
-                style={{
-                  fontSize: '12px',
-                  background: '#F87171',
-                  color: '#FFFFFF',
-                }}
-              >
-                Try Again
-              </button>
-            </div>
+            <div>
+            <h3
+              className="font-medium text-gray-900 dark:text-white"
+              style={{
+                fontSize: '14px',
+                marginBottom: '4px',
+              }}
+            >
+              Failed to load insights
+            </h3>
+            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '12px' }}>
+              {error}
+            </p>
+            <button
+              onClick={loadData}
+              className="px-4 py-2 rounded-lg font-medium transition-all bg-red-500 hover:bg-red-600 text-white"
+              style={{
+                fontSize: '12px',
+              }}
+            >
+              Try Again
+            </button>
+          </div>
           </div>
         </Card>
       )}
@@ -399,19 +415,18 @@ const InsightsPage = () => {
 
                         <div className="flex-1 min-w-0">
                           <h3
-                            className="font-medium"
+                            className="font-medium text-gray-900 dark:text-white"
                             style={{
                               fontSize: '14px',
-                              color: '#FFFFFF',
                               marginBottom: '4px',
                             }}
                           >
                             {insight.title}
                           </h3>
                           <p
+                            className="text-gray-600 dark:text-white/70"
                             style={{
                               fontSize: '12px',
-                              color: 'rgba(255, 255, 255, 0.7)',
                               lineHeight: '1.5',
                             }}
                           >
@@ -458,9 +473,9 @@ const InsightsPage = () => {
               <Card padding="md">
                 <div className="text-center">
                   <p
+                    className="text-gray-400 dark:text-white/35"
                     style={{
                       fontSize: '11px',
-                      color: 'rgba(255, 255, 255, 0.35)',
                       marginBottom: '12px',
                     }}
                   >
@@ -485,10 +500,9 @@ const InsightsPage = () => {
 
                   {/* Type */}
                   <h3
-                    className="font-medium"
+                    className="font-medium text-gray-900 dark:text-white"
                     style={{
                       fontSize: '18px',
-                      color: '#FFFFFF',
                       marginBottom: '4px',
                     }}
                   >
@@ -497,9 +511,9 @@ const InsightsPage = () => {
 
                   {/* Description */}
                   <p
+                    className="text-gray-600 dark:text-white/70"
                     style={{
                       fontSize: '12px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                       marginBottom: '16px',
                     }}
                   >
@@ -507,28 +521,28 @@ const InsightsPage = () => {
                   </p>
 
                   {/* Stats */}
-                  <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/10">
+                  <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200 dark:border-white/10">
                     <div>
-                      <p style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.35)', marginBottom: '4px' }}>
+                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '10px', marginBottom: '4px' }}>
                         Top Category
                       </p>
-                      <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>
+                      <p className="text-gray-900 dark:text-white" style={{ fontSize: '13px', fontWeight: 600 }}>
                         {dashboard.categories[0].category}
                       </p>
                     </div>
                     <div>
-                      <p style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.35)', marginBottom: '4px' }}>
+                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '10px', marginBottom: '4px' }}>
                         Transactions
                       </p>
-                      <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>
+                      <p className="text-gray-900 dark:text-white" style={{ fontSize: '13px', fontWeight: 600 }}>
                         {dashboard.total_count}
                       </p>
                     </div>
                     <div>
-                      <p style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.35)', marginBottom: '4px' }}>
+                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '10px', marginBottom: '4px' }}>
                         This Month
                       </p>
-                      <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>
+                      <p className="text-gray-900 dark:text-white" style={{ fontSize: '13px', fontWeight: 600 }}>
                         {formatCurrency(dashboard.current_month_total)}
                       </p>
                     </div>
@@ -540,8 +554,8 @@ const InsightsPage = () => {
 
           {/* Timestamp */}
           <div className="flex items-center justify-center gap-2 mt-5">
-            <Calendar size={14} style={{ color: 'rgba(255, 255, 255, 0.35)' }} />
-            <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.35)' }}>
+            <Calendar size={14} className="text-gray-400 dark:text-white/35" />
+            <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '11px' }}>
               Last analyzed: {new Date(insights.generated_at).toLocaleString()}
             </p>
           </div>

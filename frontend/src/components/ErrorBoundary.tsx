@@ -63,7 +63,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
       // Default error UI - Phase 9 Dark Design
       return (
-        <div className="min-h-screen bg-[#0B0D14] flex items-center justify-center p-8">
+        <div className="min-h-screen bg-white dark:bg-[#0B0D14] flex items-center justify-center p-8">
           <div className="max-w-md text-center">
             {/* Warning Icon */}
             <div className="flex justify-center mb-6">
@@ -73,12 +73,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             </div>
 
             {/* Title */}
-            <h1 className="text-xl font-medium text-white">
+            <h1 className="text-xl font-medium text-gray-900 dark:text-white">
               Something went wrong
             </h1>
 
             {/* Message */}
-            <p className="text-sm text-white/35 mt-2 leading-relaxed">
+            <p className="text-sm text-gray-500 dark:text-white/35 mt-2 leading-relaxed">
               An unexpected error occurred. Please refresh the page to continue.
             </p>
 
@@ -87,12 +87,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               <div className="mt-4">
                 <button
                   onClick={this.toggleDetails}
-                  className="text-xs text-white/25 hover:text-white/40 transition-colors"
+                  className="text-xs text-gray-400 dark:text-white/25 hover:text-gray-600 dark:hover:text-white/40 transition-colors"
                 >
                   {this.state.showDetails ? 'Hide details' : 'Show details'}
                 </button>
                 {this.state.showDetails && (
-                  <div className="bg-white/5 border border-white/8 rounded-xl p-3 text-xs text-white/40 font-mono mt-3 text-left overflow-auto max-h-40">
+                  <div className="bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/8 rounded-xl p-3 text-xs text-gray-600 dark:text-white/40 font-mono mt-3 text-left overflow-auto max-h-40">
                     {this.state.error.message}
                   </div>
                 )}

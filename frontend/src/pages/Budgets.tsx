@@ -208,36 +208,35 @@ const Budgets = () => {
         <div className="flex items-center gap-3">
           {/* Month Selector */}
           <div
-            className="flex items-center gap-2 px-4 py-2 rounded-lg"
-            style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.07)',
-            }}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.07]"
           >
             <button
               onClick={goToPreviousMonth}
-              className="p-1 rounded hover:bg-white/10 transition-colors"
+              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
               aria-label="Previous month"
             >
-              <ChevronLeft size={18} style={{ color: 'rgba(255, 255, 255, 0.7)' }} />
+              <ChevronLeft size={18} className="text-gray-600 dark:text-white/70" />
             </button>
 
             <button
               onClick={goToCurrentMonth}
               className="px-3 py-1 text-sm font-medium transition-colors"
               style={{
-                color: isCurrentMonth ? '#A78BFA' : 'rgba(255, 255, 255, 0.7)',
+                color: isCurrentMonth ? '#A78BFA' : undefined,
               }}
+              className={`px-3 py-1 text-sm font-medium transition-colors ${
+                isCurrentMonth ? 'text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-white/70'
+              }`}
             >
               {formatMonthDisplay(selectedMonth)}
             </button>
 
             <button
               onClick={goToNextMonth}
-              className="p-1 rounded hover:bg-white/10 transition-colors"
+              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
               aria-label="Next month"
             >
-              <ChevronRight size={18} style={{ color: 'rgba(255, 255, 255, 0.7)' }} />
+              <ChevronRight size={18} className="text-gray-600 dark:text-white/70" />
             </button>
           </div>
 
@@ -362,18 +361,17 @@ const Budgets = () => {
                       </div>
                       <div>
                         <h3
-                          className="font-medium"
+                          className="font-medium text-gray-900 dark:text-white"
                           style={{
                             fontSize: '14px',
-                            color: '#FFFFFF',
                           }}
                         >
                           {categoryData.label}
                         </h3>
                         <p
+                          className="text-gray-500 dark:text-white/35"
                           style={{
                             fontSize: '11px',
-                            color: 'rgba(255, 255, 255, 0.35)',
                           }}
                         >
                           {new Date(budgetStatus.budget.period_start).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
@@ -385,14 +383,14 @@ const Budgets = () => {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => handleEdit(budgetStatus)}
-                        className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
                         aria-label="Edit budget"
                       >
-                        <Edit2 size={14} style={{ color: 'rgba(255, 255, 255, 0.5)' }} />
+                        <Edit2 size={14} className="text-gray-500 dark:text-white/50" />
                       </button>
                       <button
                         onClick={() => setDeletingBudget(budgetStatus)}
-                        className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
                         aria-label="Delete budget"
                       >
                         <Trash2 size={14} style={{ color: '#F87171' }} />
@@ -435,9 +433,9 @@ const Budgets = () => {
                       {formatCurrency(budgetStatus.spent_amount)}
                     </span>
                     <span
+                      className="text-gray-400 dark:text-white/30"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.3)',
                       }}
                     >
                       of {formatCurrency(budgetStatus.budget.amount)}
@@ -474,15 +472,12 @@ const Budgets = () => {
 
                   {/* Footer */}
                   <div
-                    className="text-center pt-3"
-                    style={{
-                      borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                    }}
+                    className="text-center pt-3 border-t border-gray-200 dark:border-white/[0.06]"
                   >
                     <p
+                      className="text-gray-400 dark:text-white/25"
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.25)',
                       }}
                     >
                       {budgetStatus.is_active ? `${getDaysRemaining()} days remaining` : 'Past period'}
@@ -523,7 +518,7 @@ const Budgets = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-[#1A1D28] border border-red-500/15 rounded-3xl w-full max-w-sm p-7"
+              className="bg-white dark:bg-[#1A1D28] border border-red-200 dark:border-red-500/15 rounded-3xl w-full max-w-sm p-7"
             >
               <div className="text-center">
                 {/* Warning Icon */}
@@ -532,20 +527,20 @@ const Budgets = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-medium text-white text-center mt-4">
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white text-center mt-4">
                   Delete Budget?
                 </h3>
 
                 {/* Message */}
-                <p className="text-sm text-white/40 text-center mt-2">
+                <p className="text-sm text-gray-600 dark:text-white/40 text-center mt-2">
                   Are you sure you want to delete the{' '}
-                  <span className="text-white font-medium">
+                  <span className="text-gray-900 dark:text-white font-medium">
                     {getCategoryData(deletingBudget.budget.category).label}
                   </span>{' '}
                   budget?
                 </p>
 
-                <p className="mt-2 text-xs text-white/25 text-center">
+                <p className="mt-2 text-xs text-gray-400 dark:text-white/25 text-center">
                   This action cannot be undone
                 </p>
 
@@ -554,12 +549,9 @@ const Budgets = () => {
                   <button
                     type="button"
                     onClick={() => setDeletingBudget(null)}
-                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all"
+                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                     style={{
                       fontSize: '14px',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                   >
                     Cancel
@@ -567,12 +559,9 @@ const Budgets = () => {
                   <button
                     type="button"
                     onClick={handleDelete}
-                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 bg-red-100 dark:bg-red-500/12 border border-red-200 dark:border-red-500/25 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/20"
                     style={{
                       fontSize: '14px',
-                      background: 'rgba(248, 113, 113, 0.12)',
-                      border: '1px solid rgba(248, 113, 113, 0.25)',
-                      color: '#F87171',
                     }}
                   >
                     <Trash2 size={16} />

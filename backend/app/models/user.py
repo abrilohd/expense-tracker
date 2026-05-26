@@ -3,7 +3,7 @@ User model - defines the users table structure
 """
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from app.db.database import Base
 
 class User(Base):
@@ -36,7 +36,7 @@ class User(Base):
     is_admin = Column(Boolean, default=False, nullable=False)
     
     # Timestamps
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None), nullable=False)
     
     # Relationship: one user has many expenses
     expenses = relationship("Expense", back_populates="owner", cascade="all, delete-orphan")

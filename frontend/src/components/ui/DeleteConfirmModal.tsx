@@ -118,7 +118,7 @@ const DeleteConfirmModal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={!isDeleting ? onClose : undefined}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-50"
           />
 
           {/* Modal */}
@@ -128,7 +128,7 @@ const DeleteConfirmModal = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-[#1A1D28] border border-red-500/15 rounded-3xl w-full max-w-sm p-7"
+              className="bg-white dark:bg-[#1A1D28] border border-red-200 dark:border-red-500/15 rounded-3xl w-full max-w-sm p-7"
             >
               {/* Content - Centered */}
               <div className="text-center">
@@ -138,31 +138,31 @@ const DeleteConfirmModal = ({
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-medium text-white text-center mt-4">
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white text-center mt-4">
                   {title || 'Delete transaction?'}
                 </h3>
 
                 {/* Message */}
-                <p className="text-sm text-white/40 text-center mt-2">
+                <p className="text-sm text-gray-500 dark:text-white/40 text-center mt-2">
                   {message || 'This will permanently delete'}
                 </p>
 
                 {/* Expense Pill - Only show if not generic mode */}
                 {!isGenericMode && expense && (
                   <>
-                    <div className="inline-flex items-center gap-2 mx-auto mt-3 bg-white/5 border border-white/8 rounded-full px-4 py-2">
+                    <div className="inline-flex items-center gap-2 mx-auto mt-3 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/8 rounded-full px-4 py-2">
                       <span className="text-base">{getEmoji()}</span>
-                      <span className="text-sm text-white">
+                      <span className="text-sm text-gray-900 dark:text-white">
                         {expense.title || expense.description || 'Untitled'}
                       </span>
-                      <span className="text-white/30">·</span>
+                      <span className="text-gray-400 dark:text-white/30">·</span>
                       <span className={`text-sm font-medium ${isIncome ? 'text-green-400' : 'text-red-400'}`}>
                         {formatCurrency(expense.amount)}
                       </span>
                     </div>
 
                     {/* Warning Note */}
-                    <p className="mt-3 text-xs text-white/25 text-center">
+                    <p className="mt-3 text-xs text-gray-400 dark:text-white/25 text-center">
                       This cannot be undone
                     </p>
                   </>

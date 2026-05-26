@@ -132,8 +132,8 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50"
-            style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
+            style={{ background: document.documentElement.classList.contains('dark') ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.4)' }}
           />
 
           {/* Modal */}
@@ -143,10 +143,8 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-lg my-8 rounded-3xl shadow-2xl pointer-events-auto"
+              className="w-full max-w-lg my-8 rounded-3xl shadow-2xl pointer-events-auto bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/10"
               style={{
-                background: '#1A1D28',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
                 maxHeight: 'calc(100vh - 64px)',
                 overflowY: 'auto',
               }}
@@ -176,20 +174,18 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                   </div>
                   <div className="flex-1 min-w-0">
                     <h2
-                      className="font-bold truncate"
+                      className="font-bold truncate text-gray-900 dark:text-white"
                       style={{
                         fontSize: '24px',
-                        color: '#FFFFFF',
                         letterSpacing: '-0.5px',
                       }}
                     >
                       {isEditMode ? 'Edit Income' : 'Add Income'}
                     </h2>
                     <p
-                      className="truncate"
+                      className="truncate text-gray-500 dark:text-white/50"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.5)',
                         marginTop: '2px',
                       }}
                     >
@@ -230,10 +226,9 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                 {/* Amount */}
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
                   <label
-                    className="block font-bold mb-2"
+                    className="block font-bold mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '12px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Amount <span style={{ color: '#F87171' }}>*</span>
@@ -251,19 +246,10 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                       min="0"
                       placeholder="0.00"
                       autoFocus
-                      className="w-full pl-11 sm:pl-14 pr-4 py-3 sm:py-4 font-bold rounded-2xl border-2 transition-all"
+                      className="w-full pl-11 sm:pl-14 pr-4 py-3 sm:py-4 font-bold rounded-2xl border-2 transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-green-500/50"
                       style={{
                         fontSize: '20px',
-                        color: '#FFFFFF',
-                        background: errors.amount ? 'rgba(248, 113, 113, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                        border: errors.amount ? '2px solid rgba(248, 113, 113, 0.5)' : '2px solid rgba(255, 255, 255, 0.1)',
-                      }}
-                      onFocus={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(52, 211, 153, 0.6)';
-                        e.currentTarget.style.outline = 'none';
-                      }}
-                      onBlur={(e) => {
-                        e.currentTarget.style.borderColor = errors.amount ? 'rgba(248, 113, 113, 0.5)' : 'rgba(255, 255, 255, 0.1)';
+                        borderColor: errors.amount ? '#F87171' : undefined,
                       }}
                       {...register('amount', { valueAsNumber: true })}
                     />
@@ -272,8 +258,8 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="flex items-center gap-1.5 mt-2"
-                      style={{ fontSize: '13px', color: '#F87171' }}
+                      className="flex items-center gap-1.5 mt-2 text-red-500 dark:text-red-400"
+                      style={{ fontSize: '13px' }}
                     >
                       <span>⚠️</span> {errors.amount.message}
                     </motion.p>
@@ -283,10 +269,9 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                 {/* Title */}
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
                   <label
-                    className="block font-bold mb-2"
+                    className="block font-bold mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '12px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Title <span style={{ color: '#F87171' }}>*</span>
@@ -294,19 +279,10 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                   <input
                     type="text"
                     placeholder="e.g., Monthly Salary 💳"
-                    className="w-full px-4 py-3 rounded-2xl border-2 transition-all"
+                    className="w-full px-4 py-3 rounded-2xl border-2 transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-green-500/50"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
-                      background: errors.title ? 'rgba(248, 113, 113, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                      border: errors.title ? '2px solid rgba(248, 113, 113, 0.5)' : '2px solid rgba(255, 255, 255, 0.1)',
-                    }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(52, 211, 153, 0.6)';
-                      e.currentTarget.style.outline = 'none';
-                    }}
-                    onBlur={(e) => {
-                      e.currentTarget.style.borderColor = errors.title ? 'rgba(248, 113, 113, 0.5)' : 'rgba(255, 255, 255, 0.1)';
+                      borderColor: errors.title ? '#F87171' : undefined,
                     }}
                     {...register('title')}
                   />
@@ -314,8 +290,8 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="flex items-center gap-1.5 mt-2"
-                      style={{ fontSize: '13px', color: '#F87171' }}
+                      className="flex items-center gap-1.5 mt-2 text-red-500 dark:text-red-400"
+                      style={{ fontSize: '13px' }}
                     >
                       <span>⚠️</span> {errors.title.message}
                     </motion.p>
@@ -327,10 +303,9 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                   {/* Source */}
                   <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
                     <label
-                      className="block font-bold mb-2"
+                      className="block font-bold mb-2 text-gray-700 dark:text-white/70"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       Source <span style={{ color: '#F87171' }}>*</span>
@@ -347,12 +322,10 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                         </motion.div>
                       )}
                       <select
-                        className="w-full px-4 py-3 rounded-2xl border-2 appearance-none transition-all cursor-pointer"
+                        className="w-full px-4 py-3 rounded-2xl border-2 appearance-none transition-all cursor-pointer bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500/50"
                         style={{
                           fontSize: '13px',
-                          color: '#FFFFFF',
-                          background: errors.source ? 'rgba(248, 113, 113, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                          border: errors.source ? '2px solid rgba(248, 113, 113, 0.5)' : '2px solid rgba(255, 255, 255, 0.1)',
+                          borderColor: errors.source ? '#F87171' : undefined,
                           paddingLeft: selectedSource ? '44px' : '16px',
                         }}
                         {...register('source')}
@@ -365,8 +338,7 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                         ))}
                       </select>
                       <div
-                        className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
-                        style={{ color: 'rgba(255, 255, 255, 0.4)' }}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/40"
                       >
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                           <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -377,7 +349,8 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                       <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        style={{ fontSize: '11px', color: '#F87171', marginTop: '6px' }}
+                        className="text-red-500 dark:text-red-400"
+                        style={{ fontSize: '11px', marginTop: '6px' }}
                       >
                         Required
                       </motion.p>
@@ -387,10 +360,9 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                   {/* Date */}
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
                     <label
-                      className="block font-bold mb-2"
+                      className="block font-bold mb-2 text-gray-700 dark:text-white/70"
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       Date <span style={{ color: '#F87171' }}>*</span>
@@ -398,12 +370,10 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                     <input
                       type="date"
                       max={getTodayDate()}
-                      className="w-full px-4 py-3 rounded-2xl border-2 transition-all"
+                      className="w-full px-4 py-3 rounded-2xl border-2 transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500/50"
                       style={{
                         fontSize: '13px',
-                        color: '#FFFFFF',
-                        background: errors.date ? 'rgba(248, 113, 113, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                        border: errors.date ? '2px solid rgba(248, 113, 113, 0.5)' : '2px solid rgba(255, 255, 255, 0.1)',
+                        borderColor: errors.date ? '#F87171' : undefined,
                       }}
                       {...register('date')}
                     />
@@ -413,33 +383,22 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                 {/* Description */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
                   <label
-                    className="block font-bold mb-2"
+                    className="block font-bold mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '12px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Notes{' '}
-                    <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)', fontWeight: 400 }}>
+                    <span className="text-gray-400 dark:text-white/40" style={{ fontSize: '11px', fontWeight: 400 }}>
                       (Optional)
                     </span>
                   </label>
                   <textarea
                     rows={2}
                     placeholder="Add any details..."
-                    className="w-full px-4 py-3 rounded-2xl border-2 resize-none transition-all"
+                    className="w-full px-4 py-3 rounded-2xl border-2 resize-none transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-green-500/50"
                     style={{
                       fontSize: '13px',
-                      color: '#FFFFFF',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '2px solid rgba(255, 255, 255, 0.1)',
-                    }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(52, 211, 153, 0.6)';
-                      e.currentTarget.style.outline = 'none';
-                    }}
-                    onBlur={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
                     }}
                     {...register('description')}
                   />
@@ -456,19 +415,9 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50"
+                    className="flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50 bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                     style={{
                       fontSize: '14px',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                      e.currentTarget.style.transform = 'scale(1.02)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                      e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
                     Cancel
@@ -476,20 +425,11 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg"
+                    className="flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg text-white"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
                       background: 'linear-gradient(135deg, #34D399 0%, #10B981 100%)',
                       boxShadow: '0 8px 24px rgba(52, 211, 153, 0.3)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = '0 12px 32px rgba(52, 211, 153, 0.4)';
-                      e.currentTarget.style.transform = 'scale(1.02)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(52, 211, 153, 0.3)';
-                      e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
                     {isSubmitting ? (

@@ -16,6 +16,7 @@ import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import ForgotPasswordPage from './pages/ForgotPassword';
 import ResetPasswordPage from './pages/ResetPassword';
+import GoogleCallback from './pages/GoogleCallback';
 
 // Protected Pages
 import DashboardPage from './pages/Dashboard';
@@ -38,10 +39,10 @@ import NotFoundPage from './pages/NotFound';
 
 // Loading Screen Component
 const LoadingScreen = () => (
-  <div className="min-h-screen bg-[#0B0D14] flex items-center justify-center">
+  <div className="min-h-screen bg-white dark:bg-[#0B0D14] flex items-center justify-center">
     <div className="text-center">
       <div className="w-16 h-16 border-4 border-[#5B4EE8] border-t-transparent rounded-full animate-spin mx-auto" />
-      <p className="text-white/40 text-sm mt-4">Loading...</p>
+      <p className="text-gray-500 dark:text-white/40 text-sm mt-4">Loading...</p>
     </div>
   </div>
 );
@@ -81,6 +82,9 @@ function App() {
           {/* Password reset routes - accessible without authentication */}
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          
+          {/* Google OAuth callback - accessible without authentication */}
+          <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
           {/* Protected routes - require authentication */}
           <Route element={<ProtectedRoute />}>

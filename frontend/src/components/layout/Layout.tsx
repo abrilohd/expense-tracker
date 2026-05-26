@@ -35,11 +35,7 @@ const Layout = () => {
 
   return (
     <div
-      style={{
-        display: 'flex',
-        minHeight: '100vh',
-        background: '#0B0D14',
-      }}
+      className="flex min-h-screen bg-gray-50 dark:bg-[#0B0D14]"
     >
       {/* Sidebar - Always rendered, visibility controlled by transform */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -57,8 +53,7 @@ const Layout = () => {
 
         {/* Main Content with Page Transitions */}
         <main
-          className="flex-1 overflow-auto"
-          style={{ background: '#0B0D14' }}
+          className="flex-1 overflow-auto bg-gray-50 dark:bg-[#0B0D14]"
         >
           <div className="p-4 md:p-6 lg:p-8 max-w-[1400px] mx-auto">
             <AnimatePresence mode="wait">

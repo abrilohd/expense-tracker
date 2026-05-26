@@ -200,19 +200,15 @@ const Dashboard = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl p-6"
-          style={{
-            background: 'rgba(248, 113, 113, 0.07)',
-            border: '1px solid rgba(248, 113, 113, 0.2)',
-          }}
+          className="rounded-2xl p-6 bg-red-50 dark:bg-red-500/7 border border-red-200 dark:border-red-500/20"
         >
           <div className="flex items-start gap-3">
             <AlertCircle className="flex-shrink-0" size={24} style={{ color: '#F87171' }} />
             <div className="flex-1">
-              <h3 className="font-medium mb-1" style={{ fontSize: '16px', color: '#F87171' }}>
+              <h3 className="font-medium mb-1 text-red-600 dark:text-red-400" style={{ fontSize: '16px' }}>
                 Failed to load dashboard
               </h3>
-              <p className="mb-4" style={{ fontSize: '13px', color: 'rgba(248, 113, 113, 0.8)' }}>
+              <p className="mb-4 text-red-600/80 dark:text-red-400/80" style={{ fontSize: '13px' }}>
                 {error || 'An unexpected error occurred'}
               </p>
               <button onClick={refetch} className="btn-primary">
@@ -240,10 +236,9 @@ const Dashboard = () => {
         <div className="flex items-center justify-between flex-wrap gap-6">
           <div>
             <h1
-              className="font-semibold flex items-center gap-3"
+              className="font-semibold flex items-center gap-3 text-gray-900 dark:text-white"
               style={{
                 fontSize: '32px',
-                color: '#FFFFFF',
                 letterSpacing: '-0.8px',
                 lineHeight: '1.2',
               }}
@@ -257,10 +252,9 @@ const Dashboard = () => {
               </motion.span>
             </h1>
             <p
-              className="flex items-center gap-2 mt-2"
+              className="flex items-center gap-2 mt-2 text-gray-500 dark:text-white/50"
               style={{
                 fontSize: '15px',
-                color: 'rgba(255, 255, 255, 0.5)',
               }}
             >
               <Zap size={15} style={{ color: '#FBBF24' }} />
@@ -348,26 +342,23 @@ const Dashboard = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => navigate('/budgets')}
-                className="cursor-pointer rounded-xl p-4 transition-all hover:scale-[1.01]"
-                style={{
-                  background: alert.severity === 'critical' 
-                    ? 'rgba(248, 113, 113, 0.1)' 
-                    : 'rgba(251, 146, 60, 0.1)',
-                  border: alert.severity === 'critical'
-                    ? '1px solid rgba(248, 113, 113, 0.3)'
-                    : '1px solid rgba(251, 146, 60, 0.3)',
-                }}
+                className={`cursor-pointer rounded-xl p-4 transition-all hover:scale-[1.01] ${
+                  alert.severity === 'critical'
+                    ? 'bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30'
+                    : 'bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/30'
+                }`}
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className="flex items-center justify-center flex-shrink-0"
+                    className={`flex items-center justify-center flex-shrink-0 ${
+                      alert.severity === 'critical'
+                        ? 'bg-red-100 dark:bg-red-500/20'
+                        : 'bg-orange-100 dark:bg-orange-500/20'
+                    }`}
                     style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '12px',
-                      background: alert.severity === 'critical'
-                        ? 'rgba(248, 113, 113, 0.2)'
-                        : 'rgba(251, 146, 60, 0.2)',
                     }}
                   >
                     <AlertTriangle
@@ -379,18 +370,21 @@ const Dashboard = () => {
                   </div>
                   <div className="flex-1">
                     <h4
-                      className="font-medium mb-1"
+                      className={`font-medium mb-1 ${
+                        alert.severity === 'critical'
+                          ? 'text-red-600 dark:text-red-400'
+                          : 'text-orange-600 dark:text-orange-400'
+                      }`}
                       style={{
                         fontSize: '14px',
-                        color: alert.severity === 'critical' ? '#F87171' : '#FB923C',
                       }}
                     >
                       {alert.budget_name} Budget {alert.severity === 'critical' ? 'Exceeded' : 'Warning'}
                     </h4>
                     <p
+                      className="text-gray-600 dark:text-white/60"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.6)',
                       }}
                     >
                       {alert.utilization_percentage.toFixed(0)}% used • ${alert.spent_amount.toFixed(0)} of ${alert.amount.toFixed(0)}
@@ -398,9 +392,7 @@ const Dashboard = () => {
                   </div>
                   <ArrowRight
                     size={18}
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.3)',
-                    }}
+                    className="text-gray-400 dark:text-white/30"
                   />
                 </div>
               </motion.div>
@@ -483,39 +475,30 @@ const Dashboard = () => {
             <Card padding="lg">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="font-semibold flex items-center gap-2" style={{ fontSize: '17px', color: '#FFFFFF' }}>
+                  <h3 className="font-semibold flex items-center gap-2 text-gray-900 dark:text-white" style={{ fontSize: '17px' }}>
                     <div
+                      className="bg-purple-600 dark:bg-purple-500"
                       style={{
                         width: '6px',
                         height: '6px',
                         borderRadius: '50%',
-                        background: '#5B4EE8',
                       }}
                     />
                     Recent Activity
                   </h3>
-                  <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.45)', marginTop: '4px' }}>
+                  <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '13px', marginTop: '4px' }}>
                     Latest {recentExpenses.length} transactions
                   </p>
                 </div>
                 <motion.button
                   onClick={() => navigate('/expenses')}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all bg-purple-100 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 text-purple-700 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-500/15"
                   style={{
                     fontSize: '13px',
-                    color: '#A78BFA',
-                    background: 'rgba(91, 78, 232, 0.1)',
-                    border: '1px solid rgba(91, 78, 232, 0.2)',
                     fontWeight: 500,
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(91, 78, 232, 0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(91, 78, 232, 0.1)';
-                  }}
                 >
                   View all
                   <ArrowRight size={14} />
@@ -561,21 +544,20 @@ const Dashboard = () => {
             <Card padding="lg">
               <div className="flex items-center gap-3 mb-6">
                 <div
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-500/20 dark:to-purple-600/20 border border-purple-200 dark:border-purple-500/30"
                   style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '12px',
-                    background: 'linear-gradient(135deg, rgba(91, 78, 232, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%)',
                   }}
                 >
                   <Sparkles size={20} style={{ color: '#A78BFA' }} />
                 </div>
                 <div>
-                  <h3 className="font-semibold" style={{ fontSize: '15px', color: '#FFFFFF' }}>
+                  <h3 className="font-semibold text-gray-900 dark:text-white" style={{ fontSize: '15px' }}>
                     AI Insights
                   </h3>
-                  <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.4)' }}>
+                  <p className="text-gray-600 dark:text-white/40" style={{ fontSize: '12px' }}>
                     Smart analysis
                   </p>
                 </div>
@@ -600,13 +582,13 @@ const Dashboard = () => {
           {/* Quick Stats Card */}
           <motion.div variants={itemVariants} whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
             <Card padding="lg">
-              <h3 className="font-semibold mb-5 flex items-center gap-2" style={{ fontSize: '15px', color: '#FFFFFF' }}>
+              <h3 className="font-semibold mb-5 flex items-center gap-2 text-gray-900 dark:text-white" style={{ fontSize: '15px' }}>
                 <div
+                  className="bg-yellow-500 dark:bg-yellow-400"
                   style={{
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    background: '#FBBF24',
                   }}
                 />
                 Quick Stats
@@ -614,17 +596,16 @@ const Dashboard = () => {
 
               <div className="space-y-3">
                 <motion.div
-                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer"
-                  style={{ background: 'rgba(91, 78, 232, 0.08)' }}
-                  whileHover={{ scale: 1.02, background: 'rgba(91, 78, 232, 0.12)' }}
+                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-purple-50 dark:bg-purple-500/8 border border-purple-100 dark:border-purple-500/20"
+                  whileHover={{ scale: 1.02 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
+                      className="bg-purple-100 dark:bg-purple-500/15 border border-purple-200 dark:border-purple-500/20"
                       style={{
                         width: '40px',
                         height: '40px',
                         borderRadius: '12px',
-                        background: 'rgba(91, 78, 232, 0.15)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -633,10 +614,10 @@ const Dashboard = () => {
                       <DollarSign size={20} style={{ color: '#A78BFA' }} />
                     </div>
                     <div>
-                      <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
+                      <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '12px', fontWeight: 500 }}>
                         Total Spent
                       </p>
-                      <p className="font-semibold" style={{ fontSize: '18px', color: '#FFFFFF', letterSpacing: '-0.3px' }}>
+                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '18px', letterSpacing: '-0.3px' }}>
                         {formatCurrency(totalExpenses)}
                       </p>
                     </div>
@@ -644,17 +625,16 @@ const Dashboard = () => {
                 </motion.div>
 
                 <motion.div
-                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer"
-                  style={{ background: 'rgba(52, 211, 153, 0.08)' }}
-                  whileHover={{ scale: 1.02, background: 'rgba(52, 211, 153, 0.12)' }}
+                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-green-50 dark:bg-green-500/8 border border-green-100 dark:border-green-500/20"
+                  whileHover={{ scale: 1.02 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
+                      className="bg-green-100 dark:bg-green-500/15 border border-green-200 dark:border-green-500/20"
                       style={{
                         width: '40px',
                         height: '40px',
                         borderRadius: '12px',
-                        background: 'rgba(52, 211, 153, 0.15)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -663,10 +643,10 @@ const Dashboard = () => {
                       <TrendingUp size={20} style={{ color: '#34D399' }} />
                     </div>
                     <div>
-                      <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
+                      <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '12px', fontWeight: 500 }}>
                         Categories
                       </p>
-                      <p className="font-semibold" style={{ fontSize: '18px', color: '#FFFFFF', letterSpacing: '-0.3px' }}>
+                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '18px', letterSpacing: '-0.3px' }}>
                         {categories.length} active
                       </p>
                     </div>
@@ -674,17 +654,16 @@ const Dashboard = () => {
                 </motion.div>
 
                 <motion.div
-                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer"
-                  style={{ background: 'rgba(251, 191, 36, 0.08)' }}
-                  whileHover={{ scale: 1.02, background: 'rgba(251, 191, 36, 0.12)' }}
+                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-yellow-50 dark:bg-yellow-500/8 border border-yellow-100 dark:border-yellow-500/20"
+                  whileHover={{ scale: 1.02 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
+                      className="bg-yellow-100 dark:bg-yellow-500/15 border border-yellow-200 dark:border-yellow-500/20"
                       style={{
                         width: '40px',
                         height: '40px',
                         borderRadius: '12px',
-                        background: 'rgba(251, 191, 36, 0.15)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -693,10 +672,10 @@ const Dashboard = () => {
                       <Target size={20} style={{ color: '#FBBF24' }} />
                     </div>
                     <div>
-                      <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
+                      <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '12px', fontWeight: 500 }}>
                         This Month
                       </p>
-                      <p className="font-semibold" style={{ fontSize: '18px', color: '#FFFFFF', letterSpacing: '-0.3px' }}>
+                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '18px', letterSpacing: '-0.3px' }}>
                         {currentMonthCount} items
                       </p>
                     </div>

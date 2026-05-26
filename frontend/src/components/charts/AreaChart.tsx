@@ -127,8 +127,8 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
         display: false,
       },
       tooltip: {
-        backgroundColor: '#1A1D28',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+        borderColor: 'rgba(156, 163, 175, 0.2)',
         borderWidth: 1,
         titleColor: '#9CA3AF',
         bodyColor: '#FFFFFF',
@@ -192,18 +192,17 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '14px',
-              color: '#FFFFFF',
             }}
           >
             Cash Flow
           </h3>
           <p
+            className="text-gray-400 dark:text-white/35"
             style={{
               fontSize: '11px',
-              color: 'rgba(255, 255, 255, 0.35)',
               marginTop: '2px',
             }}
           >
@@ -213,12 +212,7 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
 
         {/* Period Toggle */}
         <div
-          className="flex items-center gap-1"
-          style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            borderRadius: '8px',
-            padding: '2px',
-          }}
+          className="flex items-center gap-1 bg-gray-100 dark:bg-white/3 rounded-lg p-0.5"
         >
           {(['3M', '6M', '1Y'] as Period[]).map((p) => (
             <button
@@ -229,7 +223,7 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
                 fontSize: '11px',
                 fontWeight: 500,
                 background: period === p ? 'rgba(91, 78, 232, 0.2)' : 'transparent',
-                color: period === p ? '#A78BFA' : 'rgba(255, 255, 255, 0.4)',
+                color: period === p ? '#A78BFA' : 'var(--text-muted)',
                 border: period === p ? '1px solid rgba(91, 78, 232, 0.2)' : '1px solid transparent',
               }}
             >
@@ -239,30 +233,33 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
         </div>
       </div>
 
+      <style>{`
+        :root {
+          --text-muted: rgba(0, 0, 0, 0.4);
+        }
+        .dark {
+          --text-muted: rgba(255, 255, 255, 0.4);
+        }
+      `}</style>
+
       {/* Summary Row */}
       <div
-        className="flex items-center gap-4 mb-4"
-        style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          borderRadius: '12px',
-          padding: '12px 16px',
-        }}
+        className="flex items-center gap-4 mb-4 bg-gray-50 dark:bg-white/3 rounded-xl p-3"
       >
         <div className="flex-1">
           <p
+            className="text-gray-400 dark:text-white/35"
             style={{
               fontSize: '10px',
-              color: 'rgba(255, 255, 255, 0.35)',
               marginBottom: '2px',
             }}
           >
             Total
           </p>
           <p
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '13px',
-              color: '#FFFFFF',
             }}
           >
             {formatCurrency(total)}
@@ -270,28 +267,27 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
         </div>
 
         <div
+          className="bg-gray-200 dark:bg-white/6"
           style={{
             width: '1px',
             height: '24px',
-            background: 'rgba(255, 255, 255, 0.06)',
           }}
         />
 
         <div className="flex-1">
           <p
+            className="text-gray-400 dark:text-white/35"
             style={{
               fontSize: '10px',
-              color: 'rgba(255, 255, 255, 0.35)',
               marginBottom: '2px',
             }}
           >
             Peak Month
           </p>
           <p
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '13px',
-              color: '#FFFFFF',
             }}
           >
             {formatCurrency(peak)}
@@ -299,28 +295,27 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
         </div>
 
         <div
+          className="bg-gray-200 dark:bg-white/6"
           style={{
             width: '1px',
             height: '24px',
-            background: 'rgba(255, 255, 255, 0.06)',
           }}
         />
 
         <div className="flex-1">
           <p
+            className="text-gray-400 dark:text-white/35"
             style={{
               fontSize: '10px',
-              color: 'rgba(255, 255, 255, 0.35)',
               marginBottom: '2px',
             }}
           >
             Monthly Avg
           </p>
           <p
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '13px',
-              color: '#FFFFFF',
             }}
           >
             {formatCurrency(avg)}

@@ -11,6 +11,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [resetData, setResetData] = useState<any>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +24,8 @@ export default function ForgotPassword() {
     setIsLoading(true);
 
     try {
-      await forgotPassword({ email });
+      const response = await forgotPassword({ email });
+      setResetData(response);
       setIsSuccess(true);
       toast.success('Password reset instructions sent to your email');
     } catch (error) {
@@ -50,6 +52,32 @@ export default function ForgotPassword() {
               We've sent password reset instructions to <strong>{email}</strong>
             </p>
 
+            {/* Development Mode - Show Reset Link */}
+            {resetData?.dev_mode && resetData?.reset_url && (
+              <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                   Development Mode
+                </p>
+                <p className="text-xs text-yellow-700 dark:text-yellow-300 mb-3">
+                  {resetData.note || "Email service not configured. Use this link to reset your password:"}
+                </p>
+                <a
+                  href={resetData.reset_url}
+                  className="block w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm text-center"
+                >
+                  Reset Password Now
+                </a>
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-2">
+                  This link will expire in 1 hour
+                </p>
+                {resetData.note && (
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-2 border-t border-yellow-300 dark:border-yellow-700 pt-2">
+                    💡 To send emails to any address, verify your domain at <a href="https://resend.com/domains" target="_blank" rel="noopener noreferrer" className="underline">resend.com/domains</a>
+                  </p>
+                )}
+              </div>
+            )}
+
             <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
               The reset link will expire in 1 hour. If you don't see the email, check your spam folder.
             </p>
@@ -63,7 +91,10 @@ export default function ForgotPassword() {
               </Link>
               
               <button
-                onClick={() => setIsSuccess(false)}
+                onClick={() => {
+                  setIsSuccess(false);
+                  setResetData(null);
+                }}
                 className="block w-full text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium py-3 px-4 rounded-lg transition-colors"
               >
                 Send Another Email

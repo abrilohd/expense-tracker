@@ -26,21 +26,20 @@ export const Card = ({ className = '', children, hover = false, padding = 'md' }
 
   return (
     <div
-      className={`${className} ${hover ? 'transition-colors' : ''}`}
+      className={`${className} ${hover ? 'transition-colors' : ''} bg-white dark:bg-[#0F1117] border border-gray-200 dark:border-white/[0.07]`}
       style={{
-        background: '#0F1117',
-        border: '1px solid rgba(255, 255, 255, 0.07)',
         borderRadius: '16px',
         padding: paddingMap[padding],
       }}
       onMouseEnter={(e) => {
         if (hover) {
-          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+          e.currentTarget.style.borderColor = hover ? 'rgba(91, 78, 232, 0.3)' : '';
         }
       }}
       onMouseLeave={(e) => {
         if (hover) {
-          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.07)';
+          e.currentTarget.classList.remove('border-purple-500/30');
+          e.currentTarget.style.borderColor = '';
         }
       }}
     >
@@ -62,28 +61,26 @@ interface CardHeaderProps {
 export const CardHeader = ({ title, subtitle, action }: CardHeaderProps) => {
   return (
     <div
-      className="flex justify-between items-start"
+      className="flex justify-between items-start border-b border-gray-200 dark:border-white/[0.07]"
       style={{
-        borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
         paddingBottom: '16px',
         marginBottom: '16px',
       }}
     >
       <div>
         <h3
-          className="font-medium"
+          className="font-medium text-gray-900 dark:text-white"
           style={{
             fontSize: '14px',
-            color: '#FFFFFF',
           }}
         >
           {title}
         </h3>
         {subtitle && (
           <p
+            className="text-gray-500 dark:text-white/35"
             style={{
               fontSize: '11px',
-              color: 'rgba(255, 255, 255, 0.35)',
               marginTop: '2px',
             }}
           >
@@ -155,10 +152,11 @@ export const StatCard = ({
 
       {/* Label */}
       <p
+        className="text-gray-600 dark:text-white/35"
         style={{
           fontSize: '11px',
-          color: 'rgba(255, 255, 255, 0.35)',
           marginTop: '12px',
+          fontWeight: 500,
         }}
       >
         {label}
@@ -167,10 +165,9 @@ export const StatCard = ({
       {/* Value */}
       <div className="flex items-baseline gap-2 mt-1">
         <h3
-          className="font-medium"
+          className="font-semibold text-gray-900 dark:text-white"
           style={{
             fontSize: '28px',
-            color: '#FFFFFF',
             letterSpacing: '-0.6px',
           }}
         >
@@ -198,9 +195,9 @@ export const StatCard = ({
       {/* Subtitle */}
       {subtitle && (
         <p
+          className="text-gray-500 dark:text-white/30"
           style={{
             fontSize: '11px',
-            color: 'rgba(255, 255, 255, 0.3)',
             marginTop: '4px',
           }}
         >

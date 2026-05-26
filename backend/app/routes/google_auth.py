@@ -170,8 +170,8 @@ async def google_callback(code: str = None, error: str = None, db: Session = Dep
                 expires_delta=access_token_expires
             )
             
-            # Redirect to frontend with token
-            redirect_url = f"{settings.frontend_url}/dashboard?token={jwt_token}"
+            # Redirect to frontend callback page with token
+            redirect_url = f"{settings.frontend_url}/auth/google/callback?token={jwt_token}"
             return RedirectResponse(url=redirect_url)
             
     except HTTPException as he:

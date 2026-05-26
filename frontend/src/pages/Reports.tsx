@@ -173,19 +173,18 @@ ${sortedCategories
       >
         <div>
           <h1
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '22px',
-              color: '#FFFFFF',
               letterSpacing: '-0.4px',
             }}
           >
             Financial Reports
           </h1>
           <p
+            className="text-gray-500 dark:text-white/45"
             style={{
               fontSize: '13px',
-              color: 'rgba(255, 255, 255, 0.45)',
               marginTop: '2px',
             }}
           >
@@ -195,9 +194,8 @@ ${sortedCategories
 
         {/* Period Tabs */}
         <div
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 bg-gray-100 dark:bg-white/[0.03]"
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
             borderRadius: '10px',
             padding: '3px',
           }}
@@ -208,45 +206,44 @@ ${sortedCategories
             style={{
               fontSize: '13px',
               background:
-                selectedPeriod === 'this_month' ? 'rgba(91, 78, 232, 0.15)' : 'transparent',
-              color: selectedPeriod === 'this_month' ? '#A78BFA' : 'rgba(255, 255, 255, 0.5)',
+                selectedPeriod === 'this_month' 
+                  ? 'rgba(91, 78, 232, 0.15)' 
+                  : 'transparent',
+              color: selectedPeriod === 'this_month' 
+                ? '#A78BFA' 
+                : 'var(--tw-prose-body)',
               border:
                 selectedPeriod === 'this_month'
                   ? '1px solid rgba(91, 78, 232, 0.2)'
                   : '1px solid transparent',
             }}
+            className={`px-4 py-2 rounded-lg transition-all font-medium ${
+              selectedPeriod === 'this_month'
+                ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/20'
+                : 'bg-transparent text-gray-600 dark:text-white/50 border border-transparent'
+            }`}
           >
             This Month
           </button>
           <button
             onClick={() => setSelectedPeriod('last_month')}
-            className="px-4 py-2 rounded-lg transition-all font-medium"
-            style={{
-              fontSize: '13px',
-              background:
-                selectedPeriod === 'last_month' ? 'rgba(91, 78, 232, 0.15)' : 'transparent',
-              color: selectedPeriod === 'last_month' ? '#A78BFA' : 'rgba(255, 255, 255, 0.5)',
-              border:
-                selectedPeriod === 'last_month'
-                  ? '1px solid rgba(91, 78, 232, 0.2)'
-                  : '1px solid transparent',
-            }}
+            className={`px-4 py-2 rounded-lg transition-all font-medium ${
+              selectedPeriod === 'last_month'
+                ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/20'
+                : 'bg-transparent text-gray-600 dark:text-white/50 border border-transparent'
+            }`}
+            style={{ fontSize: '13px' }}
           >
             Last Month
           </button>
           <button
             onClick={() => setSelectedPeriod('last_30_days')}
-            className="px-4 py-2 rounded-lg transition-all font-medium"
-            style={{
-              fontSize: '13px',
-              background:
-                selectedPeriod === 'last_30_days' ? 'rgba(91, 78, 232, 0.15)' : 'transparent',
-              color: selectedPeriod === 'last_30_days' ? '#A78BFA' : 'rgba(255, 255, 255, 0.5)',
-              border:
-                selectedPeriod === 'last_30_days'
-                  ? '1px solid rgba(91, 78, 232, 0.2)'
-                  : '1px solid transparent',
-            }}
+            className={`px-4 py-2 rounded-lg transition-all font-medium ${
+              selectedPeriod === 'last_30_days'
+                ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/20'
+                : 'bg-transparent text-gray-600 dark:text-white/50 border border-transparent'
+            }`}
+            style={{ fontSize: '13px' }}
           >
             Last 30 Days
           </button>
@@ -353,20 +350,19 @@ ${sortedCategories
           >
             <Card padding="lg">
               <div className="flex items-start justify-between mb-5">
-                <div>
+              <div>
                   <h3
-                    className="font-medium"
+                    className="font-medium text-gray-900 dark:text-white"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
                     }}
                   >
                     Spending by Category
                   </h3>
                   <p
+                    className="text-gray-500 dark:text-white/35"
                     style={{
                       fontSize: '11px',
-                      color: 'rgba(255, 255, 255, 0.35)',
                       marginTop: '2px',
                     }}
                   >
@@ -376,36 +372,36 @@ ${sortedCategories
 
                 {/* Sort Toggle */}
                 <div
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-1 bg-gray-100 dark:bg-white/[0.03]"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
                     borderRadius: '8px',
                     padding: '2px',
                   }}
                 >
                   <button
                     onClick={() => setSortBy('amount')}
-                    className="px-3 py-1 rounded-md transition-all"
+                    className={`px-3 py-1 rounded-md transition-all ${
+                      sortBy === 'amount'
+                        ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400'
+                        : 'bg-transparent text-gray-500 dark:text-white/40'
+                    }`}
                     style={{
                       fontSize: '11px',
                       fontWeight: 500,
-                      background:
-                        sortBy === 'amount' ? 'rgba(91, 78, 232, 0.2)' : 'transparent',
-                      color:
-                        sortBy === 'amount' ? '#A78BFA' : 'rgba(255, 255, 255, 0.4)',
                     }}
                   >
                     By Amount
                   </button>
                   <button
                     onClick={() => setSortBy('count')}
-                    className="px-3 py-1 rounded-md transition-all"
+                    className={`px-3 py-1 rounded-md transition-all ${
+                      sortBy === 'count'
+                        ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400'
+                        : 'bg-transparent text-gray-500 dark:text-white/40'
+                    }`}
                     style={{
                       fontSize: '11px',
                       fontWeight: 500,
-                      background:
-                        sortBy === 'count' ? 'rgba(91, 78, 232, 0.2)' : 'transparent',
-                      color: sortBy === 'count' ? '#A78BFA' : 'rgba(255, 255, 255, 0.4)',
                     }}
                   >
                     By Count
@@ -432,18 +428,17 @@ ${sortedCategories
                             {getCategoryEmoji(category.category)}
                           </span>
                           <span
-                            className="font-medium"
+                            className="font-medium text-gray-900 dark:text-white"
                             style={{
                               fontSize: '13px',
-                              color: '#FFFFFF',
                             }}
                           >
                             {category.category}
                           </span>
                           <span
+                            className="text-gray-400 dark:text-white/35"
                             style={{
                               fontSize: '11px',
-                              color: 'rgba(255, 255, 255, 0.35)',
                             }}
                           >
                             ({category.count} transactions)
@@ -451,18 +446,17 @@ ${sortedCategories
                         </div>
                         <div className="flex items-center gap-3">
                           <span
-                            className="font-medium"
+                            className="font-medium text-gray-900 dark:text-white"
                             style={{
                               fontSize: '13px',
-                              color: '#FFFFFF',
                             }}
                           >
                             {formatCurrency(category.total)}
                           </span>
                           <span
+                            className="text-gray-500 dark:text-white/45"
                             style={{
                               fontSize: '11px',
-                              color: 'rgba(255, 255, 255, 0.45)',
                               minWidth: '40px',
                               textAlign: 'right',
                             }}
@@ -472,9 +466,9 @@ ${sortedCategories
                         </div>
                       </div>
                       <div
+                        className="bg-gray-100 dark:bg-white/6"
                         style={{
                           height: '8px',
-                          background: 'rgba(255, 255, 255, 0.06)',
                           borderRadius: '4px',
                           overflow: 'hidden',
                         }}
@@ -522,10 +516,9 @@ ${sortedCategories
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingUp size={18} style={{ color: '#34D399' }} />
                     <span
-                      className="font-medium"
+                      className="font-medium text-gray-600 dark:text-white/70"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       Total Income
@@ -554,10 +547,9 @@ ${sortedCategories
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingDown size={18} style={{ color: '#F87171' }} />
                     <span
-                      className="font-medium"
+                      className="font-medium text-gray-600 dark:text-white/70"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.7)',
                       }}
                     >
                       Total Expenses
@@ -592,15 +584,14 @@ ${sortedCategories
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <span
-                      className="font-medium"
-                      style={{
-                        fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.7)',
-                      }}
-                    >
-                      Net Balance
-                    </span>
+                  <span
+                    className="font-medium text-gray-600 dark:text-white/70"
+                    style={{
+                      fontSize: '13px',
+                    }}
+                  >
+                    Net Balance
+                  </span>
                     <h3
                       className="font-medium mt-1"
                       style={{
@@ -676,18 +667,17 @@ ${sortedCategories
                   </div>
                   <div className="text-left">
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '13px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Download CSV
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Export to spreadsheet
@@ -723,18 +713,17 @@ ${sortedCategories
                   </div>
                   <div className="text-left">
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '13px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Download PDF
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Formatted report
@@ -770,18 +759,17 @@ ${sortedCategories
                   </div>
                   <div className="text-left">
                     <p
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '13px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Copy Summary
                     </p>
                     <p
+                      className="text-gray-500 dark:text-white/45"
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                       }}
                     >
                       Text to clipboard

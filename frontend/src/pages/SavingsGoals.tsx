@@ -142,19 +142,18 @@ const SavingsGoalsPage = () => {
       >
         <div>
           <h1
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '22px',
-              color: '#FFFFFF',
               letterSpacing: '-0.4px',
             }}
           >
             Savings Goals
           </h1>
           <p
+            className="text-gray-500 dark:text-white/45"
             style={{
               fontSize: '13px',
-              color: 'rgba(255, 255, 255, 0.45)',
               marginTop: '2px',
             }}
           >

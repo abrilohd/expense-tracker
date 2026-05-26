@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     """
     Application settings loaded from environment variables
     """
+    # Application mode
+    debug: bool = Field(default=False, validation_alias="DEBUG")
+    
     # Database configuration
     database_url: str = Field(default="sqlite:///./expenses.db", validation_alias="DATABASE_URL")
     
