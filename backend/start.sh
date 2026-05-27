@@ -7,7 +7,7 @@ echo "📊 Initializing database..."
 python -c "from app.db.database import Base, engine; import app.models.user, app.models.expense, app.models.income, app.models.budget, app.models.savings_goal, app.models.recurring_transaction; Base.metadata.create_all(bind=engine); print('✅ Database tables created')"
 
 # Admin creation (safe)
-if [ -n \"$ADMIN_EMAIL\" ] && [ -n \"$ADMIN_PASSWORD\" ]; then
+if [ -n "$ADMIN_EMAIL" ] && [ -n "$ADMIN_PASSWORD" ]; then
     echo "👤 Creating admin user..."
 
     python -c "
