@@ -329,7 +329,7 @@ const ExpenseListPage = () => {
                       <input
                         type="date"
                         value={filters.end_date || ''}
-                        onChange={(e) => setFilters({ end_date: e.target.value || undefined })}
+                        onChange={(e) => setFilters({ end_date: e.target.value || '' })}
                         className="w-full pl-9 pr-3 py-2 rounded-lg transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white"
                         style={{
                           fontSize: '12px',
