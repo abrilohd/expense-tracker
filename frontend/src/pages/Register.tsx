@@ -103,7 +103,7 @@ const RegisterPage = () => {
     <div className="login-container">
       {/* Back Button */}
       <a 
-        href={window.location.hostname === 'localhost' ? 'http://localhost:5500' : LANDING_URL} 
+        href={LANDING_URL} 
         className="back-button"
       >
         <ArrowLeft className="back-button-icon" />

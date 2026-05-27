@@ -265,10 +265,9 @@ const IncomePage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '22px',
-              color: '#FFFFFF',
               letterSpacing: '-0.4px',
             }}
           >
@@ -277,22 +276,18 @@ const IncomePage = () => {
           {total > 0 && (
             <div className="flex items-center gap-2 mt-1">
               <span
-                className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium"
+                className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
                 style={{
                   fontSize: '11px',
-                  background: 'rgba(52, 211, 153, 0.15)',
-                  color: '#34D399',
                 }}
               >
                 {total}
               </span>
               {hasActiveFilters() && (
                 <span
-                  className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium"
+                  className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
                   style={{
                     fontSize: '11px',
-                    background: 'rgba(52, 211, 153, 0.15)',
-                    color: '#34D399',
                   }}
                 >
                   {getActiveFilterCount()} filter{getActiveFilterCount() !== 1 ? 's' : ''}
@@ -339,27 +334,16 @@ const IncomePage = () => {
           <div className="relative flex-1">
             <Search
               size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2"
-              style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/25"
             />
             <input
               type="text"
               placeholder="Search income..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl transition-all"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
               style={{
                 fontSize: '13px',
-                color: '#FFFFFF',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.07)',
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(52, 211, 153, 0.6)';
-                e.currentTarget.style.outline = 'none';
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.07)';
               }}
             />
           </div>
@@ -367,16 +351,13 @@ const IncomePage = () => {
           {/* Advanced Filters Toggle */}
           <button
             onClick={() => setIsFilterExpanded(!isFilterExpanded)}
-            className="flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all flex-shrink-0"
+            className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all flex-shrink-0 ${
+              isFilterExpanded
+                ? 'bg-green-100 dark:bg-green-500/15 border-green-300 dark:border-green-500/30 text-green-700 dark:text-green-400'
+                : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/7 text-gray-600 dark:text-white/60'
+            }`}
             style={{
               fontSize: '13px',
-              background: isFilterExpanded
-                ? 'rgba(52, 211, 153, 0.15)'
-                : 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${
-                isFilterExpanded ? 'rgba(52, 211, 153, 0.3)' : 'rgba(255, 255, 255, 0.07)'
-              }`,
-              color: isFilterExpanded ? '#34D399' : 'rgba(255, 255, 255, 0.6)',
             }}
           >
             <SlidersHorizontal size={16} />
@@ -396,16 +377,13 @@ const IncomePage = () => {
           {/* All Sources */}
           <button
             onClick={() => handleSourceChange('')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0 border ${
+              !filters.source
+                ? 'bg-green-100 dark:bg-green-500/20 border-green-300 dark:border-green-500/40 text-green-700 dark:text-green-400'
+                : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/50'
+            }`}
             style={{
               fontSize: '12px',
-              background: !filters.source
-                ? 'rgba(52, 211, 153, 0.2)'
-                : 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${
-                !filters.source ? 'rgba(52, 211, 153, 0.4)' : 'rgba(255, 255, 255, 0.1)'
-              }`,
-              color: !filters.source ? '#34D399' : 'rgba(255, 255, 255, 0.5)',
             }}
           >
             All
@@ -416,22 +394,13 @@ const IncomePage = () => {
             <button
               key={source.value}
               onClick={() => handleSourceChange(source.value)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0 border ${
+                filters.source === source.value
+                  ? 'bg-green-100 dark:bg-green-500/20 border-green-300 dark:border-green-500/40 text-green-700 dark:text-green-400'
+                  : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/50'
+              }`}
               style={{
                 fontSize: '12px',
-                background:
-                  filters.source === source.value
-                    ? 'rgba(52, 211, 153, 0.2)'
-                    : 'rgba(255, 255, 255, 0.05)',
-                border: `1px solid ${
-                  filters.source === source.value
-                    ? 'rgba(52, 211, 153, 0.4)'
-                    : 'rgba(255, 255, 255, 0.1)'
-                }`,
-                color:
-                  filters.source === source.value
-                    ? '#34D399'
-                    : 'rgba(255, 255, 255, 0.5)',
               }}
             >
               <span>{source.emoji}</span>
@@ -458,8 +427,7 @@ const IncomePage = () => {
                     <div className="relative">
                       <Calendar
                         size={14}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                        style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/25"
                       />
                       <input
                         type="date"
@@ -467,12 +435,9 @@ const IncomePage = () => {
                         onChange={(e) =>
                           updateFilters({ start_date: e.target.value || undefined })
                         }
-                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white"
                         style={{
                           fontSize: '12px',
-                          color: '#FFFFFF',
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid rgba(255, 255, 255, 0.07)',
                         }}
                       />
                     </div>
@@ -481,19 +446,15 @@ const IncomePage = () => {
                     <div className="relative">
                       <Calendar
                         size={14}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                        style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/25"
                       />
                       <input
                         type="date"
                         value={filters.end_date || ''}
                         onChange={(e) => updateFilters({ end_date: e.target.value || undefined })}
-                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white"
                         style={{
                           fontSize: '12px',
-                          color: '#FFFFFF',
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid rgba(255, 255, 255, 0.07)',
                         }}
                       />
                     </div>
@@ -502,12 +463,9 @@ const IncomePage = () => {
                     <select
                       value={`${filters.sort_by}-${filters.order}`}
                       onChange={(e) => handleSortChange(e.target.value)}
-                      className="px-3 py-2 rounded-lg transition-all"
+                      className="px-3 py-2 rounded-lg transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white"
                       style={{
                         fontSize: '12px',
-                        color: '#FFFFFF',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.07)',
                       }}
                     >
                       <option value="date-desc">📅 Newest First</option>
@@ -521,12 +479,9 @@ const IncomePage = () => {
                   {hasActiveFilters() && (
                     <button
                       onClick={clearFilters}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all"
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400"
                       style={{
                         fontSize: '12px',
-                        color: '#F87171',
-                        background: 'rgba(248, 113, 113, 0.1)',
-                        border: '1px solid rgba(248, 113, 113, 0.2)',
                         fontWeight: 500,
                       }}
                     >
@@ -647,24 +602,21 @@ const IncomePage = () => {
           <>
             {/* List Header - Compact */}
             <div
-              className="flex items-center justify-between px-5 py-3"
-              style={{
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-              }}
+              className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-white/5"
             >
               <span
+                className="text-gray-600 dark:text-white/35"
                 style={{
                   fontSize: '11px',
-                  color: 'rgba(255, 255, 255, 0.35)',
                   fontWeight: 500,
                 }}
               >
                 {total} transaction{total !== 1 ? 's' : ''}
               </span>
               <span
+                className="text-gray-400 dark:text-white/25"
                 style={{
                   fontSize: '10px',
-                  color: 'rgba(255, 255, 255, 0.25)',
                 }}
               >
                 {filters.sort_by === 'date' ? '📅' : '💰'} {filters.order === 'desc' ? '↓' : '↑'}
@@ -703,16 +655,13 @@ const IncomePage = () => {
             {/* Pagination - Compact & Modern */}
             {totalPages > 1 && (
               <div
-                className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3 mt-2"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                }}
+                className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3 mt-2 border-t border-gray-200 dark:border-white/5"
               >
                 {/* Results Info */}
                 <p
+                  className="text-gray-500 dark:text-white/30"
                   style={{
                     fontSize: '11px',
-                    color: 'rgba(255, 255, 255, 0.3)',
                   }}
                 >
                   {startIndex}–{endIndex} of {total}

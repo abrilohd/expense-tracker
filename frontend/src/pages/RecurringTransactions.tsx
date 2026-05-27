@@ -151,22 +151,22 @@ const RecurringTransactionsPage = () => {
 
   // Get next occurrence status
   const getNextOccurrenceStatus = (nextOccurrence: string, isActive: boolean) => {
-    if (!isActive) return { text: 'Paused', color: 'rgba(255, 255, 255, 0.35)', bg: 'rgba(255, 255, 255, 0.05)' };
+    if (!isActive) return { text: 'Paused', color: 'rgb(107 114 128)', bg: 'rgb(243 244 246)', colorDark: 'rgba(255, 255, 255, 0.35)', bgDark: 'rgba(255, 255, 255, 0.05)' };
     
     const date = new Date(nextOccurrence);
     const today = new Date();
     const diffDays = Math.ceil((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     
     if (diffDays < 0) {
-      return { text: 'Overdue', color: '#F87171', bg: 'rgba(248, 113, 113, 0.15)' };
+      return { text: 'Overdue', color: '#F87171', bg: 'rgba(248, 113, 113, 0.15)', colorDark: '#F87171', bgDark: 'rgba(248, 113, 113, 0.15)' };
     }
     if (diffDays === 0) {
-      return { text: 'Today', color: '#FBBF24', bg: 'rgba(251, 191, 36, 0.15)' };
+      return { text: 'Today', color: '#FBBF24', bg: 'rgba(251, 191, 36, 0.15)', colorDark: '#FBBF24', bgDark: 'rgba(251, 191, 36, 0.15)' };
     }
     if (diffDays <= 7) {
-      return { text: `${diffDays} days`, color: '#34D399', bg: 'rgba(52, 211, 153, 0.15)' };
+      return { text: `${diffDays} days`, color: '#34D399', bg: 'rgba(52, 211, 153, 0.15)', colorDark: '#34D399', bgDark: 'rgba(52, 211, 153, 0.15)' };
     }
-    return { text: `${diffDays} days`, color: 'rgba(255, 255, 255, 0.45)', bg: 'rgba(255, 255, 255, 0.05)' };
+    return { text: `${diffDays} days`, color: 'rgb(107 114 128)', bg: 'rgb(243 244 246)', colorDark: 'rgba(255, 255, 255, 0.45)', bgDark: 'rgba(255, 255, 255, 0.05)' };
   };
 
   // Get type color
@@ -326,12 +326,13 @@ const RecurringTransactionsPage = () => {
                   <button
                     key={status}
                     onClick={() => setFilter(status as any)}
-                    className="flex-1 py-2 rounded-lg font-medium transition-all"
+                    className={`flex-1 py-2 rounded-lg font-medium transition-all border ${
+                      filter === status
+                        ? 'bg-purple-100 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-400'
+                        : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/70'
+                    }`}
                     style={{
                       fontSize: '12px',
-                      background: filter === status ? 'rgba(167, 139, 250, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                      color: filter === status ? '#A78BFA' : 'rgba(255, 255, 255, 0.7)',
-                      border: filter === status ? '1px solid rgba(167, 139, 250, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                   >
                     {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -356,12 +357,13 @@ const RecurringTransactionsPage = () => {
                   <button
                     key={type}
                     onClick={() => setTypeFilter(type as any)}
-                    className="flex-1 py-2 rounded-lg font-medium transition-all"
+                    className={`flex-1 py-2 rounded-lg font-medium transition-all border ${
+                      typeFilter === type
+                        ? 'bg-purple-100 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-400'
+                        : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/70'
+                    }`}
                     style={{
                       fontSize: '12px',
-                      background: typeFilter === type ? 'rgba(167, 139, 250, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                      color: typeFilter === type ? '#A78BFA' : 'rgba(255, 255, 255, 0.7)',
-                      border: typeFilter === type ? '1px solid rgba(167, 139, 250, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                   >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -576,11 +578,11 @@ const RecurringTransactionsPage = () => {
                       {/* Toggle */}
                       <button
                         onClick={() => handleToggle(item.id)}
-                        className="p-2 rounded-lg transition-colors"
-                        style={{
-                          background: item.is_active ? 'rgba(52, 211, 153, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-                          color: item.is_active ? '#34D399' : 'rgba(255, 255, 255, 0.45)',
-                        }}
+                        className={`p-2 rounded-lg transition-colors ${
+                          item.is_active
+                            ? 'bg-green-100 dark:bg-green-500/15 text-green-600 dark:text-green-400'
+                            : 'bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-white/45'
+                        }`}
                         title={item.is_active ? 'Pause' : 'Resume'}
                       >
                         {item.is_active ? <Pause size={16} /> : <Play size={16} />}
@@ -590,11 +592,7 @@ const RecurringTransactionsPage = () => {
                       {item.is_active && (
                         <button
                           onClick={() => handleGenerateNow(item)}
-                          className="p-2 rounded-lg transition-colors"
-                          style={{
-                            background: 'rgba(59, 130, 246, 0.15)',
-                            color: '#60A5FA',
-                          }}
+                          className="p-2 rounded-lg transition-colors bg-blue-100 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400"
                           title="Generate Now"
                         >
                           <Zap size={16} />
@@ -604,11 +602,7 @@ const RecurringTransactionsPage = () => {
                       {/* Edit */}
                       <button
                         onClick={() => handleEdit(item)}
-                        className="p-2 rounded-lg transition-colors"
-                        style={{
-                          background: 'rgba(167, 139, 250, 0.15)',
-                          color: '#A78BFA',
-                        }}
+                        className="p-2 rounded-lg transition-colors bg-purple-100 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400"
                         title="Edit"
                       >
                         <Edit2 size={16} />
@@ -617,11 +611,7 @@ const RecurringTransactionsPage = () => {
                       {/* Delete */}
                       <button
                         onClick={() => handleDelete(item)}
-                        className="p-2 rounded-lg transition-colors"
-                        style={{
-                          background: 'rgba(248, 113, 113, 0.15)',
-                          color: '#F87171',
-                        }}
+                        className="p-2 rounded-lg transition-colors bg-red-100 dark:bg-red-500/15 text-red-600 dark:text-red-400"
                         title="Delete"
                       >
                         <Trash2 size={16} />

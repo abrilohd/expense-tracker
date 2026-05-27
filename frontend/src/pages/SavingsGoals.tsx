@@ -210,9 +210,9 @@ const SavingsGoalsPage = () => {
               {/* Total Saved */}
               <div>
                 <p
+                  className="text-gray-500 dark:text-white/35"
                   style={{
                     fontSize: '11px',
-                    color: 'rgba(255, 255, 255, 0.35)',
                     marginBottom: '6px',
                   }}
                 >
@@ -233,19 +233,18 @@ const SavingsGoalsPage = () => {
               {/* Total Target */}
               <div>
                 <p
+                  className="text-gray-500 dark:text-white/35"
                   style={{
                     fontSize: '11px',
-                    color: 'rgba(255, 255, 255, 0.35)',
                     marginBottom: '6px',
                   }}
                 >
                   Total Target
                 </p>
                 <h3
-                  className="font-medium"
+                  className="font-medium text-gray-900 dark:text-white"
                   style={{
                     fontSize: '28px',
-                    color: '#FFFFFF',
                     letterSpacing: '-0.6px',
                   }}
                 >
@@ -256,9 +255,9 @@ const SavingsGoalsPage = () => {
               {/* Goals Count */}
               <div>
                 <p
+                  className="text-gray-500 dark:text-white/35"
                   style={{
                     fontSize: '11px',
-                    color: 'rgba(255, 255, 255, 0.35)',
                     marginBottom: '6px',
                   }}
                 >
@@ -281,18 +280,18 @@ const SavingsGoalsPage = () => {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span
+                  className="text-gray-700 dark:text-white/70"
                   style={{
                     fontSize: '13px',
-                    color: 'rgba(255, 255, 255, 0.7)',
                   }}
                 >
                   {overallPercentage.toFixed(1)}% of all goals completed
                 </span>
               </div>
               <div
+                className="bg-gray-200 dark:bg-white/[0.06]"
                 style={{
                   height: '12px',
-                  background: 'rgba(255, 255, 255, 0.06)',
                   borderRadius: '6px',
                   overflow: 'hidden',
                 }}
@@ -399,18 +398,17 @@ const SavingsGoalsPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3
-                          className="font-medium truncate"
+                          className="font-medium truncate text-gray-900 dark:text-white"
                           style={{
                             fontSize: '14px',
-                            color: '#FFFFFF',
                           }}
                         >
                           {goal.name}
                         </h3>
                         <p
+                          className="text-gray-500 dark:text-white/35"
                           style={{
                             fontSize: '11px',
-                            color: 'rgba(255, 255, 255, 0.35)',
                           }}
                         >
                           Goal #{goal.id}
@@ -422,14 +420,14 @@ const SavingsGoalsPage = () => {
                     <div className="flex items-center gap-1 opacity-0 hover-parent-show transition-opacity">
                       <button
                         onClick={() => handleEdit(goal)}
-                        className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
                         aria-label="Edit goal"
                       >
-                        <Edit2 size={14} style={{ color: 'rgba(255, 255, 255, 0.5)' }} />
+                        <Edit2 size={14} className="text-gray-500 dark:text-white/50" />
                       </button>
                       <button
                         onClick={() => setDeletingGoal(goal)}
-                        className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
                         aria-label="Delete goal"
                       >
                         <Trash2 size={14} style={{ color: '#F87171' }} />
@@ -440,9 +438,9 @@ const SavingsGoalsPage = () => {
                   {/* Progress Bar */}
                   <div className="mb-3">
                     <div
+                      className="bg-gray-200 dark:bg-white/[0.06]"
                       style={{
                         height: '8px',
-                        background: 'rgba(255, 255, 255, 0.06)',
                         borderRadius: '4px',
                         overflow: 'hidden',
                       }}
@@ -471,9 +469,9 @@ const SavingsGoalsPage = () => {
                     >
                       {formatCurrency(goal.saved_amount)}{' '}
                       <span
+                        className="text-gray-400 dark:text-white/30"
                         style={{
                           fontSize: '13px',
-                          color: 'rgba(255, 255, 255, 0.3)',
                           fontWeight: 400,
                         }}
                       >
@@ -481,9 +479,9 @@ const SavingsGoalsPage = () => {
                       </span>
                     </p>
                     <p
+                      className="text-gray-600 dark:text-white/45"
                       style={{
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.45)',
                         marginTop: '2px',
                       }}
                     >
@@ -577,21 +575,19 @@ const SavingsGoalsPage = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-md pointer-events-auto"
+                className="w-full max-w-md pointer-events-auto bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/10"
                 style={{
-                  background: '#1A1D28',
                   borderRadius: '20px',
                   padding: '24px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
                 }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div
+                    className="bg-red-100 dark:bg-red-500/15"
                     style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'rgba(248, 113, 113, 0.15)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -601,10 +597,9 @@ const SavingsGoalsPage = () => {
                   </div>
                   <div>
                     <h3
-                      className="font-medium"
+                      className="font-medium text-gray-900 dark:text-white"
                       style={{
                         fontSize: '18px',
-                        color: '#FFFFFF',
                       }}
                     >
                       Delete Savings Goal?
@@ -612,9 +607,9 @@ const SavingsGoalsPage = () => {
                   </div>
                 </div>
                 <p
+                  className="text-gray-700 dark:text-white/70"
                   style={{
                     fontSize: '14px',
-                    color: 'rgba(255, 255, 255, 0.7)',
                     marginBottom: '24px',
                   }}
                 >
@@ -623,12 +618,9 @@ const SavingsGoalsPage = () => {
                 <div className="flex gap-3">
                   <button
                     onClick={() => setDeletingGoal(null)}
-                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                     style={{
                       fontSize: '14px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                   >
                     Cancel

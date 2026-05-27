@@ -121,10 +121,9 @@ const InsightCard = ({ insight, index }: InsightCardProps) => {
 
         {/* Title */}
         <h4
-          className="font-medium"
+          className="font-medium text-gray-900 dark:text-white"
           style={{
             fontSize: '13px',
-            color: '#FFFFFF',
             marginTop: '4px',
           }}
         >
@@ -133,9 +132,9 @@ const InsightCard = ({ insight, index }: InsightCardProps) => {
 
         {/* Message */}
         <p
+          className="text-gray-600 dark:text-white/40"
           style={{
             fontSize: '11px',
-            color: 'rgba(255, 255, 255, 0.4)',
             marginTop: '4px',
             lineHeight: '1.6',
           }}

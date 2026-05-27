@@ -42,7 +42,6 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
   const isEditMode = !!expense;
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [budgetWarning, setBudgetWarning] = useState<{ show: boolean; message: string; remaining: number } | null>(null);
-  const [checkingBudget, setCheckingBudget] = useState(false);
 
   const getTodayDate = () => new Date().toISOString().split('T')[0];
 
@@ -73,7 +72,6 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
       }
 
       try {
-        setCheckingBudget(true);
         const response = await getBudgetStatus(true); // Get active budgets only
         
         // Find budget for this category
@@ -107,8 +105,6 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
       } catch (error) {
         // Silently fail - budget check is optional
         setBudgetWarning(null);
-      } finally {
-        setCheckingBudget(false);
       }
     };
 
@@ -189,152 +185,318 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Overlay */}
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
-          >
-            {/* Modal */}
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
+          />
+
+          {/* Modal */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
             <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/8 rounded-t-3xl sm:rounded-3xl p-6 relative"
+              className="w-full max-w-md pointer-events-auto overflow-hidden"
+              style={{
+                background: 'var(--modal-bg)',
+                borderRadius: '24px',
+                border: '1px solid var(--modal-border)',
+              }}
             >
-              {/* Mobile drag handle */}
-              <div className="w-10 h-1 bg-gray-300 dark:bg-white/15 rounded-full mx-auto mb-5 sm:hidden" />
+              <style>{`
+                :root {
+                  --modal-bg: #FFFFFF;
+                  --modal-border: rgba(0, 0, 0, 0.1);
+                  --modal-text: #1F2937;
+                  --modal-text-secondary: rgba(0, 0, 0, 0.6);
+                  --label-color: rgba(0, 0, 0, 0.7);
+                  --input-bg: rgba(0, 0, 0, 0.05);
+                  --input-border: rgba(0, 0, 0, 0.1);
+                  --input-text: #000000;
+                  --hover-bg: rgba(0, 0, 0, 0.05);
+                  --hover-color: rgba(0, 0, 0, 0.7);
+                  --text-secondary: rgba(0, 0, 0, 0.4);
+                  --button-text: rgba(0, 0, 0, 0.7);
+                  --button-bg: rgba(0, 0, 0, 0.05);
+                  --button-border: rgba(0, 0, 0, 0.1);
+                }
+                .dark {
+                  --modal-bg: #1A1D28;
+                  --modal-border: rgba(255, 255, 255, 0.1);
+                  --modal-text: #FFFFFF;
+                  --modal-text-secondary: rgba(255, 255, 255, 0.45);
+                  --label-color: rgba(255, 255, 255, 0.7);
+                  --input-bg: rgba(255, 255, 255, 0.05);
+                  --input-border: rgba(255, 255, 255, 0.1);
+                  --input-text: #FFFFFF;
+                  --hover-bg: rgba(255, 255, 255, 0.05);
+                  --hover-color: rgba(255, 255, 255, 0.7);
+                  --text-secondary: rgba(255, 255, 255, 0.4);
+                  --button-text: rgba(255, 255, 255, 0.7);
+                  --button-bg: rgba(255, 255, 255, 0.05);
+                  --button-border: rgba(255, 255, 255, 0.1);
+                }
+              `}</style>
+
+              {/* Decorative gradient bar */}
+              <div
+                style={{
+                  height: '4px',
+                  background: isEditMode 
+                    ? 'linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%)'
+                    : 'linear-gradient(90deg, #5B4EE8 0%, #A78BFA 100%)',
+                }}
+              />
 
               {/* Header */}
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-white">
-                    {isEditMode ? 'Edit Expense' : 'Add Expense'}
-                  </h2>
-                  <p className="text-xs text-gray-500 dark:text-white/35 mt-0.5">
-                    Track your spending
-                  </p>
+              <div className="relative px-6 pt-6 pb-5">
+                <div className="flex items-start gap-4">
+                  <div
+                    className="flex items-center justify-center"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '14px',
+                      background: isEditMode 
+                        ? 'rgba(251, 191, 36, 0.15)'
+                        : 'rgba(91, 78, 232, 0.15)',
+                      color: isEditMode ? '#FBBF24' : '#A78BFA',
+                    }}
+                  >
+                    <DollarSign size={24} />
+                  </div>
+                  <div className="flex-1">
+                    <h2
+                      className="font-medium text-gray-900 dark:text-white"
+                      style={{
+                        fontSize: '20px',
+                        letterSpacing: '-0.4px',
+                      }}
+                    >
+                      {isEditMode ? 'Edit Expense' : 'Add Expense'}
+                    </h2>
+                    <p
+                      className="text-gray-500 dark:text-white/45"
+                      style={{
+                        fontSize: '13px',
+                        marginTop: '2px',
+                      }}
+                    >
+                      Track your spending
+                    </p>
+                  </div>
                 </div>
+
+                {/* Close Button */}
                 <button
                   onClick={handleClose}
                   disabled={isSubmitting}
-                  className="w-[30px] h-[30px] flex items-center justify-center bg-gray-100 dark:bg-white/7 hover:bg-gray-200 dark:hover:bg-white/12 rounded-xl transition-colors"
+                  aria-label="Close"
+                  className="absolute top-5 right-5 p-2 rounded-lg transition-colors text-gray-400 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-600 dark:hover:text-white/70"
                 >
-                  <X size={15} className="text-gray-600 dark:text-white/60" />
+                  <X size={20} />
                 </button>
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                {/* Transaction details section */}
-                <div className="space-y-3">
-                  <p className="text-[10px] text-gray-400 dark:text-white/25 uppercase tracking-widest font-medium">
-                    Transaction details
-                  </p>
+              <form onSubmit={handleSubmit(onSubmit)} className="px-6 pb-6 space-y-5">
+                {/* Amount */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <label
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
+                    style={{
+                      fontSize: '13px',
+                    }}
+                  >
+                    Amount <span style={{ color: '#F87171' }}>*</span>
+                  </label>
+                  <div className="relative">
+                    <div
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-medium text-purple-600 dark:text-purple-400"
+                      style={{
+                        fontSize: '18px',
+                      }}
+                    >
+                      $
+                    </div>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0.00"
+                      autoFocus
+                      className="w-full pl-10 pr-4 py-3 rounded-xl font-medium transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8 focus:outline-none"
+                      style={{
+                        fontSize: '20px',
+                        borderColor: errors.amount ? '#F87171' : undefined,
+                      }}
+                      {...register('amount', { valueAsNumber: true })}
+                    />
+                  </div>
+                  {errors.amount && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      style={{
+                        fontSize: '12px',
+                        color: '#F87171',
+                        marginTop: '6px',
+                      }}
+                    >
+                      {errors.amount.message}
+                    </motion.p>
+                  )}
+                </motion.div>
 
-                  {/* Amount */}
+                {/* Title */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.12 }}
+                >
+                  <label
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
+                    style={{
+                      fontSize: '13px',
+                    }}
+                  >
+                    Title <span style={{ color: '#F87171' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Morning Coffee"
+                    className="w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8 focus:outline-none"
+                    style={{
+                      fontSize: '14px',
+                      borderColor: errors.title ? '#F87171' : undefined,
+                    }}
+                    {...register('title')}
+                  />
+                  {errors.title && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      style={{
+                        fontSize: '12px',
+                        color: '#F87171',
+                        marginTop: '6px',
+                      }}
+                    >
+                      {errors.title.message}
+                    </motion.p>
+                  )}
+                </motion.div>
+
+                {/* Category & Date Grid */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.14 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  {/* Category */}
                   <div>
-                    <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
-                      Amount
+                    <label
+                      className="block font-medium mb-2 text-gray-700 dark:text-white/70"
+                      style={{
+                        fontSize: '13px',
+                      }}
+                    >
+                      Category <span style={{ color: '#F87171' }}>*</span>
                     </label>
                     <div className="relative">
-                      <DollarSign size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40" />
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        placeholder="0.00"
-                        autoFocus
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
-                          errors.amount ? 'border-red-500' : 'border-gray-200 dark:border-white/10'
-                        }`}
-                        {...register('amount', { valueAsNumber: true })}
-                      />
+                      {selectedCategory && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 text-xl pointer-events-none"
+                        >
+                          {getCategoryEmoji(selectedCategory)}
+                        </motion.div>
+                      )}
+                      <select
+                        className="w-full appearance-none px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8 focus:outline-none"
+                        style={{
+                          paddingLeft: selectedCategory ? '3rem' : '1rem',
+                          fontSize: '14px',
+                          borderColor: errors.category ? '#F87171' : undefined,
+                        }}
+                        {...register('category')}
+                      >
+                        <option value="">Select</option>
+                        {CATEGORIES.map((cat) => (
+                          <option key={cat.value} value={cat.value}>
+                            {cat.emoji} {cat.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/30">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                          <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                     </div>
-                    {errors.amount && (
-                      <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">{errors.amount.message}</p>
+                    {errors.category && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        style={{
+                          fontSize: '12px',
+                          color: '#F87171',
+                          marginTop: '6px',
+                        }}
+                      >
+                        Required
+                      </motion.p>
                     )}
                   </div>
 
-                  {/* Title */}
+                  {/* Date */}
                   <div>
-                    <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
-                      Title
+                    <label
+                      className="block font-medium mb-2 text-gray-700 dark:text-white/70"
+                      style={{
+                        fontSize: '13px',
+                      }}
+                    >
+                      Date <span style={{ color: '#F87171' }}>*</span>
                     </label>
                     <input
-                      type="text"
-                      placeholder="e.g., Morning Coffee"
-                      className={`w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
-                        errors.title ? 'border-red-500' : 'border-gray-200 dark:border-white/10'
-                      }`}
-                      {...register('title')}
+                      type="date"
+                      max={getTodayDate()}
+                      className="w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8 focus:outline-none"
+                      style={{
+                        fontSize: '14px',
+                        borderColor: errors.date ? '#F87171' : undefined,
+                      }}
+                      {...register('date')}
                     />
-                    {errors.title && (
-                      <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">{errors.title.message}</p>
+                    {errors.date && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        style={{
+                          fontSize: '12px',
+                          color: '#F87171',
+                          marginTop: '6px',
+                        }}
+                      >
+                        {errors.date.message}
+                      </motion.p>
                     )}
                   </div>
-
-                  {/* Category & Date Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {/* Category */}
-                    <div>
-                      <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
-                        Category
-                      </label>
-                      <div className="relative">
-                        {selectedCategory && (
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none">
-                            {getCategoryEmoji(selectedCategory)}
-                          </span>
-                        )}
-                        <select
-                          className={`w-full appearance-none px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
-                            selectedCategory ? 'pl-9' : ''
-                          } ${errors.category ? 'border-red-500' : 'border-gray-200 dark:border-white/10'}`}
-                          {...register('category')}
-                        >
-                          <option value="">Select</option>
-                          {CATEGORIES.map((cat) => (
-                            <option key={cat.value} value={cat.value}>
-                              {cat.emoji} {cat.label}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/40">
-                          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                      </div>
-                      {errors.category && (
-                        <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">Required</p>
-                      )}
-                    </div>
-
-                    {/* Date */}
-                    <div>
-                      <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
-                        Date
-                      </label>
-                      <input
-                        type="date"
-                        max={getTodayDate()}
-                        className={`w-full px-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${
-                          errors.date ? 'border-red-500' : 'border-gray-200 dark:border-white/10'
-                        }`}
-                        {...register('date')}
-                      />
-                      {errors.date && (
-                        <p className="text-xs text-red-500 dark:text-red-400 mt-1.5">{errors.date.message}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                </motion.div>
 
                 {/* Budget Warning */}
                 <AnimatePresence>
@@ -343,6 +505,7 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
+                      transition={{ delay: 0.16 }}
                       className="overflow-hidden"
                     >
                       <div
@@ -359,56 +522,72 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                         <div className="flex-1">
                           <p
                             className={`text-sm font-medium ${
-                              budgetWarning.remaining < 0 ? 'text-red-300' : 'text-orange-300'
+                              budgetWarning.remaining < 0 ? 'text-red-600 dark:text-red-400' : 'text-orange-600 dark:text-orange-400'
                             }`}
                           >
                             {budgetWarning.remaining < 0 ? 'Budget Exceeded!' : 'Budget Warning'}
                           </p>
-                          <p className="text-xs text-white/50 mt-1">{budgetWarning.message}</p>
+                          <p className="text-xs text-gray-600 dark:text-white/50 mt-1">{budgetWarning.message}</p>
                         </div>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                {/* More info section */}
-                <div className="space-y-3 pt-1">
-                  <p className="text-[10px] text-gray-400 dark:text-white/25 uppercase tracking-widest font-medium">
-                    More info
-                  </p>
+                {/* Description */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18 }}
+                >
+                  <label
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
+                    style={{
+                      fontSize: '13px',
+                    }}
+                  >
+                    Notes <span className="text-gray-400 dark:text-white/30 font-normal">(Optional)</span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Add any details..."
+                    className="w-full px-4 py-3 rounded-xl resize-none transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-500 focus:bg-purple-50 dark:focus:bg-purple-500/8 focus:outline-none"
+                    style={{
+                      fontSize: '14px',
+                    }}
+                    {...register('description')}
+                  />
+                </motion.div>
 
-                  {/* Description */}
-                  <div>
-                    <label className="block text-xs text-gray-700 dark:text-white/40 font-medium mb-1.5">
-                      Notes <span className="text-gray-400 dark:text-white/25 font-normal">(Optional)</span>
-                    </label>
-                    <textarea
-                      rows={3}
-                      placeholder="Add any details..."
-                      className="w-full px-4 py-3 rounded-xl resize-none transition-all bg-white dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-                      {...register('description')}
-                    />
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="border-t border-gray-200 dark:border-white/6 pt-6 mt-6 flex gap-3">
+                {/* Buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex gap-3 pt-2"
+                >
                   <button
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
+                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/8"
+                    style={{
+                      fontSize: '14px',
+                    }}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all text-white ${
+                    className={`flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-white ${
                       budgetWarning && budgetWarning.remaining < 0
-                        ? 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600'
-                        : 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
+                        ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800'
+                        : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800'
                     }`}
+                    style={{
+                      fontSize: '14px',
+                    }}
                   >
                     {isSubmitting ? (
                       <>
@@ -424,10 +603,10 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                       </>
                     )}
                   </button>
-                </div>
+                </motion.div>
               </form>
             </motion.div>
-          </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>

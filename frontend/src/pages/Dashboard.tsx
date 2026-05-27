@@ -31,12 +31,15 @@ import InsightCard from '../components/ui/InsightCard';
 import EmptyState from '../components/ui/EmptyState';
 import { SkeletonGrid, SkeletonHeroCard } from '../components/ui/SkeletonLoader';
 import AreaChart from '../components/charts/AreaChart';
-import DonutChart from '../components/charts/DonutChart';
+import TopExpensesBarChart from '../components/charts/TopExpensesBarChart';
+import ReportDonutChart from '../components/charts/ReportDonutChart';
+import ExpenseLineChart from '../components/charts/ExpenseLineChart';
 import FinancialCards from '../components/dashboard/FinancialCards';
 import { getBalance } from '../api/balance';
 import { getBudgetAlerts } from '../api/budgets';
 import { useState, useEffect } from 'react';
 import type { BudgetAlert } from '../types';
+import { checkIsDemoMode, DEMO_CATEGORIES, DEMO_MONTHLY_TRENDS, DEMO_REPORT, DEMO_RECENT } from '../utils/demoData';
 
 // Format currency
 const formatCurrency = (amount: number): string => {
@@ -46,6 +49,36 @@ const formatCurrency = (amount: number): string => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
+};
+
+// Get category emoji
+const getCategoryEmoji = (category: string): string => {
+  const emojiMap: Record<string, string> = {
+    Housing: '🏠',
+    Food: '🍔',
+    Transport: '🚗',
+    Entertainment: '🎬',
+    Health: '💊',
+    Shopping: '🛍️',
+    Education: '📚',
+    Other: '📦',
+  };
+  return emojiMap[category] || '📦';
+};
+
+// Get category background color
+const getCategoryBg = (category: string): string => {
+  const bgMap: Record<string, string> = {
+    Housing: 'rgba(139, 92, 246, 0.12)',
+    Food: 'rgba(34, 197, 94, 0.12)',
+    Transport: 'rgba(59, 130, 246, 0.12)',
+    Entertainment: 'rgba(236, 72, 153, 0.12)',
+    Health: 'rgba(239, 68, 68, 0.12)',
+    Shopping: 'rgba(251, 146, 60, 0.12)',
+    Education: 'rgba(14, 165, 233, 0.12)',
+    Other: 'rgba(107, 114, 128, 0.12)',
+  };
+  return bgMap[category] || 'rgba(107, 114, 128, 0.12)';
 };
 
 // Get greeting
@@ -163,25 +196,28 @@ const Dashboard = () => {
     fetchBudgetAlerts();
   }, [data]); // Refetch when dashboard data changes
 
-  // Extract data
-  const totalExpenses = data?.total_expenses ?? 0;
-  const currentMonthTotal = data?.current_month_total ?? 0;
-  const currentMonthCount = data?.current_month_count ?? 0;
-  const averageExpense = data?.average_expense ?? 0;
-  const highestExpense = data?.highest_expense ?? 0;
-  const totalCount = data?.total_count ?? 0;
-  const categories = data?.categories ?? [];
-  const monthlyTrends = data?.monthly_trends ?? [];
-  const recentExpenses = data?.recent_expenses ?? [];
+  // Demo mode detection
+  const isDemoMode = checkIsDemoMode(data, isLoading);
+
+  // Extract data (use demo data when in demo mode)
+  const totalExpenses = isDemoMode ? DEMO_CATEGORIES.reduce((sum, cat) => sum + cat.total, 0) : (data?.total_expenses ?? 0);
+  const currentMonthTotal = isDemoMode ? (DEMO_MONTHLY_TRENDS[DEMO_MONTHLY_TRENDS.length - 1]?.total ?? 0) : (data?.current_month_total ?? 0);
+  const currentMonthCount = isDemoMode ? (DEMO_MONTHLY_TRENDS[DEMO_MONTHLY_TRENDS.length - 1]?.count ?? 0) : (data?.current_month_count ?? 0);
+  const averageExpense = isDemoMode ? totalExpenses / DEMO_CATEGORIES.reduce((sum, cat) => sum + cat.count, 0) : (data?.average_expense ?? 0);
+  const highestExpense = isDemoMode ? Math.max(...DEMO_CATEGORIES.map(cat => cat.total)) : (data?.highest_expense ?? 0);
+  const totalCount = isDemoMode ? DEMO_CATEGORIES.reduce((sum, cat) => sum + cat.count, 0) : (data?.total_count ?? 0);
+  const categories = isDemoMode ? DEMO_CATEGORIES : (data?.categories ?? []);
+  const monthlyTrends = isDemoMode ? DEMO_MONTHLY_TRENDS : (data?.monthly_trends ?? []);
+  const recentExpenses = isDemoMode ? DEMO_RECENT : (data?.recent_expenses ?? []);
 
   const firstName = user?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'User';
   
-  // Use balance data if available, otherwise use defaults
-  const totalIncome = balanceData?.totalIncome ?? 0;
-  const currentMonthIncome = balanceData?.currentMonthIncome ?? 0;
-  const lastMonthIncome = balanceData?.lastMonthIncome ?? 0;
+  // Use balance data if available, otherwise use demo/defaults
+  const totalIncome = isDemoMode ? DEMO_REPORT.totalIncome : (balanceData?.totalIncome ?? 0);
+  const currentMonthIncome = isDemoMode ? DEMO_REPORT.totalIncome : (balanceData?.currentMonthIncome ?? 0);
+  const lastMonthIncome = isDemoMode ? DEMO_REPORT.totalIncome * 0.9 : (balanceData?.lastMonthIncome ?? 0);
   
-  const lastMonthExpenses = monthlyTrends[monthlyTrends.length - 2]?.total ?? 0;
+  const lastMonthExpenses = monthlyTrends.length >= 2 ? (monthlyTrends[monthlyTrends.length - 2]?.total ?? 0) : 0;
 
   // Loading state
   if (isLoading || isLoadingBalance) {
@@ -265,13 +301,20 @@ const Dashboard = () => {
           {/* Quick Action Buttons */}
           <div className="flex items-center gap-3">
             <motion.button
-              onClick={() => navigate('/income')}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Add Income button clicked');
+                navigate('/income');
+              }}
               className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all"
               style={{
                 fontSize: '14px',
                 background: 'rgba(52, 211, 153, 0.12)',
                 color: '#34D399',
                 border: '1px solid rgba(52, 211, 153, 0.25)',
+                cursor: 'pointer',
               }}
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
@@ -289,14 +332,20 @@ const Dashboard = () => {
             </motion.button>
 
             <motion.button
-              onClick={() => navigate('/expenses/add')}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Add Expense button clicked');
+                navigate('/expenses/add');
+              }}
               className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all"
               style={{
                 fontSize: '14px',
                 background: 'linear-gradient(135deg, #5B4EE8 0%, #7C3AED 100%)',
-                color: '#FFFFFF',
                 border: 'none',
                 boxShadow: '0 4px 16px rgba(91, 78, 232, 0.35)',
+                cursor: 'pointer',
               }}
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
@@ -330,6 +379,143 @@ const Dashboard = () => {
       </motion.div>
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          DEMO MODE BANNER - Show when using sample data
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      {isDemoMode && (
+        <motion.div
+          variants={itemVariants}
+          className="rounded-2xl p-4 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-500/10 dark:to-indigo-500/10 border border-purple-200 dark:border-purple-500/20 mb-6"
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="flex items-center justify-center bg-purple-100 dark:bg-purple-500/20 flex-shrink-0"
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+              }}
+            >
+              <Sparkles size={18} className="text-purple-600 dark:text-purple-400" />
+            </div>
+            <div className="flex-1">
+              <p
+                className="font-medium text-purple-900 dark:text-purple-300"
+                style={{ fontSize: '14px' }}
+              >
+                ✦ Sample data shown — add your first expense to see your real financial insights
+              </p>
+              <p
+                className="text-purple-600 dark:text-purple-400/80"
+                style={{ fontSize: '12px', marginTop: '2px' }}
+              >
+                This beautiful dashboard is ready for your financial data
+              </p>
+            </div>
+            <motion.button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Add First Expense button clicked');
+                navigate('/expenses/add');
+              }}
+              className="px-4 py-2 rounded-lg font-medium transition-all bg-purple-600 dark:bg-purple-500 text-white hover:bg-purple-700 dark:hover:bg-purple-600"
+              style={{ fontSize: '13px', cursor: 'pointer' }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Add First Expense →
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          MAIN CHARTS ROW - Always Visible
+          Top Expense Sources (left) + Financial Overview (right)
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Top Expense Sources - Full Width Bar Chart */}
+        <motion.div whileHover={{ scale: 1.005 }} transition={{ duration: 0.2 }}>
+          <TopExpensesBarChart
+            data={categories}
+            isLoading={isLoading}
+            isDemoMode={isDemoMode}
+            compact={false}
+          />
+        </motion.div>
+
+        {/* Financial Overview - Donut Chart */}
+        <motion.div whileHover={{ scale: 1.005 }} transition={{ duration: 0.2 }}>
+          <ReportDonutChart
+            totalIncome={totalIncome}
+            totalExpenses={totalExpenses}
+            isLoading={isLoading || isLoadingBalance}
+            isDemoMode={isDemoMode}
+          />
+        </motion.div>
+      </motion.div>
+
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          STAT CARDS - 4 in ONE row (Equal Heights)
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <motion.div variants={itemVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
+          <StatCard
+            label="This Month"
+            value={formatCurrency(currentMonthTotal)}
+            icon={Calendar}
+            iconColor="#A78BFA"
+            iconBg="rgba(91, 78, 232, 0.15)"
+            subtitle={`${currentMonthCount} transactions`}
+            sparkline={monthlyTrends.slice(-7).map((t) => t.total)}
+            trend={
+              lastMonthExpenses > 0
+                ? {
+                    value: Math.abs(((currentMonthTotal - lastMonthExpenses) / lastMonthExpenses) * 100),
+                    isPositive: currentMonthTotal < lastMonthExpenses,
+                  }
+                : undefined
+            }
+          />
+        </motion.div>
+
+        <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
+          <StatCard
+            label="Average"
+            value={formatCurrency(averageExpense)}
+            icon={Calculator}
+            iconColor="#34D399"
+            iconBg="rgba(52, 211, 153, 0.12)"
+            subtitle="Per transaction"
+          />
+        </motion.div>
+
+        <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
+          <StatCard
+            label="Highest"
+            value={formatCurrency(highestExpense)}
+            icon={ArrowUpRight}
+            iconColor="#F87171"
+            iconBg="rgba(248, 113, 113, 0.12)"
+            subtitle="Single expense"
+          />
+        </motion.div>
+
+        <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
+          <StatCard
+            label="Total"
+            value={String(totalCount)}
+            icon={Receipt}
+            iconColor="#FBBF24"
+            iconBg="rgba(251, 191, 36, 0.12)"
+            subtitle="All transactions"
+            sparkline={monthlyTrends.slice(-7).map((t) => t.count)}
+          />
+        </motion.div>
+      </motion.div>
+
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           BUDGET ALERTS - Show warnings and exceeded budgets
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       {budgetAlerts.length > 0 && (
@@ -341,12 +527,18 @@ const Dashboard = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                onClick={() => navigate('/budgets')}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('Budget alert clicked');
+                  navigate('/budgets');
+                }}
                 className={`cursor-pointer rounded-xl p-4 transition-all hover:scale-[1.01] ${
                   alert.severity === 'critical'
                     ? 'bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30'
                     : 'bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/30'
                 }`}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="flex items-start gap-3">
                   <div
@@ -402,100 +594,59 @@ const Dashboard = () => {
       )}
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          BENTO GRID LAYOUT - Modern 2024 Design
+          BENTO GRID LAYOUT - Main content + Right sidebar
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* LEFT COLUMN - Main Content (8 cols) */}
         <div className="lg:col-span-8 space-y-6">
 
-          {/* Stat Cards Grid - 2x2 */}
-          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
-            <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
-              <StatCard
-                label="This Month"
-                value={formatCurrency(currentMonthTotal)}
-                icon={Calendar}
-                iconColor="#A78BFA"
-                iconBg="rgba(91, 78, 232, 0.15)"
-                subtitle={`${currentMonthCount} transactions`}
-                sparkline={monthlyTrends.slice(-7).map((t) => t.total)}
-                trend={
-                  lastMonthExpenses > 0
-                    ? {
-                        value: Math.abs(((currentMonthTotal - lastMonthExpenses) / lastMonthExpenses) * 100),
-                        isPositive: currentMonthTotal < lastMonthExpenses,
-                      }
-                    : undefined
-                }
-              />
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
-              <StatCard
-                label="Average"
-                value={formatCurrency(averageExpense)}
-                icon={Calculator}
-                iconColor="#34D399"
-                iconBg="rgba(52, 211, 153, 0.12)"
-                subtitle="Per transaction"
-              />
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
-              <StatCard
-                label="Highest"
-                value={formatCurrency(highestExpense)}
-                icon={ArrowUpRight}
-                iconColor="#F87171"
-                iconBg="rgba(248, 113, 113, 0.12)"
-                subtitle="Single expense"
-              />
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.2 }}>
-              <StatCard
-                label="Total"
-                value={String(totalCount)}
-                icon={Receipt}
-                iconColor="#FBBF24"
-                iconBg="rgba(251, 191, 36, 0.12)"
-                subtitle="All transactions"
-                sparkline={monthlyTrends.slice(-7).map((t) => t.count)}
-              />
-            </motion.div>
+          {/* Expense Line Chart (Full Width) */}
+          <motion.div variants={itemVariants} whileHover={{ scale: 1.005 }} transition={{ duration: 0.2 }}>
+            <ExpenseLineChart
+              data={monthlyTrends}
+              isLoading={isLoading}
+              isDemoMode={isDemoMode}
+            />
           </motion.div>
 
-          {/* Cash Flow Chart */}
+          {/* Cash Flow Chart (Full Width) */}
           <motion.div variants={itemVariants} whileHover={{ scale: 1.005 }} transition={{ duration: 0.2 }}>
             <AreaChart data={monthlyTrends} height={260} />
           </motion.div>
 
           {/* Recent Transactions */}
           <motion.div variants={itemVariants}>
-            <Card padding="lg">
+            <Card>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="font-semibold flex items-center gap-2 text-gray-900 dark:text-white" style={{ fontSize: '17px' }}>
+                  <h3 className="font-semibold flex items-center gap-2.5 text-gray-900 dark:text-white" style={{ fontSize: '17px' }}>
                     <div
-                      className="bg-purple-600 dark:bg-purple-500"
+                      className="bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 shadow-md shadow-purple-500/30"
                       style={{
-                        width: '6px',
-                        height: '6px',
+                        width: '8px',
+                        height: '8px',
                         borderRadius: '50%',
                       }}
                     />
                     Recent Activity
                   </h3>
-                  <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '13px', marginTop: '4px' }}>
+                  <p className="text-gray-600 dark:text-gray-400" style={{ fontSize: '13px', marginTop: '4px' }}>
                     Latest {recentExpenses.length} transactions
                   </p>
                 </div>
                 <motion.button
-                  onClick={() => navigate('/expenses')}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('View all expenses button clicked');
+                    navigate('/expenses');
+                  }}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all bg-purple-100 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 text-purple-700 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-500/15"
                   style={{
                     fontSize: '13px',
                     fontWeight: 500,
+                    cursor: 'pointer',
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -505,7 +656,7 @@ const Dashboard = () => {
                 </motion.button>
               </div>
 
-              {recentExpenses.length === 0 ? (
+              {recentExpenses.length === 0 && !isDemoMode ? (
                 <EmptyState
                   icon={Inbox}
                   title="No transactions yet"
@@ -534,30 +685,104 @@ const Dashboard = () => {
 
         {/* RIGHT COLUMN - Sidebar (4 cols) */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Category Breakdown Donut */}
+          {/* Category Breakdown List (BUG 4 FIX - replaced duplicate chart) */}
           <motion.div variants={itemVariants} whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
-            <DonutChart data={categories} />
+            <div
+              className={`rounded-2xl border p-5 bg-white dark:bg-[#0F1117] border-[#E8ECF0] dark:border-white/[0.07]`}
+              style={{ boxShadow: 'none' }}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="text-[15px] font-semibold text-gray-800 dark:text-white">
+                    Category Breakdown
+                  </h3>
+                  {isDemoMode && (
+                    <span className="text-[10px] text-purple-500 dark:text-purple-400">
+                      Sample data
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {isLoading ? (
+                <div className="space-y-3">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg animate-pulse bg-gray-100 dark:bg-white/5" />
+                      <div className="flex-1 space-y-1.5">
+                        <div className="h-3 w-24 rounded animate-pulse bg-gray-100 dark:bg-white/5" />
+                        <div className="h-2.5 w-16 rounded animate-pulse bg-gray-100 dark:bg-white/5" />
+                      </div>
+                      <div className="h-3 w-16 rounded animate-pulse bg-gray-100 dark:bg-white/5" />
+                    </div>
+                  ))}
+                </div>
+              ) : categories.length === 0 ? (
+                <div className="py-8 text-center">
+                  <p className="text-sm text-gray-400 dark:text-white/30">No categories yet</p>
+                  <p className="text-xs text-gray-300 dark:text-white/20 mt-1">
+                    Add expenses to see breakdown
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {categories.slice(0, 5).map((cat, i) => (
+                    <div
+                      key={cat.category}
+                      className={`flex items-center gap-3 py-2.5 px-2 rounded-lg cursor-default hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors duration-150 ${
+                        i < categories.length - 1
+                          ? 'border-b border-gray-50 dark:border-white/[0.03]'
+                          : ''
+                      }`}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-base"
+                        style={{ background: getCategoryBg(cat.category) }}
+                      >
+                        {getCategoryEmoji(cat.category)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-700 dark:text-white/80 truncate">
+                          {cat.category}
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-white/30 mt-0.5">
+                          {cat.count} transaction{cat.count !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-sm font-semibold text-gray-800 dark:text-white">
+                          {formatCurrency(cat.total)}
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-white/30 mt-0.5">
+                          {cat.percentage.toFixed(0)}%
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </motion.div>
 
           {/* AI Insights */}
           <motion.div variants={itemVariants} whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
-            <Card padding="lg">
+            <Card>
               <div className="flex items-center gap-3 mb-6">
                 <div
-                  className="flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-500/20 dark:to-purple-600/20 border border-purple-200 dark:border-purple-500/30"
+                  className="flex items-center justify-center bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 shadow-lg shadow-purple-500/30"
                   style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '12px',
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '14px',
                   }}
                 >
-                  <Sparkles size={20} style={{ color: '#A78BFA' }} />
+                  <Sparkles size={22} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white" style={{ fontSize: '15px' }}>
+                  <h3 className="font-semibold text-gray-900 dark:text-white" style={{ fontSize: '16px' }}>
                     AI Insights
                   </h3>
-                  <p className="text-gray-600 dark:text-white/40" style={{ fontSize: '12px' }}>
+                  <p className="text-gray-600 dark:text-gray-400" style={{ fontSize: '12px' }}>
                     Smart analysis
                   </p>
                 </div>
@@ -581,13 +806,13 @@ const Dashboard = () => {
 
           {/* Quick Stats Card */}
           <motion.div variants={itemVariants} whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
-            <Card padding="lg">
-              <h3 className="font-semibold mb-5 flex items-center gap-2 text-gray-900 dark:text-white" style={{ fontSize: '15px' }}>
+            <Card>
+              <h3 className="font-semibold mb-5 flex items-center gap-2.5 text-gray-900 dark:text-white" style={{ fontSize: '16px' }}>
                 <div
-                  className="bg-yellow-500 dark:bg-yellow-400"
+                  className="bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500 shadow-md shadow-amber-500/30"
                   style={{
-                    width: '6px',
-                    height: '6px',
+                    width: '8px',
+                    height: '8px',
                     borderRadius: '50%',
                   }}
                 />
@@ -595,87 +820,93 @@ const Dashboard = () => {
               </h3>
 
               <div className="space-y-3">
+                {/* Total Spent Card */}
                 <motion.div
-                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-purple-50 dark:bg-purple-500/8 border border-purple-100 dark:border-purple-500/20"
-                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  transition={{ duration: 0.2 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="bg-purple-100 dark:bg-purple-500/15 border border-purple-200 dark:border-purple-500/20"
+                      className="bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 shadow-lg shadow-purple-500/30"
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '44px',
+                        height: '44px',
                         borderRadius: '12px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
                     >
-                      <DollarSign size={20} style={{ color: '#A78BFA' }} />
+                      <DollarSign size={22} className="text-white" />
                     </div>
                     <div>
-                      <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '12px', fontWeight: 500 }}>
+                      <p className="text-purple-700 dark:text-purple-400" style={{ fontSize: '12px', fontWeight: 600 }}>
                         Total Spent
                       </p>
-                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '18px', letterSpacing: '-0.3px' }}>
+                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '20px', letterSpacing: '-0.4px' }}>
                         {formatCurrency(totalExpenses)}
                       </p>
                     </div>
                   </div>
                 </motion.div>
 
+                {/* Categories Card */}
                 <motion.div
-                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-green-50 dark:bg-green-500/8 border border-green-100 dark:border-green-500/20"
-                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  transition={{ duration: 0.2 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="bg-green-100 dark:bg-green-500/15 border border-green-200 dark:border-green-500/20"
+                      className="bg-gradient-to-br from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 shadow-lg shadow-green-500/30"
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '44px',
+                        height: '44px',
                         borderRadius: '12px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
                     >
-                      <TrendingUp size={20} style={{ color: '#34D399' }} />
+                      <TrendingUp size={22} className="text-white" />
                     </div>
                     <div>
-                      <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '12px', fontWeight: 500 }}>
+                      <p className="text-green-700 dark:text-green-400" style={{ fontSize: '12px', fontWeight: 600 }}>
                         Categories
                       </p>
-                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '18px', letterSpacing: '-0.3px' }}>
+                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '20px', letterSpacing: '-0.4px' }}>
                         {categories.length} active
                       </p>
                     </div>
                   </div>
                 </motion.div>
 
+                {/* This Month Card */}
                 <motion.div
-                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-yellow-50 dark:bg-yellow-500/8 border border-yellow-100 dark:border-yellow-500/20"
-                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  transition={{ duration: 0.2 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="bg-yellow-100 dark:bg-yellow-500/15 border border-yellow-200 dark:border-yellow-500/20"
+                      className="bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500 shadow-lg shadow-amber-500/30"
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '44px',
+                        height: '44px',
                         borderRadius: '12px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
                     >
-                      <Target size={20} style={{ color: '#FBBF24' }} />
+                      <Target size={22} className="text-white" />
                     </div>
                     <div>
-                      <p className="text-gray-600 dark:text-white/45" style={{ fontSize: '12px', fontWeight: 500 }}>
+                      <p className="text-amber-700 dark:text-amber-400" style={{ fontSize: '12px', fontWeight: 600 }}>
                         This Month
                       </p>
-                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '18px', letterSpacing: '-0.3px' }}>
+                      <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: '20px', letterSpacing: '-0.4px' }}>
                         {currentMonthCount} items
                       </p>
                     </div>

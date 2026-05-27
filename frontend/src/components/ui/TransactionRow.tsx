@@ -124,7 +124,10 @@ const TransactionRow = ({
         borderRadius: '10px',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.02)';
+        if (document.documentElement.classList.contains('dark')) {
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+        }
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.background = 'transparent';
@@ -151,10 +154,9 @@ const TransactionRow = ({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p
-            className="font-medium truncate"
+            className="font-medium truncate text-gray-900 dark:text-white"
             style={{
               fontSize: '13px',
-              color: '#FFFFFF',
             }}
           >
             {expense.title || expense.description || 'Untitled'}
@@ -171,9 +173,9 @@ const TransactionRow = ({
         {/* Date - Desktop */}
         {!compact && (
           <p
+            className="text-gray-500 dark:text-white/30"
             style={{
               fontSize: '11px',
-              color: 'rgba(255, 255, 255, 0.3)',
               marginTop: '2px',
             }}
           >
@@ -200,10 +202,9 @@ const TransactionRow = ({
           {/* Date - Mobile (below amount) */}
           {!compact && (
             <p
-              className="sm:hidden"
+              className="sm:hidden text-gray-500 dark:text-white/25"
               style={{
                 fontSize: '10px',
-                color: 'rgba(255, 255, 255, 0.25)',
                 marginTop: '2px',
               }}
             >
@@ -218,20 +219,11 @@ const TransactionRow = ({
             {onEdit && (
               <button
                 onClick={() => onEdit(expense.id)}
-                className="p-1.5 rounded-lg transition-all"
+                className="p-1.5 rounded-lg transition-all text-gray-400 dark:text-white/30 hover:bg-blue-100 dark:hover:bg-blue-500/15 hover:text-blue-600 dark:hover:text-blue-400"
                 style={{
                   background: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
-                  color: 'rgba(255, 255, 255, 0.3)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(59, 130, 246, 0.15)';
-                  e.currentTarget.style.color = '#3B82F6';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)';
                 }}
                 title="Edit"
               >
@@ -242,20 +234,11 @@ const TransactionRow = ({
             {onDelete && (
               <button
                 onClick={() => onDelete(expense.id)}
-                className="p-1.5 rounded-lg transition-all"
+                className="p-1.5 rounded-lg transition-all text-gray-400 dark:text-white/30 hover:bg-red-100 dark:hover:bg-red-500/15 hover:text-red-600 dark:hover:text-red-400"
                 style={{
                   background: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
-                  color: 'rgba(255, 255, 255, 0.3)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
-                  e.currentTarget.style.color = '#EF4444';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)';
                 }}
                 title="Delete"
               >

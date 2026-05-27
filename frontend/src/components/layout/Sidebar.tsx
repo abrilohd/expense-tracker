@@ -62,50 +62,53 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen w-60 flex flex-col z-40 lg:z-20 overflow-y-auto overflow-x-hidden transition-transform duration-[280ms] bg-white dark:bg-[#0F1117] border-r border-gray-200 dark:border-white/6 ${
+      className={`fixed left-0 top-0 h-screen w-60 flex flex-col overflow-y-auto overflow-x-hidden transition-transform duration-[280ms] bg-white dark:bg-[#0F1117] ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0`}
       style={{
         transitionTimingFunction: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+        borderRight: '1px solid transparent',
+        boxShadow: '2px 0 8px rgba(0, 0, 0, 0.03)',
+        zIndex: 40,
       }}
     >
       {/* Logo Section */}
       <div
-        className="px-5 py-5 border-b border-gray-200 dark:border-white/6"
+        className="px-5 py-5 border-b border-gray-200/50 dark:border-white/[0.03]"
       >
         <div className="flex items-center gap-2.5">
           {/* Logo Icon */}
           <div
-            className="flex items-center justify-center flex-shrink-0"
+            className="flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/30"
             style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '9px',
-              background: '#5B4EE8',
+              width: '36px',
+              height: '36px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #5B4EE8 0%, #7C3AED 100%)',
             }}
           >
-            <Coins size={16} className="text-white" />
+            <Coins size={18} className="text-white" />
           </div>
 
           {/* Logo Text */}
           <div className="flex items-baseline gap-0.5">
             <span
-              className="font-semibold text-gray-900 dark:text-white"
+              className="font-bold text-gray-900 dark:text-white"
               style={{
-                fontSize: '15px',
-                letterSpacing: '-0.3px',
+                fontSize: '16px',
+                letterSpacing: '-0.4px',
               }}
             >
               Expense
             </span>
             <span
-              className="font-bold text-purple-600 dark:text-[#A78BFA]"
+              className="font-bold bg-gradient-to-r from-purple-600 to-purple-700 dark:from-purple-400 dark:to-purple-500 bg-clip-text text-transparent"
               style={{
-                fontSize: '15px',
-                letterSpacing: '-0.3px',
+                fontSize: '16px',
+                letterSpacing: '-0.4px',
               }}
             >
-              AI
+              Tracker
             </span>
           </div>
         </div>
@@ -133,27 +136,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               end={item.path === '/'}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
+                `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] transition-all duration-150 ${
                   isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-[#A78BFA]' : 'text-gray-600 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white/80'
                 }`
               }
             >
-              <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
+              <item.icon size={18} className="flex-shrink-0" />
               <span style={{ fontSize: '13px' }}>{item.label}</span>
-              {/* Active dot */}
-              <NavLink to={item.path} end={item.path === '/'}>
-                {({ isActive }) =>
-                  isActive ? (
-                    <div
-                      className="ml-auto rounded-full bg-purple-600 dark:bg-[#A78BFA]"
-                      style={{
-                        width: '5px',
-                        height: '5px',
-                      }}
-                    />
-                  ) : null
-                }
-              </NavLink>
             </NavLink>
           ))}
         </div>
@@ -177,15 +166,14 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               to={item.path}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
+                `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] transition-all duration-150 ${
                   isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-[#A78BFA]' : 'text-gray-600 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white/80'
                 }`
               }
             >
-              <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
+              <item.icon size={18} className="flex-shrink-0" />
               <span style={{ fontSize: '13px' }}>{item.label}</span>
-              {/* AI Badge or Active dot */}
-              {item.badge ? (
+              {item.badge && (
                 <span
                   className="ml-auto px-1.5 py-0.5 rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-[#A78BFA]"
                   style={{
@@ -194,20 +182,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 >
                   {item.badge}
                 </span>
-              ) : (
-                <NavLink to={item.path}>
-                  {({ isActive }) =>
-                    isActive ? (
-                      <div
-                        className="ml-auto rounded-full bg-purple-600 dark:bg-[#A78BFA]"
-                        style={{
-                          width: '5px',
-                          height: '5px',
-                        }}
-                      />
-                    ) : null
-                  }
-                </NavLink>
               )}
             </NavLink>
           ))}
@@ -232,27 +206,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               to={item.path}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
+                `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] transition-all duration-150 ${
                   isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-[#A78BFA]' : 'text-gray-600 dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white/80'
                 }`
               }
             >
-              <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
+              <item.icon size={18} className="flex-shrink-0" />
               <span style={{ fontSize: '13px' }}>{item.label}</span>
-              {/* Active dot */}
-              <NavLink to={item.path}>
-                {({ isActive }) =>
-                  isActive ? (
-                    <div
-                      className="ml-auto rounded-full bg-purple-600 dark:bg-[#A78BFA]"
-                      style={{
-                        width: '5px',
-                        height: '5px',
-                      }}
-                    />
-                  ) : null
-                }
-              </NavLink>
             </NavLink>
           ))}
         </div>
@@ -266,12 +226,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 to={item.path}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] cursor-pointer transition-all duration-150 ${
+                  `flex items-center gap-2.5 mx-3 px-3 py-2.5 rounded-[10px] transition-all duration-150 ${
                     isActive ? 'font-medium bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-300' : 'text-gray-600 dark:text-white/40 hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:text-purple-600 dark:hover:text-purple-300'
                   }`
                 }
               >
-                <item.icon size={16} className="flex-shrink-0" style={{ width: '18px' }} />
+                <item.icon size={18} className="flex-shrink-0" />
                 <span style={{ fontSize: '13px' }}>{item.label}</span>
                 <span 
                   className="ml-auto text-xs px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-300"
@@ -290,12 +250,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
       {/* Bottom Section */}
       <div
-        className="mt-auto px-3 pb-4 pt-4 border-t border-gray-200 dark:border-white/6"
+        className="mt-auto px-3 pb-4 pt-4 border-t border-gray-200 dark:border-white/[0.03]"
       >
         {/* User Info */}
         {user && (
           <div
-            className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] cursor-pointer transition-all duration-150 mb-0.5 hover:bg-gray-100 dark:hover:bg-white/4"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] transition-all duration-150 mb-0.5 hover:bg-gray-100 dark:hover:bg-white/4"
           >
             {/* Avatar */}
             <div
@@ -348,11 +308,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         {/* Logout Button */}
         <button
           onClick={logout}
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-150 my-0.5 text-gray-500 dark:text-white/35 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/6"
+          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-150 my-0.5 text-gray-500 dark:text-white/35 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/6"
           style={{
             fontSize: '13px',
             background: 'transparent',
             border: 'none',
+            cursor: 'pointer',
           }}
         >
           <LogOut size={14} className="flex-shrink-0" />

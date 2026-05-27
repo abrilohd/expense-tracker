@@ -129,10 +129,9 @@ const ExpenseListPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1
-            className="font-medium"
+            className="font-medium text-gray-900 dark:text-white"
             style={{
               fontSize: '22px',
-              color: '#FFFFFF',
               letterSpacing: '-0.4px',
             }}
           >
@@ -141,22 +140,18 @@ const ExpenseListPage = () => {
           {total > 0 && (
             <div className="flex items-center gap-2 mt-1">
               <span
-                className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium"
+                className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400"
                 style={{
                   fontSize: '11px',
-                  background: 'rgba(248, 113, 113, 0.15)',
-                  color: '#F87171',
                 }}
               >
                 {total}
               </span>
               {hasActiveFilters() && (
                 <span
-                  className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium"
+                  className="inline-flex items-center justify-center px-2 py-0.5 rounded-full font-medium bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
                   style={{
                     fontSize: '11px',
-                    background: 'rgba(91, 78, 232, 0.15)',
-                    color: '#5B4EE8',
                   }}
                 >
                   {getActiveFilterCount()} filter{getActiveFilterCount() !== 1 ? 's' : ''}
@@ -203,27 +198,16 @@ const ExpenseListPage = () => {
           <div className="relative flex-1">
             <Search
               size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2"
-              style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/25"
             />
             <input
               type="text"
               placeholder="Search expenses..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl transition-all"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
               style={{
                 fontSize: '13px',
-                color: '#FFFFFF',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.07)',
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(91, 78, 232, 0.6)';
-                e.currentTarget.style.outline = 'none';
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.07)';
               }}
             />
           </div>
@@ -231,16 +215,13 @@ const ExpenseListPage = () => {
           {/* Advanced Filters Toggle */}
           <button
             onClick={() => setIsFilterExpanded(!isFilterExpanded)}
-            className="flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all flex-shrink-0"
+            className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all flex-shrink-0 border ${
+              isFilterExpanded
+                ? 'bg-purple-100 dark:bg-purple-500/15 border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-400'
+                : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/7 text-gray-600 dark:text-white/60'
+            }`}
             style={{
               fontSize: '13px',
-              background: isFilterExpanded
-                ? 'rgba(91, 78, 232, 0.15)'
-                : 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${
-                isFilterExpanded ? 'rgba(91, 78, 232, 0.3)' : 'rgba(255, 255, 255, 0.07)'
-              }`,
-              color: isFilterExpanded ? '#5B4EE8' : 'rgba(255, 255, 255, 0.6)',
             }}
           >
             <SlidersHorizontal size={16} />
@@ -260,69 +241,50 @@ const ExpenseListPage = () => {
           {/* All Categories */}
           <button
             onClick={() => handleCategoryChange('')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0 border ${
+              !filters.category
+                ? 'bg-purple-100 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/40 text-purple-700 dark:text-purple-400'
+                : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/50'
+            }`}
             style={{
               fontSize: '12px',
-              background: !filters.category
-                ? 'rgba(91, 78, 232, 0.2)'
-                : 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${
-                !filters.category ? 'rgba(91, 78, 232, 0.4)' : 'rgba(255, 255, 255, 0.1)'
-              }`,
-              color: !filters.category ? '#5B4EE8' : 'rgba(255, 255, 255, 0.5)',
             }}
           >
             All
           </button>
 
           {/* Category Pills */}
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.value}
-              onClick={() => handleCategoryChange(cat.value)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0"
-              style={{
-                fontSize: '12px',
-                background:
-                  filters.category === cat.value
-                    ? `${cat.color === 'orange' ? 'rgba(245, 158, 11, 0.2)' : 
-                       cat.color === 'blue' ? 'rgba(59, 130, 246, 0.2)' :
-                       cat.color === 'purple' ? 'rgba(139, 92, 246, 0.2)' :
-                       cat.color === 'pink' ? 'rgba(236, 72, 153, 0.2)' :
-                       cat.color === 'green' ? 'rgba(16, 185, 129, 0.2)' :
-                       cat.color === 'yellow' ? 'rgba(249, 115, 22, 0.2)' :
-                       cat.color === 'indigo' ? 'rgba(99, 102, 241, 0.2)' :
-                       'rgba(107, 114, 128, 0.2)'}`
-                    : 'rgba(255, 255, 255, 0.05)',
-                border: `1px solid ${
-                  filters.category === cat.value
-                    ? `${cat.color === 'orange' ? 'rgba(245, 158, 11, 0.4)' : 
-                       cat.color === 'blue' ? 'rgba(59, 130, 246, 0.4)' :
-                       cat.color === 'purple' ? 'rgba(139, 92, 246, 0.4)' :
-                       cat.color === 'pink' ? 'rgba(236, 72, 153, 0.4)' :
-                       cat.color === 'green' ? 'rgba(16, 185, 129, 0.4)' :
-                       cat.color === 'yellow' ? 'rgba(249, 115, 22, 0.4)' :
-                       cat.color === 'indigo' ? 'rgba(99, 102, 241, 0.4)' :
-                       'rgba(107, 114, 128, 0.4)'}`
-                    : 'rgba(255, 255, 255, 0.1)'
-                }`,
-                color:
-                  filters.category === cat.value
-                    ? `${cat.color === 'orange' ? '#F59E0B' : 
-                       cat.color === 'blue' ? '#3B82F6' :
-                       cat.color === 'purple' ? '#8B5CF6' :
-                       cat.color === 'pink' ? '#EC4899' :
-                       cat.color === 'green' ? '#10B981' :
-                       cat.color === 'yellow' ? '#F97316' :
-                       cat.color === 'indigo' ? '#6366F1' :
-                       '#6B7280'}`
-                    : 'rgba(255, 255, 255, 0.5)',
-              }}
-            >
-              <span>{cat.emoji}</span>
-              <span className="hidden sm:inline">{cat.label}</span>
-            </button>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const isActive = filters.category === cat.value;
+            const colorClasses = {
+              orange: isActive ? 'bg-orange-100 dark:bg-orange-500/20 border-orange-300 dark:border-orange-500/40 text-orange-700 dark:text-orange-400' : '',
+              blue: isActive ? 'bg-blue-100 dark:bg-blue-500/20 border-blue-300 dark:border-blue-500/40 text-blue-700 dark:text-blue-400' : '',
+              purple: isActive ? 'bg-purple-100 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/40 text-purple-700 dark:text-purple-400' : '',
+              pink: isActive ? 'bg-pink-100 dark:bg-pink-500/20 border-pink-300 dark:border-pink-500/40 text-pink-700 dark:text-pink-400' : '',
+              green: isActive ? 'bg-green-100 dark:bg-green-500/20 border-green-300 dark:border-green-500/40 text-green-700 dark:text-green-400' : '',
+              yellow: isActive ? 'bg-yellow-100 dark:bg-yellow-500/20 border-yellow-300 dark:border-yellow-500/40 text-yellow-700 dark:text-yellow-400' : '',
+              indigo: isActive ? 'bg-indigo-100 dark:bg-indigo-500/20 border-indigo-300 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-400' : '',
+              gray: isActive ? 'bg-gray-100 dark:bg-gray-500/20 border-gray-300 dark:border-gray-500/40 text-gray-700 dark:text-gray-400' : '',
+            };
+            
+            return (
+              <button
+                key={cat.value}
+                onClick={() => handleCategoryChange(cat.value)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all flex-shrink-0 border ${
+                  isActive
+                    ? colorClasses[cat.color as keyof typeof colorClasses] || colorClasses.gray
+                    : 'bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/50'
+                }`}
+                style={{
+                  fontSize: '12px',
+                }}
+              >
+                <span>{cat.emoji}</span>
+                <span className="hidden sm:inline">{cat.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Advanced Filters - Collapsible */}
@@ -343,8 +305,7 @@ const ExpenseListPage = () => {
                     <div className="relative">
                       <Calendar
                         size={14}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                        style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/25"
                       />
                       <input
                         type="date"
@@ -352,12 +313,9 @@ const ExpenseListPage = () => {
                         onChange={(e) =>
                           setFilters({ start_date: e.target.value || undefined })
                         }
-                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white"
                         style={{
                           fontSize: '12px',
-                          color: '#FFFFFF',
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid rgba(255, 255, 255, 0.07)',
                         }}
                       />
                     </div>
@@ -366,19 +324,15 @@ const ExpenseListPage = () => {
                     <div className="relative">
                       <Calendar
                         size={14}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                        style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-white/25"
                       />
                       <input
                         type="date"
                         value={filters.end_date || ''}
                         onChange={(e) => setFilters({ end_date: e.target.value || undefined })}
-                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white"
                         style={{
                           fontSize: '12px',
-                          color: '#FFFFFF',
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid rgba(255, 255, 255, 0.07)',
                         }}
                       />
                     </div>
@@ -387,12 +341,9 @@ const ExpenseListPage = () => {
                     <select
                       value={`${filters.sort_by}-${filters.order}`}
                       onChange={(e) => handleSortChange(e.target.value)}
-                      className="px-3 py-2 rounded-lg transition-all"
+                      className="px-3 py-2 rounded-lg transition-all bg-white dark:bg-white/5 border border-gray-200 dark:border-white/7 text-gray-900 dark:text-white"
                       style={{
                         fontSize: '12px',
-                        color: '#FFFFFF',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.07)',
                       }}
                     >
                       <option value="date-desc">📅 Newest First</option>
@@ -406,12 +357,9 @@ const ExpenseListPage = () => {
                   {hasActiveFilters() && (
                     <button
                       onClick={clearFilters}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all"
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400"
                       style={{
                         fontSize: '12px',
-                        color: '#F87171',
-                        background: 'rgba(248, 113, 113, 0.1)',
-                        border: '1px solid rgba(248, 113, 113, 0.2)',
                         fontWeight: 500,
                       }}
                     >
@@ -532,24 +480,21 @@ const ExpenseListPage = () => {
           <>
             {/* List Header - Compact */}
             <div
-              className="flex items-center justify-between px-5 py-3"
-              style={{
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-              }}
+              className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-white/5"
             >
               <span
+                className="text-gray-600 dark:text-white/35"
                 style={{
                   fontSize: '11px',
-                  color: 'rgba(255, 255, 255, 0.35)',
                   fontWeight: 500,
                 }}
               >
                 {total} transaction{total !== 1 ? 's' : ''}
               </span>
               <span
+                className="text-gray-400 dark:text-white/25"
                 style={{
                   fontSize: '10px',
-                  color: 'rgba(255, 255, 255, 0.25)',
                 }}
               >
                 {filters.sort_by === 'date' ? '📅' : '💰'} {filters.order === 'desc' ? '↓' : '↑'}
@@ -587,16 +532,13 @@ const ExpenseListPage = () => {
             {/* Pagination - Compact & Modern */}
             {totalPages > 1 && (
               <div
-                className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3 mt-2"
-                style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                }}
+                className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3 mt-2 border-t border-gray-200 dark:border-white/5"
               >
                 {/* Results Info */}
                 <p
+                  className="text-gray-500 dark:text-white/30"
                   style={{
                     fontSize: '11px',
-                    color: 'rgba(255, 255, 255, 0.3)',
                   }}
                 >
                   {startIndex}–{endIndex} of {total}

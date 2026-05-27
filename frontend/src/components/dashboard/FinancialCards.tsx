@@ -18,6 +18,18 @@ const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
+// Safe trend calculation helper (BUG 1 FIX)
+const safeTrend = (current: number, previous: number): string => {
+  if (previous === 0) {
+    return current > 0 ? '100.0' : '0.0';
+  }
+  const pct = ((current - previous) / Math.abs(previous)) * 100;
+  if (!isFinite(pct) || isNaN(pct)) {
+    return '0.0';
+  }
+  return Math.abs(pct).toFixed(1);
+};
+
 // Card animation variants
 const cardVariants = {
   hidden: { opacity: 0, y: 30, rotateX: -15 },
@@ -68,26 +80,16 @@ const FinancialCards = ({
     setShowBalance((prev: boolean) => !prev);
   };
 
-  // Calculate trends with proper logic
-  const incomeTrend =
-    lastMonthIncome > 0
-      ? (((currentMonthIncome - lastMonthIncome) / lastMonthIncome) * 100).toFixed(1)
-      : currentMonthIncome > 0 ? '100' : '0';
-  
-  const expenseTrend =
-    lastMonthExpenses > 0
-      ? (((currentMonthExpenses - lastMonthExpenses) / lastMonthExpenses) * 100).toFixed(1)
-      : currentMonthExpenses > 0 ? '100' : '0';
-
+  // Calculate trends with safe helper (BUG 1 FIX)
+  const incomeTrend = safeTrend(currentMonthIncome, lastMonthIncome);
+  const expenseTrend = safeTrend(currentMonthExpenses, lastMonthExpenses);
   const isIncomeUp = currentMonthIncome >= lastMonthIncome;
   const isExpenseUp = currentMonthExpenses >= lastMonthExpenses;
 
   // Calculate balance trend (positive = good, negative = bad)
   const lastMonthBalance = lastMonthIncome - lastMonthExpenses;
   const currentMonthBalance = currentMonthIncome - currentMonthExpenses;
-  const balanceTrend = lastMonthBalance !== 0
-    ? (((currentMonthBalance - lastMonthBalance) / Math.abs(lastMonthBalance)) * 100).toFixed(1)
-    : '0';
+  const balanceTrend = safeTrend(currentMonthBalance, lastMonthBalance);
   const isBalanceImproving = currentMonthBalance > lastMonthBalance;
 
   return (

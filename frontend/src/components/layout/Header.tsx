@@ -75,7 +75,7 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
 
   return (
     <header
-      className="sticky top-0 z-30 flex items-center justify-between h-14 px-6 bg-white dark:bg-[#0B0D14] border-b border-gray-200 dark:border-white/5"
+      className="sticky top-0 z-30 flex items-center justify-between h-14 px-6 bg-white dark:bg-[#0B0D14] border-b border-gray-200 dark:border-white/[0.03]"
     >
       {/* LEFT SIDE */}
       <div className="flex items-center gap-4 min-w-0 flex-1">

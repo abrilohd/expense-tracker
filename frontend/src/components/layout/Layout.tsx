@@ -4,7 +4,6 @@
  */
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './Sidebar';
 import MobileOverlay from './MobileOverlay';
 import Header from './Header';
@@ -35,7 +34,7 @@ const Layout = () => {
 
   return (
     <div
-      className="flex min-h-screen bg-gray-50 dark:bg-[#0B0D14]"
+      className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#0B0D14]"
     >
       {/* Sidebar - Always rendered, visibility controlled by transform */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -53,23 +52,10 @@ const Layout = () => {
 
         {/* Main Content with Page Transitions */}
         <main
-          className="flex-1 overflow-auto bg-gray-50 dark:bg-[#0B0D14]"
+          className="flex-1 overflow-auto bg-[#F8FAFC] dark:bg-[#0B0D14]"
         >
           <div className="p-4 md:p-6 lg:p-8 max-w-[1400px] mx-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={location.pathname}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{
-                  duration: 0.2,
-                  ease: [0.25, 0.1, 0.25, 1],
-                }}
-              >
-                <Outlet />
-              </motion.div>
-            </AnimatePresence>
+            <Outlet />
           </div>
         </main>
       </div>

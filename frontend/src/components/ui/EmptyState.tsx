@@ -25,29 +25,25 @@ const EmptyState = ({ icon: Icon, title, message, action }: EmptyStateProps) => 
     >
       {/* Icon Container */}
       <div
-        className="inline-flex items-center justify-center"
+        className="inline-flex items-center justify-center bg-gray-100 dark:bg-white/[0.04]"
         style={{
           width: '64px',
           height: '64px',
-          background: 'rgba(255, 255, 255, 0.04)',
           borderRadius: '16px',
           marginBottom: '16px',
         }}
       >
         <Icon
           size={32}
-          style={{
-            color: 'rgba(255, 255, 255, 0.2)',
-          }}
+          className="text-gray-300 dark:text-white/20"
         />
       </div>
 
       {/* Title */}
       <h3
-        className="font-medium"
+        className="font-medium text-gray-900 dark:text-white"
         style={{
           fontSize: '14px',
-          color: '#FFFFFF',
           marginTop: '8px',
         }}
       >
@@ -56,10 +52,9 @@ const EmptyState = ({ icon: Icon, title, message, action }: EmptyStateProps) => 
 
       {/* Message */}
       <p
-        className="mx-auto"
+        className="mx-auto text-gray-500 dark:text-white/35"
         style={{
           fontSize: '13px',
-          color: 'rgba(255, 255, 255, 0.35)',
           marginTop: '4px',
           maxWidth: '320px',
           lineHeight: '1.6',

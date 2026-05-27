@@ -1,6 +1,8 @@
 /**
- * AreaChart Component - Cash flow visualization
+ * AreaChart Component - Cash flow visualization (PRODUCTION READY)
  * Shows income vs expenses over time with smooth gradients
+ * BUGS FIXED: $-Infinity, empty chart labels, theme detection, rerendering
+ * Updated to match production patterns: ChartData type, gradient useEffect, key prop
  */
 import { useState, useRef, useEffect } from 'react';
 import {
@@ -14,6 +16,7 @@ import {
   Legend,
   Filler,
   ChartOptions,
+  ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Card, CardHeader } from '../ui/Card';
@@ -64,57 +67,87 @@ interface AreaChartProps {
 
 const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) => {
   const [period, setPeriod] = useState<Period>('6M');
+  const [isDark, setIsDark] = useState(() =>
+    document.documentElement.classList.contains('dark')
+  );
   const chartRef = useRef<ChartJS<'line'>>(null);
+  const [chartData, setChartData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
+
+  // Theme detection with MutationObserver (BUG FIX 3)
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Filter data based on period
   const filteredData = data.slice(
     period === '3M' ? -3 : period === '6M' ? -6 : -12
   );
 
-  // Calculate summary stats
+  // Calculate summary stats (BUG FIX 1 - Fix $-Infinity)
   const total = filteredData.reduce((sum, item) => sum + item.total, 0);
-  const peak = Math.max(...filteredData.map((item) => item.total));
-  const avg = total / filteredData.length || 0;
+  const peak = filteredData.length > 0 ? Math.max(...filteredData.map((item) => item.total)) : 0;
+  const avg = filteredData.length > 0 ? total / filteredData.length : 0;
 
-  // Create gradient for expenses
+  // Prepare labels and values
+  const labels = filteredData.map((item) => {
+    const date = new Date(item.month + '-01');
+    return date.toLocaleDateString('en-US', { month: 'short' });
+  });
+  const values = filteredData.map((item) => item.total);
+
+  // Build chart data with gradient (updates on theme change)
   useEffect(() => {
     const chart = chartRef.current;
     if (!chart) return;
 
     const ctx = chart.ctx;
-    const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, 'rgba(248, 113, 113, 0.25)');
-    gradient.addColorStop(1, 'rgba(248, 113, 113, 0)');
+    const chartArea = chart.chartArea;
 
-    chart.data.datasets[0].backgroundColor = gradient;
-    chart.update('none');
-  }, [height]);
+    if (!chartArea) return;
 
-  // Chart data
-  const chartData = {
-    labels: filteredData.map((item) => {
-      const date = new Date(item.month + '-01');
-      return date.toLocaleDateString('en-US', { month: 'short' });
-    }),
-    datasets: [
-      {
-        label: 'Expenses',
-        data: filteredData.map((item) => item.total),
-        borderColor: '#F87171',
-        borderWidth: 2.5,
-        fill: true,
-        tension: 0.4,
-        backgroundColor: 'rgba(248, 113, 113, 0.25)', // Will be replaced by gradient
-        pointRadius: 3,
-        pointHoverRadius: 6,
-        pointBackgroundColor: '#F87171',
-        pointBorderColor: '#0B0D14',
-        pointBorderWidth: 2,
-      },
-    ],
-  };
+    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+    
+    if (isDark) {
+      gradient.addColorStop(0, 'rgba(248, 113, 113, 0.25)');
+      gradient.addColorStop(1, 'rgba(248, 113, 113, 0)');
+    } else {
+      gradient.addColorStop(0, 'rgba(239, 68, 68, 0.15)');
+      gradient.addColorStop(1, 'rgba(239, 68, 68, 0)');
+    }
 
-  // Chart options
+    setChartData({
+      labels,
+      datasets: [
+        {
+          label: 'Expenses',
+          data: values,
+          borderColor: isDark ? '#F87171' : '#EF4444',
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.4,
+          backgroundColor: gradient,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: isDark ? '#F87171' : '#EF4444',
+          pointBorderColor: isDark ? '#0F1117' : '#FFFFFF',
+          pointBorderWidth: 2,
+        },
+      ],
+    });
+  }, [isDark, filteredData, labels.join(','), values.join(',')]);
+
+  // Chart options (updated for theme and BUG FIX 2)
+  const maxValue = filteredData.length > 0 ? Math.max(...filteredData.map((item) => item.total)) : 0;
+  
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -127,10 +160,10 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
         display: false,
       },
       tooltip: {
-        backgroundColor: 'rgba(17, 24, 39, 0.95)',
-        borderColor: 'rgba(156, 163, 175, 0.2)',
+        backgroundColor: isDark ? '#1A1D28' : '#1E293B',
+        borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
         borderWidth: 1,
-        titleColor: '#9CA3AF',
+        titleColor: '#94A3B8',
         bodyColor: '#FFFFFF',
         padding: 12,
         cornerRadius: 8,
@@ -139,7 +172,7 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
           label: (context) => {
             const label = context.dataset.label || '';
             const value = context.parsed.y;
-            return `${label}: ${formatCurrency(value)}`;
+            return ` ${label}: ${formatCurrency(value)}`;
           },
         },
       },
@@ -150,9 +183,10 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
           display: false,
         },
         ticks: {
-          color: '#374151',
+          color: isDark ? '#6B7280' : '#94A3B8',
           font: {
             size: 11,
+            family: 'Inter',
           },
         },
         border: {
@@ -160,13 +194,17 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
         },
       },
       y: {
+        min: 0,
+        suggestedMax: maxValue > 0 ? maxValue * 1.2 : 100,
         grid: {
-          color: 'rgba(255, 255, 255, 0.04)',
+          color: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)',
+          drawBorder: false,
         },
         ticks: {
-          color: '#374151',
+          color: isDark ? '#6B7280' : '#94A3B8',
           font: {
             size: 11,
+            family: 'Inter',
           },
           callback: (value) => formatCurrency(Number(value)),
         },
@@ -176,7 +214,7 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
       },
     },
     animation: {
-      duration: 800,
+      duration: 900,
       easing: 'easeInOutQuart',
     },
   };
@@ -194,7 +232,7 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
           <h3
             className="font-medium text-gray-900 dark:text-white"
             style={{
-              fontSize: '14px',
+              fontSize: '15px',
             }}
           >
             Cash Flow
@@ -202,29 +240,30 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
           <p
             className="text-gray-400 dark:text-white/35"
             style={{
-              fontSize: '11px',
+              fontSize: '12px',
               marginTop: '2px',
             }}
           >
-            Income vs expenses
+            Expense trends over time
           </p>
         </div>
 
         {/* Period Toggle */}
         <div
-          className="flex items-center gap-1 bg-gray-100 dark:bg-white/3 rounded-lg p-0.5"
+          className="flex items-center gap-1 bg-gray-100 dark:bg-white/[0.05] rounded-lg p-0.5"
         >
           {(['3M', '6M', '1Y'] as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className="px-3 py-1 rounded-md transition-all"
+              className={`px-3 py-1 rounded-md transition-all ${
+                period === p
+                  ? 'bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400'
+                  : 'text-gray-600 dark:text-white/40 hover:text-gray-900 dark:hover:text-white/60'
+              }`}
               style={{
                 fontSize: '11px',
                 fontWeight: 500,
-                background: period === p ? 'rgba(91, 78, 232, 0.2)' : 'transparent',
-                color: period === p ? '#A78BFA' : 'var(--text-muted)',
-                border: period === p ? '1px solid rgba(91, 78, 232, 0.2)' : '1px solid transparent',
               }}
             >
               {p}
@@ -233,18 +272,9 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
         </div>
       </div>
 
-      <style>{`
-        :root {
-          --text-muted: rgba(0, 0, 0, 0.4);
-        }
-        .dark {
-          --text-muted: rgba(255, 255, 255, 0.4);
-        }
-      `}</style>
-
       {/* Summary Row */}
       <div
-        className="flex items-center gap-4 mb-4 bg-gray-50 dark:bg-white/3 rounded-xl p-3"
+        className="flex items-center gap-4 mb-4 bg-gray-50 dark:bg-white/[0.03] rounded-xl p-3"
       >
         <div className="flex-1">
           <p
@@ -262,12 +292,12 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
               fontSize: '13px',
             }}
           >
-            {formatCurrency(total)}
+            {filteredData.length === 0 ? '$0' : formatCurrency(total)}
           </p>
         </div>
 
         <div
-          className="bg-gray-200 dark:bg-white/6"
+          className="bg-gray-200 dark:bg-white/[0.06]"
           style={{
             width: '1px',
             height: '24px',
@@ -290,12 +320,12 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
               fontSize: '13px',
             }}
           >
-            {formatCurrency(peak)}
+            {filteredData.length === 0 ? '$0' : formatCurrency(peak)}
           </p>
         </div>
 
         <div
-          className="bg-gray-200 dark:bg-white/6"
+          className="bg-gray-200 dark:bg-white/[0.06]"
           style={{
             width: '1px',
             height: '24px',
@@ -318,14 +348,19 @@ const AreaChart = ({ data, isLoading = false, height = 220 }: AreaChartProps) =>
               fontSize: '13px',
             }}
           >
-            {formatCurrency(avg)}
+            {filteredData.length === 0 ? '$0' : formatCurrency(avg)}
           </p>
         </div>
       </div>
 
-      {/* Chart */}
+      {/* Chart (BUG FIX 4 - Force remount on theme change with key prop) */}
       <div style={{ height: `${height}px` }}>
-        <Line ref={chartRef} data={chartData} options={options} />
+        <Line 
+          key={isDark ? 'dark' : 'light'} 
+          ref={chartRef} 
+          data={chartData} 
+          options={options} 
+        />
       </div>
     </Card>
   );

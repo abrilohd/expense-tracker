@@ -246,7 +246,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                     className="block font-medium mb-2"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Goal Name <span style={{ color: '#F87171' }}>*</span>
@@ -261,7 +260,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                       border: errors.name
                         ? '1px solid #F87171'
                         : '1px solid rgba(255, 255, 255, 0.1)',
-                      color: '#FFFFFF',
                       fontSize: '14px',
                     }}
                     onFocus={(e) => {
@@ -301,7 +299,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                     className="block font-medium mb-2"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Target Amount <span style={{ color: '#F87171' }}>*</span>
@@ -327,7 +324,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                         border: errors.target_amount
                           ? '1px solid #F87171'
                           : '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '20px',
                       }}
                       onFocus={(e) => {
@@ -368,14 +364,12 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                     className="block font-medium mb-2"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Deadline{' '}
                     <span
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.35)',
                         fontWeight: 400,
                       }}
                     >
@@ -389,7 +383,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                     style={{
                       background: 'rgba(255, 255, 255, 0.05)',
                       border: '1px solid rgba(255, 255, 255, 0.1)',
-                      color: '#FFFFFF',
                       fontSize: '14px',
                     }}
                     onFocus={(e) => {
@@ -414,7 +407,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                     className="block font-medium mb-2"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Choose an Icon
@@ -430,8 +422,8 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                           fontSize: '24px',
                           background:
                             selectedEmoji === emoji
-                              ? 'rgba(52, 211, 153, 0.15)'
-                              : 'rgba(255, 255, 255, 0.05)',
+                              ? 'rgba(231, 240, 237, 0.43)'
+                              : 'rgba(248, 248, 248, 0.05)',
                           border:
                             selectedEmoji === emoji
                               ? '2px solid #34D399'
@@ -439,7 +431,7 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                         }}
                         onMouseEnter={(e) => {
                           if (selectedEmoji !== emoji) {
-                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                            e.currentTarget.style.background = 'rgba(236, 233, 233, 1)';
                           }
                         }}
                         onMouseLeave={(e) => {
@@ -468,7 +460,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                     className="flex-1 px-5 py-3 rounded-xl font-medium transition-all"
                     style={{
                       fontSize: '14px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                       background: 'rgba(255, 255, 255, 0.05)',
                       border: '1px solid rgba(255, 255, 255, 0.1)',
                     }}
@@ -487,7 +478,6 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
                     className="flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
                     style={{
                       fontSize: '14px',
-                      color: '#FFFFFF',
                       background: 'linear-gradient(135deg, #34D399 0%, #10B981 100%)',
                       border: 'none',
                     }}

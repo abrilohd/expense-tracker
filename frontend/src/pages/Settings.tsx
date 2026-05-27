@@ -18,6 +18,8 @@ interface ToggleSwitchProps {
 }
 
 const ToggleSwitch = ({ checked, onChange, disabled = false }: ToggleSwitchProps) => {
+  const isDarkMode = document.documentElement.classList.contains('dark');
+  
   return (
     <button
       onClick={() => !disabled && onChange(!checked)}
@@ -27,7 +29,11 @@ const ToggleSwitch = ({ checked, onChange, disabled = false }: ToggleSwitchProps
         width: '40px',
         height: '22px',
         borderRadius: '11px',
-        background: checked ? '#5B4EE8' : 'rgba(255, 255, 255, 0.1)',
+        background: checked 
+          ? '#5B4EE8' 
+          : isDarkMode 
+            ? 'rgba(255, 255, 255, 0.1)' 
+            : 'rgba(0, 0, 0, 0.1)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
       }}
@@ -171,7 +177,7 @@ const Settings = () => {
   };
 
   return (
-    <div style={{ padding: '24px', maxWidth: '900px', margin: '0 auto' }}>
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto">
       {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -559,19 +565,19 @@ const Settings = () => {
               {/* Export All Data */}
               <button
                 onClick={exportAllData}
-                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-green-50 dark:bg-green-500/8 border border-green-200 dark:border-green-500/15 hover:bg-green-100 dark:hover:bg-green-500/12"
+                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 hover:bg-green-100 dark:hover:bg-green-500/15"
               >
                 <div
-                  className="flex items-center justify-center bg-green-100 dark:bg-green-500/15"
+                  className="flex items-center justify-center bg-green-100 dark:bg-green-500/20"
                   style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
                   }}
                 >
-                  <Download size={20} style={{ color: '#34D399' }} />
+                  <Download size={20} className="text-green-600 dark:text-green-400" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p
                     className="font-medium text-gray-900 dark:text-white"
                     style={{
@@ -581,7 +587,7 @@ const Settings = () => {
                     Export All Data
                   </p>
                   <p
-                    className="text-gray-500 dark:text-white/45"
+                    className="text-gray-600 dark:text-white/60"
                     style={{
                       fontSize: '12px',
                     }}
@@ -594,19 +600,19 @@ const Settings = () => {
               {/* Clear All Expenses */}
               <button
                 onClick={() => setIsClearModalOpen(true)}
-                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-red-50 dark:bg-red-500/8 border border-red-200 dark:border-red-500/15 hover:bg-red-100 dark:hover:bg-red-500/12"
+                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 hover:bg-red-100 dark:hover:bg-red-500/15"
               >
                 <div
-                  className="flex items-center justify-center bg-red-100 dark:bg-red-500/15"
+                  className="flex items-center justify-center bg-red-100 dark:bg-red-500/20"
                   style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
                   }}
                 >
-                  <Trash2 size={20} style={{ color: '#F87171' }} />
+                  <Trash2 size={20} className="text-red-600 dark:text-red-400" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p
                     className="font-medium text-gray-900 dark:text-white"
                     style={{
@@ -616,7 +622,7 @@ const Settings = () => {
                     Clear All Expenses
                   </p>
                   <p
-                    className="text-gray-500 dark:text-white/45"
+                    className="text-gray-600 dark:text-white/60"
                     style={{
                       fontSize: '12px',
                     }}
@@ -629,19 +635,19 @@ const Settings = () => {
               {/* Privacy Policy */}
               <button
                 onClick={() => toast('Privacy policy coming soon!', { icon: '📄' })}
-                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-purple-50 dark:bg-purple-500/8 border border-purple-200 dark:border-purple-500/15 hover:bg-purple-100 dark:hover:bg-purple-500/12"
+                className="w-full flex items-center gap-3 p-4 rounded-xl transition-all text-left bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 hover:bg-purple-100 dark:hover:bg-purple-500/15"
               >
                 <div
-                  className="flex items-center justify-center bg-purple-100 dark:bg-purple-500/15"
+                  className="flex items-center justify-center bg-purple-100 dark:bg-purple-500/20"
                   style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
                   }}
                 >
-                  <FileText size={20} style={{ color: '#A78BFA' }} />
+                  <FileText size={20} className="text-purple-600 dark:text-purple-400" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p
                     className="font-medium text-gray-900 dark:text-white"
                     style={{
@@ -651,7 +657,7 @@ const Settings = () => {
                     Privacy Policy
                   </p>
                   <p
-                    className="text-gray-500 dark:text-white/45"
+                    className="text-gray-600 dark:text-white/60"
                     style={{
                       fontSize: '12px',
                     }}
@@ -681,7 +687,7 @@ const Settings = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-md pointer-events-auto bg-white dark:bg-[#1A1D28] border border-red-200 dark:border-red-500/20"
+                className="w-full max-w-md pointer-events-auto bg-white dark:bg-[#1A1D28] border border-red-200 dark:border-red-500/30 shadow-2xl"
                 style={{
                   borderRadius: '20px',
                   padding: '24px',
@@ -689,7 +695,7 @@ const Settings = () => {
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div
-                    className="bg-red-100 dark:bg-red-500/15"
+                    className="bg-red-100 dark:bg-red-500/20"
                     style={{
                       width: '48px',
                       height: '48px',
@@ -699,7 +705,7 @@ const Settings = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    <AlertTriangle size={24} style={{ color: '#F87171' }} />
+                    <AlertTriangle size={24} className="text-red-600 dark:text-red-400" />
                   </div>
                   <div>
                     <h3
@@ -714,7 +720,7 @@ const Settings = () => {
                 </div>
 
                 <p
-                  className="text-gray-700 dark:text-white/70"
+                  className="text-gray-700 dark:text-white/80"
                   style={{
                     fontSize: '14px',
                     marginBottom: '16px',
@@ -724,13 +730,13 @@ const Settings = () => {
                 </p>
 
                 <p
-                  className="text-gray-600 dark:text-white/60"
+                  className="text-gray-600 dark:text-white/70"
                   style={{
                     fontSize: '13px',
                     marginBottom: '12px',
                   }}
                 >
-                  Type <strong style={{ color: '#F87171' }}>CLEAR</strong> to confirm:
+                  Type <strong className="text-red-600 dark:text-red-400">CLEAR</strong> to confirm:
                 </p>
 
                 <input
@@ -738,7 +744,7 @@ const Settings = () => {
                   value={clearConfirmText}
                   onChange={(e) => setClearConfirmText(e.target.value)}
                   placeholder="Type CLEAR"
-                  className="w-full px-4 py-3 rounded-xl mb-4 bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-3 rounded-xl mb-4 bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-red-500/50"
                   style={{
                     fontSize: '14px',
                   }}
@@ -760,11 +766,10 @@ const Settings = () => {
                   <button
                     onClick={handleClearExpenses}
                     disabled={clearConfirmText !== 'CLEAR'}
-                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all text-white"
                     style={{
                       fontSize: '14px',
-                      background: clearConfirmText === 'CLEAR' ? '#F87171' : 'rgba(248, 113, 113, 0.3)',
-                      color: '#FFFFFF',
+                      background: clearConfirmText === 'CLEAR' ? '#EF4444' : 'rgba(239, 68, 68, 0.3)',
                       cursor: clearConfirmText === 'CLEAR' ? 'pointer' : 'not-allowed',
                       opacity: clearConfirmText === 'CLEAR' ? 1 : 0.5,
                     }}

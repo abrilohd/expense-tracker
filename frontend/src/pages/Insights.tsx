@@ -272,7 +272,7 @@ const InsightsPage = () => {
             >
               Failed to load insights
             </h3>
-            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '12px' }}>
+            <p style={{ fontSize: '12px', marginBottom: '11px' }}>
               {error}
             </p>
             <button
@@ -313,13 +313,13 @@ const InsightsPage = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    <Sparkles size={24} style={{ color: '#FFFFFF' }} />
+                    <Sparkles size={24}/>
                   </div>
                   <div>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 600 }}>
+                    <p style={{ fontSize: '15px', fontWeight: 600 }}>
                       AI Analysis Complete
                     </p>
-                    <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.8)' }}>
+                    <p style={{ fontSize: '13px', }}>
                       {insights.insights.length} insights for last {selectedDays} days
                     </p>
                   </div>
@@ -329,26 +329,26 @@ const InsightsPage = () => {
                 <div className="hidden sm:flex gap-4">
                   {insightCounts.warning > 0 && (
                     <div className="text-center">
-                      <p style={{ fontSize: '18px', color: '#FFFFFF', fontWeight: 700 }}>
+                      <p style={{ fontSize: '18px', fontWeight: 700 }}>
                         {insightCounts.warning}
                       </p>
-                      <p style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.8)' }}>Warnings</p>
+                      <p style={{ fontSize: '10px'}}>Warnings</p>
                     </div>
                   )}
                   {insightCounts.success > 0 && (
                     <div className="text-center">
-                      <p style={{ fontSize: '18px', color: '#FFFFFF', fontWeight: 700 }}>
+                      <p style={{ fontSize: '18px', fontWeight: 700 }}>
                         {insightCounts.success}
                       </p>
-                      <p style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.8)' }}>Wins</p>
+                      <p style={{ fontSize: '10px'}}>Wins</p>
                     </div>
                   )}
                   {insightCounts.tip > 0 && (
                     <div className="text-center">
-                      <p style={{ fontSize: '18px', color: '#FFFFFF', fontWeight: 700 }}>
+                      <p style={{ fontSize: '18px', fontWeight: 700 }}>
                         {insightCounts.tip}
                       </p>
-                      <p style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.8)' }}>Tips</p>
+                      <p style={{ fontSize: '10px'}}>Tips</p>
                     </div>
                   )}
                 </div>
@@ -523,7 +523,7 @@ const InsightsPage = () => {
                   {/* Stats */}
                   <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200 dark:border-white/10">
                     <div>
-                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '10px', marginBottom: '4px' }}>
+                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '14px', marginBottom: '4px' }}>
                         Top Category
                       </p>
                       <p className="text-gray-900 dark:text-white" style={{ fontSize: '13px', fontWeight: 600 }}>
@@ -531,7 +531,7 @@ const InsightsPage = () => {
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '10px', marginBottom: '4px' }}>
+                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '14px', marginBottom: '4px' }}>
                         Transactions
                       </p>
                       <p className="text-gray-900 dark:text-white" style={{ fontSize: '13px', fontWeight: 600 }}>
@@ -539,7 +539,7 @@ const InsightsPage = () => {
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '10px', marginBottom: '4px' }}>
+                      <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '14px', marginBottom: '4px' }}>
                         This Month
                       </p>
                       <p className="text-gray-900 dark:text-white" style={{ fontSize: '13px', fontWeight: 600 }}>
@@ -555,7 +555,7 @@ const InsightsPage = () => {
           {/* Timestamp */}
           <div className="flex items-center justify-center gap-2 mt-5">
             <Calendar size={14} className="text-gray-400 dark:text-white/35" />
-            <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '11px' }}>
+            <p className="text-gray-400 dark:text-white/35" style={{ fontSize: '13px' }}>
               Last analyzed: {new Date(insights.generated_at).toLocaleString()}
             </p>
           </div>

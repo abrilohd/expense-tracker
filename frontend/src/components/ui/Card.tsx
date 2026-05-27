@@ -26,20 +26,21 @@ export const Card = ({ className = '', children, hover = false, padding = 'md' }
 
   return (
     <div
-      className={`${className} ${hover ? 'transition-colors' : ''} bg-white dark:bg-[#0F1117] border border-gray-200 dark:border-white/[0.07]`}
+      className={`${className} ${hover ? 'transition-all duration-200' : ''} bg-white dark:bg-[#0F1117] border border-gray-200/80 dark:border-white/[0.07] shadow-sm hover:shadow-md`}
       style={{
         borderRadius: '16px',
         padding: paddingMap[padding],
       }}
       onMouseEnter={(e) => {
         if (hover) {
-          e.currentTarget.style.borderColor = hover ? 'rgba(91, 78, 232, 0.3)' : '';
+          e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.3)';
+          e.currentTarget.style.transform = 'translateY(-2px)';
         }
       }}
       onMouseLeave={(e) => {
         if (hover) {
-          e.currentTarget.classList.remove('border-purple-500/30');
           e.currentTarget.style.borderColor = '';
+          e.currentTarget.style.transform = 'translateY(0)';
         }
       }}
     >
@@ -136,96 +137,100 @@ export const StatCard = ({
 
   return (
     <Card hover padding="md">
-      {/* Icon */}
-      <div
-        className="flex items-center justify-center"
-        style={{
-          width: '36px',
-          height: '36px',
-          borderRadius: '10px',
-          background: iconBg,
-          color: iconColor,
-        }}
-      >
-        <Icon size={18} />
-      </div>
-
-      {/* Label */}
-      <p
-        className="text-gray-600 dark:text-white/35"
-        style={{
-          fontSize: '11px',
-          marginTop: '12px',
-          fontWeight: 500,
-        }}
-      >
-        {label}
-      </p>
-
-      {/* Value */}
-      <div className="flex items-baseline gap-2 mt-1">
-        <h3
-          className="font-semibold text-gray-900 dark:text-white"
+      <div style={{ minHeight: '140px', display: 'flex', flexDirection: 'column' }}>
+        {/* Icon */}
+        <div
+          className="flex items-center justify-center shadow-lg"
           style={{
-            fontSize: '28px',
-            letterSpacing: '-0.6px',
+            width: '40px',
+            height: '40px',
+            borderRadius: '12px',
+            background: iconBg,
+            color: iconColor,
           }}
         >
-          {value}
-        </h3>
+          <Icon size={20} />
+        </div>
 
-        {/* Trend Pill */}
-        {trend && (
-          <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-medium"
-            style={{
-              fontSize: '11px',
-              background: trend.isPositive
-                ? 'rgba(52, 211, 153, 0.15)'
-                : 'rgba(248, 113, 113, 0.15)',
-              color: trend.isPositive ? '#34D399' : '#F87171',
-            }}
-          >
-            {trend.isPositive ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-            {Math.abs(trend.value)}%
-          </span>
-        )}
-      </div>
-
-      {/* Subtitle */}
-      {subtitle && (
+        {/* Label */}
         <p
-          className="text-gray-500 dark:text-white/30"
+          className="text-gray-600 dark:text-white/35"
           style={{
             fontSize: '11px',
-            marginTop: '4px',
+            marginTop: '14px',
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
           }}
         >
-          {subtitle}
+          {label}
         </p>
-      )}
 
-      {/* Sparkline (simple visualization) */}
-      {sparkline && sparkline.length > 0 && (
-        <div className="mt-3" style={{ height: '40px' }}>
-          <svg width="100%" height="40" style={{ overflow: 'visible' }}>
-            <polyline
-              fill="none"
-              stroke={iconColor}
-              strokeWidth="2"
-              points={sparkline
-                .map((val, i) => {
-                  const x = (i / (sparkline.length - 1)) * 100;
-                  const max = Math.max(...sparkline);
-                  const min = Math.min(...sparkline);
-                  const y = 40 - ((val - min) / (max - min)) * 35;
-                  return `${x}%,${y}`;
-                })
-                .join(' ')}
-            />
-          </svg>
+        {/* Value */}
+        <div className="flex items-baseline gap-2 mt-1.5">
+          <h3
+            className="font-bold text-gray-900 dark:text-white"
+            style={{
+              fontSize: '30px',
+              letterSpacing: '-0.8px',
+            }}
+          >
+            {value}
+          </h3>
+
+          {/* Trend Pill */}
+          {trend && (
+            <span
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-medium"
+              style={{
+                fontSize: '11px',
+                background: trend.isPositive
+                  ? 'rgba(52, 211, 153, 0.15)'
+                  : 'rgba(248, 113, 113, 0.15)',
+                color: trend.isPositive ? '#34D399' : '#F87171',
+              }}
+            >
+              {trend.isPositive ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+              {Math.abs(trend.value).toFixed(1)}%
+            </span>
+          )}
         </div>
-      )}
+
+        {/* Subtitle */}
+        {subtitle && (
+          <p
+            className="text-gray-500 dark:text-white/30"
+            style={{
+              fontSize: '11px',
+              marginTop: '4px',
+            }}
+          >
+            {subtitle}
+          </p>
+        )}
+
+        {/* Sparkline (simple visualization) */}
+        {sparkline && sparkline.length > 0 && (
+          <div className="mt-auto pt-3" style={{ height: '40px' }}>
+            <svg width="100%" height="40" style={{ overflow: 'visible' }}>
+              <polyline
+                fill="none"
+                stroke={iconColor}
+                strokeWidth="2"
+                points={sparkline
+                  .map((val, i) => {
+                    const x = (i / (sparkline.length - 1)) * 100;
+                    const max = Math.max(...sparkline);
+                    const min = Math.min(...sparkline);
+                    const y = 40 - ((val - min) / (max - min)) * 35;
+                    return `${x}%,${y}`;
+                  })
+                  .join(' ')}
+              />
+            </svg>
+          </div>
+        )}
+      </div>
     </Card>
   );
 };

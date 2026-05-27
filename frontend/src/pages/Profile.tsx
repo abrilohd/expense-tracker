@@ -197,7 +197,6 @@ const Profile = () => {
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, #5B4EE8 0%, #A78BFA 100%)',
                   fontSize: '28px',
-                  color: '#FFFFFF',
                   letterSpacing: '-0.5px',
                 }}
               >
@@ -435,14 +434,12 @@ const Profile = () => {
                     className="block font-medium mb-2"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Phone Number{' '}
                     <span
                       style={{
                         fontSize: '11px',
-                        color: 'rgba(255, 255, 255, 0.35)',
                         fontWeight: 400,
                       }}
                     >
@@ -452,7 +449,6 @@ const Profile = () => {
                   <div className="relative">
                     <div
                       className="absolute left-4 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(255, 255, 255, 0.35)' }}
                     >
                       <Phone size={18} />
                     </div>
@@ -464,7 +460,6 @@ const Profile = () => {
                       style={{
                         background: 'rgba(255, 255, 255, 0.03)',
                         border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
                         cursor: 'not-allowed',
                         opacity: 0.6,
@@ -529,19 +524,14 @@ const Profile = () => {
                     <input
                       type="password"
                       placeholder="Enter current password"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white"
-                      style={{
-                        fontSize: '14px',
-                        border: passwordErrors.current_password
-                          ? '1px solid #F87171'
-                          : '1px solid',
-                        borderColor: passwordErrors.current_password ? '#F87171' : undefined,
-                      }}
                       className={`w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white ${
                         passwordErrors.current_password
                           ? 'border border-red-500'
                           : 'border border-gray-200 dark:border-white/10'
                       }`}
+                      style={{
+                        fontSize: '14px',
+                      }}
                       {...registerPassword('current_password')}
                     />
                   </div>
@@ -564,7 +554,6 @@ const Profile = () => {
                     className="block font-medium mb-2"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     New Password
@@ -572,7 +561,7 @@ const Profile = () => {
                   <div className="relative">
                     <div
                       className="absolute left-4 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(255, 255, 255, 0.35)' }}
+                      style={{ color: 'rgba(134, 120, 120, 0.35)' }}
                     >
                       <Lock size={18} />
                     </div>
@@ -585,7 +574,6 @@ const Profile = () => {
                         border: passwordErrors.new_password
                           ? '1px solid #F87171'
                           : '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
                         fontSize: '14px',
                       }}
                       {...registerPassword('new_password')}
@@ -610,7 +598,6 @@ const Profile = () => {
                     className="block font-medium mb-2"
                     style={{
                       fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.7)',
                     }}
                   >
                     Confirm New Password
@@ -618,7 +605,6 @@ const Profile = () => {
                   <div className="relative">
                     <div
                       className="absolute left-4 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(255, 255, 255, 0.35)' }}
                     >
                       <Lock size={18} />
                     </div>
@@ -630,8 +616,7 @@ const Profile = () => {
                         background: 'rgba(255, 255, 255, 0.05)',
                         border: passwordErrors.confirm_password
                           ? '1px solid #F87171'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
-                        color: '#FFFFFF',
+                          : '1px solid rgba(146, 11, 11, 0.1)',
                         fontSize: '14px',
                       }}
                       {...registerPassword('confirm_password')}
@@ -699,7 +684,6 @@ const Profile = () => {
                     <p
                       style={{
                         fontSize: '12px',
-                        color: 'rgba(255, 255, 255, 0.6)',
                       }}
                     >
                       Permanently delete your account and all associated data
@@ -830,7 +814,6 @@ const Profile = () => {
                     style={{
                       fontSize: '14px',
                       background: deleteConfirmText === 'DELETE' ? '#EF4444' : 'rgba(239, 68, 68, 0.3)',
-                      color: '#FFFFFF',
                       cursor: deleteConfirmText === 'DELETE' ? 'pointer' : 'not-allowed',
                       opacity: deleteConfirmText === 'DELETE' ? 1 : 0.5,
                     }}

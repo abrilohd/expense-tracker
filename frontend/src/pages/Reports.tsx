@@ -202,26 +202,14 @@ ${sortedCategories
         >
           <button
             onClick={() => setSelectedPeriod('this_month')}
-            className="px-4 py-2 rounded-lg transition-all font-medium"
-            style={{
-              fontSize: '13px',
-              background:
-                selectedPeriod === 'this_month' 
-                  ? 'rgba(91, 78, 232, 0.15)' 
-                  : 'transparent',
-              color: selectedPeriod === 'this_month' 
-                ? '#A78BFA' 
-                : 'var(--tw-prose-body)',
-              border:
-                selectedPeriod === 'this_month'
-                  ? '1px solid rgba(91, 78, 232, 0.2)'
-                  : '1px solid transparent',
-            }}
             className={`px-4 py-2 rounded-lg transition-all font-medium ${
               selectedPeriod === 'this_month'
                 ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/20'
                 : 'bg-transparent text-gray-600 dark:text-white/50 border border-transparent'
             }`}
+            style={{
+              fontSize: '13px',
+            }}
           >
             This Month
           </button>

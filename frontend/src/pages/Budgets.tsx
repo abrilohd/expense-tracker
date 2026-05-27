@@ -220,10 +220,6 @@ const Budgets = () => {
 
             <button
               onClick={goToCurrentMonth}
-              className="px-3 py-1 text-sm font-medium transition-colors"
-              style={{
-                color: isCurrentMonth ? '#A78BFA' : undefined,
-              }}
               className={`px-3 py-1 text-sm font-medium transition-colors ${
                 isCurrentMonth ? 'text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-white/70'
               }`}
@@ -472,10 +468,10 @@ const Budgets = () => {
 
                   {/* Footer */}
                   <div
-                    className="text-center pt-3 border-t border-gray-200 dark:border-white/[0.06]"
+                    className="text-center pt-3 border-t border-gray-200 dark:border-white/5"
                   >
                     <p
-                      className="text-gray-400 dark:text-white/25"
+                      className="text-gray-500 dark:text-white/25"
                       style={{
                         fontSize: '11px',
                       }}

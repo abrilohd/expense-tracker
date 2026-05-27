@@ -5,6 +5,35 @@
 @tailwind utilities;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ROOT BACKGROUND FIX (BUG 5)
+   Prevent white background at bottom in dark mode
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  background-color: #F8FAFC;
+}
+
+html.dark,
+html.dark body,
+html.dark #root {
+  background-color: #0B0D14 !important;
+}
+
+/* Prevent flash of wrong bg on theme change */
+html {
+  transition: background-color 0.2s ease;
+}
+
+/* Target root div */
+#root {
+  background-color: inherit;
+  min-height: 100vh;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    BASE STYLES
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
@@ -20,8 +49,8 @@ html {
 }
 
 body {
-  background: #0B0D14;
-  color: #F9FAFB;
+  background: #F8FAFC;
+  color: #1F2937;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   line-height: 1.6;
@@ -29,10 +58,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Light mode body */
-body:not(.dark) {
-  background: #FFFFFF;
-  color: #1F2937;
+/* Dark mode body */
+body.dark,
+html.dark body {
+  background: #0B0D14;
+  color: #F9FAFB;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
