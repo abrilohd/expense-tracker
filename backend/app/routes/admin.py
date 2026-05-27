@@ -15,11 +15,67 @@ from app.models.income import Income
 from app.models.budget import Budget
 from app.models.savings_goal import SavingsGoal
 from app.models.recurring_transaction import RecurringTransaction
-from app.core.security import get_current_admin_user
-from app.core.exceptions import NotFoundException
+from app.core.security import get_current_admin_user, hash_password
+from app.core.exceptions import NotFoundException, BadRequestException
 
 # Create router instance
 router = APIRouter()
+
+@router.post("/create-first-admin", response_model=dict, status_code=status.HTTP_201_CREATED)
+def create_first_admin_user(
+    email: str,
+    password: str,
+    name: str = "Admin User",
+    db: Session = Depends(get_db)
+):
+    """
+    Create the first admin user - ONLY works if no admin exists
+    This is a public endpoint but only works once
+    """
+    # Check if any admin already exists
+    existing_admin = db.query(User).filter(User.is_admin == True).first()
+    
+    if existing_admin:
+        raise BadRequestException("Admin user already exists. Use the admin panel to create additional admins.")
+    
+    # Validate password
+    if len(password) < 8:
+        raise BadRequestException("Password must be at least 8 characters")
+    
+    # Check if email already exists
+    existing_user = db.query(User).filter(User.email == email).first()
+    
+    if existing_user:
+        # Update existing user to admin
+        existing_user.is_admin = True
+        db.commit()
+        db.refresh(existing_user)
+        return {
+            "message": "Existing user promoted to admin",
+            "email": existing_user.email,
+            "name": existing_user.name
+        }
+    
+    # Create new admin user
+    admin_user = User(
+        email=email,
+        name=name,
+        hashed_password=hash_password(password),
+        is_admin=True,
+        is_active=True,
+        provider='local'
+    )
+    
+    db.add(admin_user)
+    db.commit()
+    db.refresh(admin_user)
+    
+    return {
+        "message": "Admin user created successfully",
+        "email": admin_user.email,
+        "name": admin_user.name
+    }
+
 
 @router.get("/stats", response_model=dict)
 def get_system_statistics(
