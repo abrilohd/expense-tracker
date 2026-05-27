@@ -1,17 +1,24 @@
 #!/bin/bash
+# Railway startup script - Initializes database and starts FastAPI server
 
 echo "🚀 Starting Expense Tracker API..."
 
+# Initialize database tables (creates all tables if they don't exist)
 echo "📊 Initializing database..."
+python -c "
+from app.db.database import Base, engine
+from app.models import *
 
-python -c "from app.db.database import Base, engine; import app.models.user, app.models.expense, app.models.income, app.models.budget, app.models.savings_goal, app.models.recurring_transaction; Base.metadata.create_all(bind=engine); print('✅ Database tables created')"
+Base.metadata.create_all(bind=engine)
+print('✅ Database tables created')
+"
 
-# Admin creation (safe)
+# Create admin user if ADMIN_EMAIL and ADMIN_PASSWORD are set
 if [ -n "$ADMIN_EMAIL" ] && [ -n "$ADMIN_PASSWORD" ]; then
     echo "👤 Creating admin user..."
-
     python -c "
 from app.db.database import SessionLocal
+from app.models import *
 from app.models.user import User
 from app.core.security import hash_password
 import os
@@ -21,13 +28,12 @@ try:
     email = os.getenv('ADMIN_EMAIL')
     password = os.getenv('ADMIN_PASSWORD')
     name = os.getenv('ADMIN_NAME', 'Admin User')
-
+    
     existing = db.query(User).filter(User.email == email).first()
-
     if existing:
         existing.is_admin = True
         db.commit()
-        print('✅ Admin updated')
+        print(f'✅ Updated {email} to admin')
     else:
         admin = User(
             email=email,
@@ -39,17 +45,17 @@ try:
         )
         db.add(admin)
         db.commit()
-        print('✅ Admin created')
-
+        print(f'✅ Created admin: {email}')
 except Exception as e:
-    print('⚠️ Admin creation error:', e)
+    print(f'⚠️  Admin creation failed: {e}')
     db.rollback()
 finally:
     db.close()
 "
 else
-    echo "ℹ️ No admin credentials provided"
+    echo "ℹ️  No admin credentials provided (set ADMIN_EMAIL and ADMIN_PASSWORD to create admin)"
 fi
 
+# Start the FastAPI server
 echo "🌐 Starting uvicorn server..."
 uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
