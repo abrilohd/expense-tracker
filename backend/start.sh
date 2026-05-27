@@ -13,7 +13,7 @@ if [ -n "$ADMIN_EMAIL" ] && [ -n "$ADMIN_PASSWORD" ]; then
     python -c "
 from app.db.database import SessionLocal
 from app.models.user import User
-from app.core.security import get_password_hash
+from app.core.security import hash_password
 import os
 
 db = SessionLocal()
@@ -32,7 +32,7 @@ try:
         admin = User(
             email=email,
             name=name,
-            hashed_password=get_password_hash(password),
+            hashed_password=hash_password(password),
             is_admin=True,
             is_active=True,
             provider='local'
