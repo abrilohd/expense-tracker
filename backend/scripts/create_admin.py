@@ -14,7 +14,7 @@ from app.models.user import User
 from app.core.security import get_password_hash
 
 
-def create_admin_user(email: str, password: str, full_name: str = "Admin User"):
+def create_admin_user(email: str, password: str, name: str = "Admin User"):
     """Create an admin user"""
     db = SessionLocal()
     
@@ -32,10 +32,11 @@ def create_admin_user(email: str, password: str, full_name: str = "Admin User"):
             hashed_password = get_password_hash(password)
             admin_user = User(
                 email=email,
-                full_name=full_name,
+                name=name,
                 hashed_password=hashed_password,
                 is_admin=True,
-                is_active=True
+                is_active=True,
+                provider='local'
             )
             db.add(admin_user)
             db.commit()
