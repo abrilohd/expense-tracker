@@ -11,7 +11,7 @@ import { User, Mail, Phone, Lock, AlertTriangle, Crown, Calendar, DollarSign, Tr
 import toast from 'react-hot-toast';
 import { Card } from '../components/ui/Card';
 import { useAuthStore } from '../store/authStore';
-import { updatePassword } from '../api/auth';
+import { updatePassword, updateProfile } from '../api/auth';
 import { useDashboardData } from '../hooks/useExpenses';
 
 // Profile form schema
@@ -39,6 +39,7 @@ type PasswordFormData = z.infer<typeof passwordSchema>;
 
 const Profile = () => {
   const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
   const { data: dashboard } = useDashboardData();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
@@ -108,7 +109,16 @@ const Profile = () => {
 
   // Handle profile update
   const onSubmitProfile = async (data: ProfileFormData) => {
-    toast('Profile update coming soon!', { icon: '👤' });
+    try {
+      const updatedUser = await updateProfile({
+        name: data.name,
+        phone_number: data.phone_number || undefined,
+      });
+      setUser(updatedUser);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to update profile');
+    }
   };
 
   // Handle password update
@@ -370,8 +380,7 @@ const Profile = () => {
                     <input
                       type="text"
                       placeholder="Enter your name"
-                      disabled
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-gray-100 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white cursor-not-allowed opacity-60"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 dark:focus:border-purple-500"
                       style={{
                         fontSize: '14px',
                       }}
@@ -455,14 +464,9 @@ const Profile = () => {
                     <input
                       type="tel"
                       placeholder="+1 (555) 000-0000"
-                      disabled
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:border-purple-500 dark:focus:border-purple-500"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
                         fontSize: '14px',
-                        cursor: 'not-allowed',
-                        opacity: 0.6,
                       }}
                       {...registerProfile('phone_number')}
                     />

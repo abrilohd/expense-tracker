@@ -106,17 +106,21 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4 overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-[#0D1326] rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-white/[0.06] overflow-hidden"
+              className="relative w-full sm:max-w-md max-h-[92vh] sm:max-h-[88vh] overflow-y-auto modal-scroll rounded-t-2xl sm:rounded-2xl bg-white dark:bg-[#0D1326] border-0 sm:border border-gray-200 dark:border-white/[0.06] mx-0 sm:mx-auto my-0 sm:my-4 shadow-2xl"
             >
+              {/* Mobile drag handle */}
+              <div className="flex justify-center pt-3 pb-1 sm:hidden">
+                <div className="w-10 h-1 rounded-full bg-gray-200 dark:bg-white/20" />
+              </div>
               {/* Header */}
               <div className="bg-gradient-to-r from-yellow-500 to-amber-500 px-6 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -136,7 +140,7 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
+              <form onSubmit={handleSubmit(onSubmit)} className="px-4 pb-6 pt-2 sm:p-6 space-y-5">
                 {/* Goal Name */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -247,19 +251,19 @@ const SavingsGoalModal = ({ isOpen, onClose, mode, goal }: SavingsGoalModalProps
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-4 sm:pt-6 border-t border-gray-100 dark:border-white/[0.06]">
                   <button
                     type="button"
                     onClick={onClose}
                     disabled={isLoading}
-                    className="flex-1 px-6 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 px-6 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 transition-all shadow-lg shadow-yellow-500/30 hover:shadow-xl hover:shadow-yellow-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 transition-all shadow-lg shadow-yellow-500/30 hover:shadow-xl hover:shadow-yellow-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? 'Saving...' : mode === 'create' ? 'Create Goal' : 'Save Changes'}
                   </button>

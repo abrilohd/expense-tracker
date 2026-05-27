@@ -58,6 +58,28 @@ body {
   overflow-x: hidden;
 }
 
+/* Prevent horizontal scroll globally */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Mobile tap targets */
+@media (max-width: 640px) {
+  button, [role="button"] {
+    min-height: 40px;
+  }
+  
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on input focus */
+  }
+}
+
+/* Scrollable modals */
+.modal-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Dark mode body */
 body.dark,
 html.dark body {

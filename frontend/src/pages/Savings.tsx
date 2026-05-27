@@ -145,7 +145,6 @@ const Savings = () => {
             className="font-medium"
             style={{
               fontSize: '22px',
-              color: '#FFFFFF',
               letterSpacing: '-0.4px',
             }}
           >

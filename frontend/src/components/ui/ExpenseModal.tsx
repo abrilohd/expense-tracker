@@ -192,24 +192,23 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 pointer-events-none overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md pointer-events-auto overflow-hidden"
-              style={{
-                background: 'var(--modal-bg)',
-                borderRadius: '24px',
-                border: '1px solid var(--modal-border)',
-              }}
+              className="relative w-full sm:max-w-md md:max-w-lg max-h-[92vh] sm:max-h-[88vh] overflow-y-auto modal-scroll rounded-t-2xl sm:rounded-2xl bg-white dark:bg-[#1A1D28] border-0 sm:border border-gray-200 dark:border-white/[0.08] mx-0 sm:mx-auto my-0 sm:my-4 pointer-events-auto"
             >
+              {/* Mobile drag handle */}
+              <div className="flex justify-center pt-3 pb-1 sm:hidden">
+                <div className="w-10 h-1 rounded-full bg-gray-200 dark:bg-white/20" />
+              </div>
               <style>{`
                 :root {
                   --modal-bg: #FFFFFF;
@@ -256,7 +255,7 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
               />
 
               {/* Header */}
-              <div className="relative px-6 pt-6 pb-5">
+              <div className="relative px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-5">
                 <div className="flex items-start gap-4">
                   <div
                     className="flex items-center justify-center"
@@ -306,7 +305,7 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="px-6 pb-6 space-y-5">
+              <form onSubmit={handleSubmit(onSubmit)} className="px-4 pb-6 pt-2 sm:p-6 space-y-5">
                 {/* Amount */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -564,13 +563,13 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="flex gap-3 pt-2"
+                  className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-4 sm:pt-6 border-t border-gray-100 dark:border-white/[0.06]"
                 >
                   <button
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-5 py-3 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/8"
+                    className="w-full sm:w-auto sm:flex-1 px-5 py-3 rounded-xl font-medium transition-all bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/8"
                     style={{
                       fontSize: '14px',
                     }}
@@ -580,7 +579,7 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-white ${
+                    className={`w-full sm:w-auto sm:flex-1 px-5 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-white ${
                       budgetWarning && budgetWarning.remaining < 0
                         ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800'
                         : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800'

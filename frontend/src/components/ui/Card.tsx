@@ -358,7 +358,6 @@ export const HeroBalanceCard = ({
           className="font-medium"
           style={{
             fontSize: '32px',
-            color: '#FFFFFF',
             letterSpacing: '-1px',
             marginTop: '4px',
           }}
@@ -418,7 +417,6 @@ export const HeroBalanceCard = ({
             style={{
               fontSize: '12px',
               background: 'rgba(255, 255, 255, 0.15)',
-              color: '#FFFFFF',
               border: '1px solid rgba(255, 255, 255, 0.2)',
             }}
             onMouseEnter={(e) => {

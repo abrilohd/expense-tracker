@@ -130,7 +130,6 @@ const DonutChart = ({ data, isLoading = false }: DonutChartProps) => {
         borderColor: 'rgba(156, 163, 175, 0.2)',
         borderWidth: 1,
         titleColor: '#9CA3AF',
-        bodyColor: '#FFFFFF',
         padding: 12,
         cornerRadius: 8,
         displayColors: true,

@@ -249,7 +249,7 @@ const InsightsPage = () => {
             <div className="flex items-center gap-3">
               <Loader2 size={24} className="animate-spin" style={{ color: '#A78BFA' }} />
               <div>
-                <p style={{ fontSize: '14px', color: '#FFFFFF' }}>Analyzing your spending...</p>
+                <p style={{ fontSize: '14px'}}>Analyzing your spending...</p>
                 <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>This will take a moment</p>
               </div>
             </div>

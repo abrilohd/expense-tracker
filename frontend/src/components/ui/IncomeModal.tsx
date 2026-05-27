@@ -132,23 +132,23 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-50"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
             style={{ background: document.documentElement.classList.contains('dark') ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.4)' }}
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 pointer-events-none overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-lg my-8 rounded-3xl shadow-2xl pointer-events-auto bg-white dark:bg-[#1A1D28] border border-gray-200 dark:border-white/10"
-              style={{
-                maxHeight: 'calc(100vh - 64px)',
-                overflowY: 'auto',
-              }}
+              className="relative w-full sm:max-w-md md:max-w-lg max-h-[92vh] sm:max-h-[88vh] overflow-y-auto modal-scroll rounded-t-2xl sm:rounded-3xl bg-white dark:bg-[#1A1D28] border-0 sm:border border-gray-200 dark:border-white/10 mx-0 sm:mx-auto my-0 sm:my-4 pointer-events-auto shadow-2xl"
             >
+              {/* Mobile drag handle */}
+              <div className="flex justify-center pt-3 pb-1 sm:hidden">
+                <div className="w-10 h-1 rounded-full bg-gray-200 dark:bg-white/20" />
+              </div>
               {/* Decorative gradient bar - GREEN */}
               <div
                 style={{
@@ -158,7 +158,7 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
               />
 
               {/* Header */}
-              <div className="relative px-6 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-6">
+              <div className="relative px-4 pb-4 pt-2 sm:px-6 sm:pt-6 sm:pb-5">
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div
                     className="flex items-center justify-center shadow-lg flex-shrink-0"
@@ -170,7 +170,7 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                       boxShadow: '0 8px 24px rgba(52, 211, 153, 0.3)',
                     }}
                   >
-                    <TrendingUp size={24} style={{ color: '#FFFFFF' }} />
+                    <TrendingUp size={24} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h2
@@ -222,7 +222,7 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="px-6 sm:px-8 pb-6 sm:pb-8 space-y-4 sm:space-y-5">
+              <form onSubmit={handleSubmit(onSubmit)} className="px-4 pb-6 pt-2 sm:p-6 space-y-4 sm:space-y-5">
                 {/* Amount */}
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
                   <label
@@ -409,13 +409,13 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="flex flex-col sm:flex-row gap-3 pt-2 sm:pt-4"
+                  className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-4 sm:pt-6 border-t border-gray-100 dark:border-white/[0.06]"
                 >
                   <button
                     type="button"
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50 bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
+                    className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50 bg-gray-100 dark:bg-white/[0.05] text-gray-700 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/[0.08]"
                     style={{
                       fontSize: '14px',
                     }}
@@ -425,7 +425,7 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg text-white"
+                    className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-2xl font-bold transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg text-white"
                     style={{
                       fontSize: '14px',
                       background: 'linear-gradient(135deg, #34D399 0%, #10B981 100%)',

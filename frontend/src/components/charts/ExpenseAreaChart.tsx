@@ -128,7 +128,6 @@ const ExpenseAreaChart = ({ data, isLoading = false }: ExpenseAreaChartProps) =>
         borderColor: 'rgba(255, 255, 255, 0.1)',
         borderWidth: 1,
         titleColor: '#9CA3AF',
-        bodyColor: '#FFFFFF',
         padding: 12,
         cornerRadius: 8,
         displayColors: false,

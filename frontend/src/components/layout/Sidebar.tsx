@@ -270,7 +270,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 className="font-medium"
                 style={{
                   fontSize: '12px',
-                  color: '#FFFFFF',
                 }}
               >
                 {getInitial()}

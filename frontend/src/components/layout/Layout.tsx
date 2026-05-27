@@ -34,7 +34,7 @@ const Layout = () => {
 
   return (
     <div
-      className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#0B0D14]"
+      className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#0B0D14] overflow-x-hidden"
     >
       {/* Sidebar - Always rendered, visibility controlled by transform */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -43,7 +43,7 @@ const Layout = () => {
       <MobileOverlay isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content Area */}
-      <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px]">
+      <div className="flex flex-col flex-1 min-w-0 w-full lg:ml-[240px] transition-all duration-300">
         {/* Header */}
         <Header
           onMenuClick={() => setSidebarOpen((prev) => !prev)}
@@ -52,9 +52,9 @@ const Layout = () => {
 
         {/* Main Content with Page Transitions */}
         <main
-          className="flex-1 overflow-auto bg-[#F8FAFC] dark:bg-[#0B0D14]"
+          className="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8 bg-[#F8FAFC] dark:bg-[#0B0D14]"
         >
-          <div className="p-4 md:p-6 lg:p-8 max-w-[1400px] mx-auto">
+          <div className="max-w-[1400px] mx-auto">
             <Outlet />
           </div>
         </main>

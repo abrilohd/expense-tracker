@@ -118,18 +118,22 @@ const DeleteConfirmModal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={!isDeleting ? onClose : undefined}
-            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-50"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-white dark:bg-[#1A1D28] border border-red-200 dark:border-red-500/15 rounded-3xl w-full max-w-sm p-7"
+              className="relative w-full sm:max-w-sm max-h-[92vh] sm:max-h-[88vh] overflow-y-auto modal-scroll rounded-t-2xl sm:rounded-3xl bg-white dark:bg-[#1A1D28] border-0 sm:border border-red-200 dark:border-red-500/15 mx-0 sm:mx-auto my-0 sm:my-4 p-6 sm:p-7"
             >
+              {/* Mobile drag handle */}
+              <div className="flex justify-center pb-3 sm:hidden">
+                <div className="w-10 h-1 rounded-full bg-gray-200 dark:bg-white/20" />
+              </div>
               {/* Content - Centered */}
               <div className="text-center">
                 {/* Warning Icon */}
@@ -169,12 +173,12 @@ const DeleteConfirmModal = ({
                 )}
 
                 {/* Action Buttons */}
-                <div className="mt-6 flex gap-3">
+                <div className="mt-6 flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
                   <button
                     type="button"
                     onClick={onClose}
                     disabled={isDeleting}
-                    className="btn-ghost flex-1 disabled:opacity-50"
+                    className="btn-ghost w-full sm:flex-1 disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -182,7 +186,7 @@ const DeleteConfirmModal = ({
                     type="button"
                     onClick={handleDelete}
                     disabled={isDeleting}
-                    className="flex-1 bg-red-500/12 hover:bg-red-500/20 border border-red-500/25 text-red-400 rounded-xl py-2.5 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full sm:flex-1 bg-red-500/12 hover:bg-red-500/20 border border-red-500/25 text-red-400 rounded-xl py-2.5 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isDeleting ? (
                       <>

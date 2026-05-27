@@ -147,7 +147,6 @@ const FinancialCards = ({
                 height: '32px',
                 background: 'rgba(255, 255, 255, 0.15)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: '#FFFFFF',
                 cursor: 'pointer',
               }}
               whileHover={{ scale: 1.1, background: 'rgba(255, 255, 255, 0.25)' }}
@@ -260,7 +259,7 @@ const FinancialCards = ({
             </div>
             <span
               className="font-semibold tracking-wider"
-              style={{ fontSize: '13px', color: '#FFFFFF' }}
+              style={{ fontSize: '13px' }}
             >
               {showBalance 
                 ? String(Math.abs(totalBalance)).slice(-4).padStart(4, '0')
@@ -284,9 +283,9 @@ const FinancialCards = ({
               </p>
               <div className="flex items-center gap-1 mt-1">
                 {isBalanceImproving ? (
-                  <TrendingUp size={12} style={{ color: '#FFFFFF' }} />
+                  <TrendingUp size={12} />
                 ) : (
-                  <TrendingDown size={12} style={{ color: '#FFFFFF' }} />
+                  <TrendingDown size={12} />
                 )}
                 <span
                   className="font-medium"

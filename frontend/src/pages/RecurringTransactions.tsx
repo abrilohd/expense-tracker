@@ -708,8 +708,7 @@ const RecurringTransactionsPage = () => {
                     className="flex-1 px-4 py-2.5 rounded-xl font-medium transition-all"
                     style={{
                       fontSize: '14px',
-                      background: '#F87171',
-                      color: '#FFFFFF',
+                      background: '#F87171'
                     }}
                   >
                     Delete
