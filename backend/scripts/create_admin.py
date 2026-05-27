@@ -11,7 +11,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from sqlalchemy.orm import Session
 from app.db.database import SessionLocal
 from app.models.user import User
-from app.core.security import get_password_hash
+from app.core.security import hash_password
 
 
 def create_admin_user(email: str, password: str, name: str = "Admin User"):
@@ -29,7 +29,7 @@ def create_admin_user(email: str, password: str, name: str = "Admin User"):
             print(f"✅ Updated existing user {email} to admin")
         else:
             # Create new admin user
-            hashed_password = get_password_hash(password)
+            hashed_password = hash_password(password)
             admin_user = User(
                 email=email,
                 name=name,
