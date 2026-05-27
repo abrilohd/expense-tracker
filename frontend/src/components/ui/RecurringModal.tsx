@@ -20,7 +20,9 @@ const recurringSchema = z.object({
   payment_method: z.string().max(50).optional(),
   frequency: z.enum(['daily', 'weekly', 'monthly', 'yearly']),
   start_date: z.string().min(1, 'Start date is required'),
-  end_date: z.string().optional(),
+  end_date: z.string().optional().or(z.literal("")).transform((val) => {
+    return val === "" ? null : val
+  }),
 });
 
 type RecurringFormData = z.infer<typeof recurringSchema>;
@@ -53,7 +55,7 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
           payment_method: recurring.payment_method || '',
           frequency: recurring.frequency,
           start_date: recurring.start_date,
-          end_date: recurring.end_date || '',
+          end_date: recurring.end_date ?? null,
         }
       : {
           transaction_type: 'expense',
@@ -75,7 +77,7 @@ const RecurringModal = ({ isOpen, onClose, onSubmit, recurring, mode }: Recurrin
         payment_method: recurring.payment_method || '',
         frequency: recurring.frequency,
         start_date: recurring.start_date,
-        end_date: recurring.end_date || '',
+        end_date: recurring.end_date ?? null,
       });
     } else if (isOpen && !recurring) {
       reset({

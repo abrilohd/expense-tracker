@@ -132,9 +132,14 @@ def get_dashboard(
     ).limit(5).all()
     
     # Convert to ExpenseResponse schema
-    recent_expenses: List[ExpenseResponse] = [
-        ExpenseResponse.model_validate(expense) for expense in recent_expenses_query
-    ]
+    recent_expenses: List[ExpenseResponse] = []
+    
+    for expense in recent_expenses_query:
+        try:
+            validated = ExpenseResponse.model_validate(expense)
+            recent_expenses.append(validated)
+        except Exception as e:
+            print(f"Skipping invalid expense: {e}")
     
     # Return complete dashboard response
     return DashboardResponse(
