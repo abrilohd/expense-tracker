@@ -173,12 +173,12 @@ const DeleteConfirmModal = ({
                 )}
 
                 {/* Action Buttons */}
-                <div className="mt-6 flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
+                <div className="mt-6 flex gap-3">
                   <button
                     type="button"
                     onClick={onClose}
                     disabled={isDeleting}
-                    className="btn-ghost w-full sm:flex-1 disabled:opacity-50"
+                    className="btn-ghost flex-1 disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -186,7 +186,7 @@ const DeleteConfirmModal = ({
                     type="button"
                     onClick={handleDelete}
                     disabled={isDeleting}
-                    className="w-full sm:flex-1 bg-red-500/12 hover:bg-red-500/20 border border-red-500/25 text-red-400 rounded-xl py-2.5 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-1 bg-red-500/12 hover:bg-red-500/20 border border-red-500/25 text-red-400 rounded-xl py-2.5 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isDeleting ? (
                       <>
