@@ -11,7 +11,7 @@ from io import BytesIO
 from app.db.database import get_db
 from app.models.user import User
 from app.schemas.report import ReportRequest, QuickReportRequest, ReportResponse
-from app.services.report_service import ReportService
+from app.services.reports.report_service import ReportService
 from app.core.security import get_current_user
 
 # Create router instance

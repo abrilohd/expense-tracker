@@ -12,7 +12,7 @@ load_dotenv()
 # Add app directory to path
 sys.path.insert(0, os.path.dirname(__file__))
 
-from app.services.email_service import EmailService
+from app.services.auth.email_service import EmailService
 
 def test_password_reset_email():
     """
@@ -157,7 +157,7 @@ if __name__ == "__main__":
     print(f"✅ Welcome Email: {'PASSED' if welcome_success else 'FAILED'}")
     
     if reset_success and welcome_success:
-        print(f"\n🎉 All tests passed! Email service is working correctly.")
+        print(f"\n  All tests passed! Email service is working correctly.")
         print(f"\n📧 Check your inbox at: abrsh067@gmail.com")
         print(f"📱 Don't forget to check spam folder!")
     else:

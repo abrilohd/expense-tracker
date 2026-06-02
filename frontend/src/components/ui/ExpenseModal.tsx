@@ -12,9 +12,9 @@ import toast from 'react-hot-toast';
 import type { Expense } from '../../types';
 import { ExpenseCategory } from '../../types';
 import { CATEGORIES } from '../../utils/constants';
-import { createExpense, updateExpense } from '../../api/expenses';
+import { createExpense, updateExpense } from '../../api/expenses.api';
 import { getCategoryEmoji } from '../../utils/formatters';
-import { getBudgetStatus } from '../../api/budgets';
+import { getBudgetStatus } from '../../api/budgets.api';
 
 interface ExpenseModalProps {
   isOpen: boolean;
@@ -143,10 +143,10 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
       const payload = { ...data, category: data.category as ExpenseCategory };
       if (isEditMode && expense) {
         await updateExpense(expense.id, payload);
-        toast.success('✨ Expense updated!');
+        toast.success('  Expense updated!');
       } else {
         await createExpense(payload);
-        toast.success('🎉 Expense added!');
+        toast.success('  Expense added!');
       }
       onSuccess();
       onClose();

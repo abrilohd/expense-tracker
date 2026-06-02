@@ -16,7 +16,7 @@ from app.schemas.recurring_transaction import (
     RecurringTransactionResponse,
     RecurringTransactionListResponse
 )
-from app.services.recurring_service import RecurringService
+from app.services.recurring.recurring_service import RecurringService
 from app.core.security import get_current_user
 from app.core.exceptions import NotFoundException
 

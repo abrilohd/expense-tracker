@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, DollarSign, TrendingUp, Activity, Shield } from 'lucide-react';
-import { getSystemStats } from '../../api/admin';
+import { getSystemStats } from '../../api/admin.api';
 import { formatCurrency } from '../../utils/formatters';
 
 const AdminDashboard = () => {

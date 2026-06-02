@@ -20,7 +20,7 @@ A modern, full-stack expense tracking application with AI-powered insights, dual
 
 ---
 
-## ✨ Features
+##   Features
 
 ### 🔐 **Authentication**
 - Secure JWT-based authentication

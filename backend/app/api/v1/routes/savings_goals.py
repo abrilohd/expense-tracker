@@ -17,7 +17,7 @@ from app.schemas.savings_goal import (
     SavingsGoalStatus,
     SavingsGoalContribution
 )
-from app.services.savings_goal_service import SavingsGoalService
+from app.services.savings.savings_goal_service import SavingsGoalService
 from app.core.security import get_current_user
 from app.core.exceptions import NotFoundException, ForbiddenException
 

@@ -3,7 +3,8 @@
  */
 import { create } from 'zustand';
 import type { RecurringTransaction, RecurringTransactionCreate, RecurringTransactionUpdate } from '../types';
-import * as recurringAPI from '../api/recurring';
+import * as recurringAPI from '../api/recurring.api';
+import { useExpenseStore } from './expenseStore';
 
 interface RecurringStore {
   recurring: RecurringTransaction[];
@@ -63,6 +64,9 @@ export const useRecurringStore = create<RecurringStore>((set, get) => ({
         isLoading: false,
       }));
       
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
+      
       return newRecurring;
     } catch (error: any) {
       set({
@@ -83,6 +87,9 @@ export const useRecurringStore = create<RecurringStore>((set, get) => ({
         recurring: state.recurring.map((r) => (r.id === id ? updated : r)),
         isLoading: false,
       }));
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
       
       return updated;
     } catch (error: any) {
@@ -110,6 +117,9 @@ export const useRecurringStore = create<RecurringStore>((set, get) => ({
           isLoading: false,
         };
       });
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
       set({
         error: error.response?.data?.message || 'Failed to delete recurring transaction',
@@ -147,6 +157,9 @@ export const useRecurringStore = create<RecurringStore>((set, get) => ({
       
       // Refresh the list to get updated next_occurrence
       await get().fetchRecurring();
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
       set({
         error: error.response?.data?.message || 'Failed to generate transaction',

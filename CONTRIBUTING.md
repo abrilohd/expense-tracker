@@ -569,6 +569,6 @@ If you have questions about contributing:
 
 ---
 
-Thank you for contributing to Expense Tracker! 🎉
+Thank you for contributing to Expense Tracker!  
 
 Your contributions help make this project better for everyone.

@@ -19,7 +19,7 @@ import {
 import toast from 'react-hot-toast';
 import { Card } from '../components/ui/Card';
 import EmptyState from '../components/ui/EmptyState';
-import { getInsights, getDashboard } from '../api/expenses';
+import { getInsights, getDashboard } from '../api/expenses.api';
 import type { InsightsResponse, Insight, DashboardData } from '../types';
 
 const InsightsPage = () => {

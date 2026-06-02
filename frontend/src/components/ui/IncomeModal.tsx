@@ -11,7 +11,7 @@ import { X, Loader2, DollarSign, TrendingUp } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { Income, IncomeSource } from '../../types';
 import { INCOME_SOURCES } from '../../utils/constants';
-import { createIncome, updateIncome } from '../../api/expenses';
+import { createIncome, updateIncome } from '../../api/expenses.api';
 
 interface IncomeModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ interface IncomeModalProps {
 const incomeSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters').max(100, 'Title too long'),
   amount: z.number().positive('Amount must be greater than 0').max(999999, 'Amount too large'),
-  source: z.enum(['Salary', 'Business', 'Freelancing', 'Investment', 'Gift', 'Rental', 'Other'] as const),
+  source: z.enum(['Salary', 'Business', 'Freelancing', 'Investment', 'Gifts', 'Rental', 'Other'] as const),
   date: z.string().refine((val) => {
     const date = new Date(val);
     const today = new Date();
@@ -79,10 +79,10 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
       const payload = { ...data, source: data.source as IncomeSource };
       if (isEditMode && income) {
         await updateIncome(income.id, payload);
-        toast.success('✨ Income updated!');
+        toast.success('  Income updated!');
       } else {
         await createIncome(payload);
-        toast.success('🎉 Income added!');
+        toast.success('  Income added!');
       }
       onSuccess();
       onClose();

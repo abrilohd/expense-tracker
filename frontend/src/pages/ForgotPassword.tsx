@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { forgotPassword } from '../api/auth';
+import { forgotPassword } from '../api/auth.api';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');

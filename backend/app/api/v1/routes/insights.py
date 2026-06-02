@@ -10,7 +10,7 @@ from app.models.expense import Expense
 from app.models.user import User
 from app.schemas.insights import InsightsResponse
 from app.core.security import get_current_user
-from app.services.insights import InsightsEngine
+from app.services.insights.insights_service import InsightsEngine
 
 # Create router instance
 router = APIRouter()

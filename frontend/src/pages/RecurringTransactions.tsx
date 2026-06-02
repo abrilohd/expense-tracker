@@ -76,7 +76,7 @@ const RecurringTransactionsPage = () => {
     try {
       if (editingRecurring) {
         await updateRecurring(editingRecurring.id, data);
-        toast.success('✨ Recurring transaction updated!');
+        toast.success('  Recurring transaction updated!');
       } else {
         await createRecurring(data);
         toast.success('🎯 Recurring transaction created!');

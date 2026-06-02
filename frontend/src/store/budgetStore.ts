@@ -11,7 +11,8 @@ import type {
   BudgetStatusResponse,
   BudgetAlert,
 } from '../types';
-import * as budgetApi from '../api/budgets';
+import * as budgetApi from '../api/budgets.api';
+import { useExpenseStore } from './expenseStore';
 
 interface BudgetStore {
   // State
@@ -58,9 +59,9 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
         isLoading: false,
       });
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch budgets';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch budgets';
       set({ error: errorMessage, isLoading: false });
-      toast.error(errorMessage);
+      // Error toast already shown by API client interceptor
     }
   },
 
@@ -78,9 +79,9 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
         isLoading: false,
       });
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch budget status';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch budget status';
       set({ error: errorMessage, isLoading: false });
-      toast.error(errorMessage);
+      // Error toast already shown by API client interceptor
     }
   },
 
@@ -112,10 +113,13 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
       
       // Refresh budget status to get utilization
       get().fetchBudgetStatus();
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to create budget';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to create budget';
       set({ error: errorMessage, isLoading: false });
-      toast.error(errorMessage);
+      // Error toast already shown by API client interceptor
       throw error;
     }
   },
@@ -149,13 +153,16 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
       
       // Refresh budget status
       get().fetchBudgetStatus();
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
       // Rollback on error
       set({ budgets: originalBudgets, isLoading: false });
       
-      const errorMessage = error.response?.data?.message || 'Failed to update budget';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update budget';
       set({ error: errorMessage });
-      toast.error(errorMessage);
+      // Error toast already shown by API client interceptor
       throw error;
     }
   },
@@ -181,6 +188,9 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
       
       // Refresh budget status
       get().fetchBudgetStatus();
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
       // Rollback on error
       set({
@@ -189,9 +199,9 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
         isLoading: false,
       });
       
-      const errorMessage = error.response?.data?.message || 'Failed to delete budget';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to delete budget';
       set({ error: errorMessage });
-      toast.error(errorMessage);
+      // Error toast already shown by API client interceptor
       throw error;
     }
   },

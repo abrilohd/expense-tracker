@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { Card, StatCard } from '../components/ui/Card';
 import EmptyState from '../components/ui/EmptyState';
 import BudgetModal from '../components/ui/BudgetModal';
-import { getBudgetStatus, deleteBudget } from '../api/budgets';
+import { getBudgetStatus, deleteBudget } from '../api/budgets.api';
 import { CATEGORIES } from '../utils/constants';
 import type { BudgetStatusResponse, ExpenseCategory } from '../types';
 

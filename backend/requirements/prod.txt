@@ -1,0 +1,8 @@
+# Include base requirements
+-r base.txt
+
+# Production Server
+gunicorn>=21.2.0
+
+# Monitoring & Logging (optional)
+# sentry-sdk>=1.32.0

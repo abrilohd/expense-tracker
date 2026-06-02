@@ -22,24 +22,23 @@ import {
   DollarSign,
   AlertTriangle,
 } from 'lucide-react';
-import { useDashboardData } from '../hooks/useExpenses';
-import { useInsightsData } from '../hooks/useExpenses';
-import { useAuthStore } from '../store/authStore';
-import { Card, StatCard } from '../components/ui/Card';
-import TransactionRow from '../components/ui/TransactionRow';
-import InsightCard from '../components/ui/InsightCard';
-import EmptyState from '../components/ui/EmptyState';
-import { SkeletonGrid, SkeletonHeroCard } from '../components/ui/SkeletonLoader';
-import AreaChart from '../components/charts/AreaChart';
-import TopExpensesBarChart from '../components/charts/TopExpensesBarChart';
-import ReportDonutChart from '../components/charts/ReportDonutChart';
-import ExpenseLineChart from '../components/charts/ExpenseLineChart';
-import FinancialCards from '../components/dashboard/FinancialCards';
-import { getBalance } from '../api/balance';
-import { getBudgetAlerts } from '../api/budgets';
+import { useDashboardData, useInsightsData } from '@/hooks/useExpenses';
+import { useAuthStore } from '@/store/authStore';
+import { Card, StatCard } from '@/components/ui/Card';
+import TransactionRow from '@/components/ui/TransactionRow';
+import InsightCard from '@/components/ui/InsightCard';
+import EmptyState from '@/components/ui/EmptyState';
+import { SkeletonGrid, SkeletonHeroCard } from '@/components/ui/SkeletonLoader';
+import AreaChart from '@/components/charts/AreaChart';
+import TopExpensesBarChart from '@/components/charts/TopExpensesBarChart';
+import ReportDonutChart from '@/components/charts/ReportDonutChart';
+import ExpenseLineChart from '@/components/charts/ExpenseLineChart';
+import FinancialCards from '@/components/dashboard/FinancialCards';
+import { getBalance } from '@/api/balance.api';
+import { getBudgetAlerts } from '@/api/budgets.api';
 import { useState, useEffect } from 'react';
-import type { BudgetAlert } from '../types';
-import { checkIsDemoMode, DEMO_CATEGORIES, DEMO_MONTHLY_TRENDS, DEMO_REPORT, DEMO_RECENT } from '../utils/demoData';
+import type { BudgetAlert } from '@/types';
+import { checkIsDemoMode, DEMO_CATEGORIES, DEMO_MONTHLY_TRENDS, DEMO_REPORT, DEMO_RECENT } from '@/utils/demoData';
 
 // Format currency
 const formatCurrency = (amount: number): string => {
@@ -305,7 +304,6 @@ const Dashboard = () => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Add Income button clicked');
                 navigate('/income');
               }}
               className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all"
@@ -336,7 +334,6 @@ const Dashboard = () => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Add Expense button clicked');
                 navigate('/expenses/add');
               }}
               className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all"
@@ -416,7 +413,6 @@ const Dashboard = () => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Add First Expense button clicked');
                 navigate('/expenses/add');
               }}
               className="px-4 py-2 rounded-lg font-medium transition-all bg-purple-600 dark:bg-purple-500 text-white hover:bg-purple-700 dark:hover:bg-purple-600"
@@ -530,7 +526,6 @@ const Dashboard = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log('Budget alert clicked');
                   navigate('/budgets');
                 }}
                 className={`cursor-pointer rounded-xl p-4 transition-all hover:scale-[1.01] ${
@@ -639,7 +634,6 @@ const Dashboard = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('View all expenses button clicked');
                     navigate('/expenses');
                   }}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all bg-purple-100 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 text-purple-700 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-500/15"

@@ -11,7 +11,7 @@ import { User, Mail, Phone, Lock, AlertTriangle, Crown, Calendar, DollarSign, Tr
 import toast from 'react-hot-toast';
 import { Card } from '../components/ui/Card';
 import { useAuthStore } from '../store/authStore';
-import { updatePassword, updateProfile } from '../api/auth';
+import { updatePassword, updateProfile } from '../api/auth.api';
 import { useDashboardData } from '../hooks/useExpenses';
 
 // Profile form schema

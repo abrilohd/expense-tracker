@@ -326,7 +326,7 @@ This email was sent by {app_name}
                     <tr>
                         <td style="background: linear-gradient(135deg, #00F5C4 0%, #7B61FF 50%, #FF6B9D 100%); padding: 40px; text-align: center;">
                             <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700;">
-                                🎉 Welcome to {app_name}!
+                                  Welcome to {app_name}!
                             </h1>
                         </td>
                     </tr>
@@ -372,7 +372,7 @@ This email was sent by {app_name}
             response = resend.Emails.send({
                 "from": from_email,
                 "to": to_email,
-                "subject": f"Welcome to {app_name}! 🎉",
+                "subject": f"Welcome to {app_name}!  ",
                 "html": html_content
             })
             

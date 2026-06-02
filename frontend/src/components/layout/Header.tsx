@@ -193,7 +193,7 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
                     <div
                       className="flex items-center justify-center flex-shrink-0 rounded-full w-7 h-7 bg-green-100 dark:bg-green-500/15"
                     >
-                      <span className="text-xs">✨</span>
+                      <span className="text-xs"> </span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p

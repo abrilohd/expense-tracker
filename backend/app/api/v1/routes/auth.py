@@ -30,7 +30,7 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 from app.core.exceptions import BadRequestException, UnauthorizedException, ForbiddenException
-from app.services.email_service import EmailService
+from app.services.auth.email_service import EmailService
 
 # Create router instance
 router = APIRouter()

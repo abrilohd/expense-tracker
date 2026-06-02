@@ -20,7 +20,7 @@ export const enum IncomeSource {
   Business = 'Business',
   Freelancing = 'Freelancing',
   Investment = 'Investment',
-  Gift = 'Gift',
+  Gifts = 'Gifts',
   Rental = 'Rental',
   Other = 'Other',
 }

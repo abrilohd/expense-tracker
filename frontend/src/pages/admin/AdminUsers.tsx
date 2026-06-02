@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Search, Shield, Ban, CheckCircle, Trash2 } from 'lucide-react';
-import { listAllUsers, toggleUserActive, toggleUserAdmin, deleteUser } from '../../api/admin';
+import { listAllUsers, toggleUserActive, toggleUserAdmin, deleteUser } from '../../api/admin.api';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState<any[]>([]);

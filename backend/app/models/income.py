@@ -19,8 +19,9 @@ class Income(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     
     # Income details
+    title = Column(String, nullable=False)  # Income title/name
     amount = Column(Float, nullable=False)
-    source = Column(String, nullable=False, index=True)  # Salary, Business, Freelancing, Gifts, Other
+    source = Column(String, nullable=False, index=True)  # Salary, Business, Freelancing, Investment, Gifts, Rental, Other
     date = Column(Date, nullable=False, index=True)
     description = Column(String, nullable=True)
     

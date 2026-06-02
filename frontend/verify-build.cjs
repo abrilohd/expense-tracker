@@ -67,7 +67,7 @@ checks.forEach(({ name, check }) => {
 console.log(`\n📊 Results: ${passed} passed, ${failed} failed`);
 
 if (failed === 0) {
-  console.log('\n🎉 Build is ready for deployment!');
+  console.log('\n  Build is ready for deployment!');
   process.exit(0);
 } else {
   console.log('\n⚠️  Build has issues. Please fix before deploying.');

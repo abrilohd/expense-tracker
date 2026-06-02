@@ -11,13 +11,16 @@ class IncomeSource(str, Enum):
     SALARY = "Salary"
     BUSINESS = "Business"
     FREELANCING = "Freelancing"
+    INVESTMENT = "Investment"
     GIFTS = "Gifts"
+    RENTAL = "Rental"
     OTHER = "Other"
 
 class IncomeCreate(BaseModel):
     """
     Schema for creating a new income record
     """
+    title: str = Field(..., min_length=1, max_length=200, description="Income title/name")
     amount: float = Field(..., gt=0, description="Income amount must be greater than 0")
     source: IncomeSource
     date: date
@@ -35,6 +38,7 @@ class IncomeUpdate(BaseModel):
     """
     Schema for updating an income record - all fields optional
     """
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
     amount: Optional[float] = Field(None, gt=0)
     source: Optional[IncomeSource] = None
     date: Optional[date] = None
@@ -54,6 +58,7 @@ class IncomeResponse(BaseModel):
     """
     id: int
     user_id: int
+    title: str
     amount: float
     source: str
     date: date

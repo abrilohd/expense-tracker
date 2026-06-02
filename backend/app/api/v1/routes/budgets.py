@@ -18,7 +18,7 @@ from app.schemas.budget import (
     BudgetStatusResponse,
     BudgetStatusListResponse
 )
-from app.services.budget_service import BudgetService
+from app.services.budget.budget_service import BudgetService
 from app.core.security import get_current_user
 from app.core.exceptions import NotFoundException, ForbiddenException, BadRequestException
 

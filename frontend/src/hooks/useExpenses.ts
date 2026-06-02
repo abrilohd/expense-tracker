@@ -6,7 +6,7 @@ import { useExpenseStore } from '../store/expenseStore';
 
 /**
  * Hook for dashboard data with auto-fetch
- * Automatically fetches dashboard if null
+ * Automatically fetches dashboard on mount and when data is null
  */
 export const useDashboardData = () => {
   const dashboard = useExpenseStore((state) => state.dashboard);
@@ -14,12 +14,10 @@ export const useDashboardData = () => {
   const error = useExpenseStore((state) => state.dashboardError);
   const fetchDashboard = useExpenseStore((state) => state.fetchDashboard);
 
-  // Auto-fetch if dashboard is null
+  // Auto-fetch on mount to ensure fresh data
   useEffect(() => {
-    if (dashboard === null) {
-      fetchDashboard();
-    }
-  }, [dashboard, fetchDashboard]);
+    fetchDashboard();
+  }, [fetchDashboard]);
 
   return {
     data: dashboard,

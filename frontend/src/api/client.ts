@@ -24,6 +24,28 @@ if (import.meta.env.DEV) {
   });
 }
 
+// Toast deduplication - prevent showing same error multiple times
+const recentToasts = new Map<string, number>();
+const TOAST_COOLDOWN = 3000; // 3 seconds
+
+function showToastOnce(message: string, type: 'error' | 'success' = 'error', options?: any) {
+  const now = Date.now();
+  const lastShown = recentToasts.get(message);
+  
+  // Only show if not shown recently
+  if (!lastShown || now - lastShown > TOAST_COOLDOWN) {
+    recentToasts.set(message, now);
+    if (type === 'error') {
+      toast.error(message, options);
+    } else {
+      toast.success(message, options);
+    }
+    
+    // Clean up old entries
+    setTimeout(() => recentToasts.delete(message), TOAST_COOLDOWN);
+  }
+}
+
 // Request interceptor: Attach JWT token to all requests
 apiClient.interceptors.request.use(
   (config) => {
@@ -54,11 +76,11 @@ apiClient.interceptors.response.use(
           apiUrl: API_URL,
           timestamp: new Date().toISOString(),
         });
-        toast.error('Backend server is offline. Please try again later.', {
+        showToastOnce('Unable to connect to server. Please check your connection.', 'error', {
           duration: 5000,
           icon: '🔌',
         });
-        return Promise.reject(new Error('Backend server is offline'));
+        return Promise.reject(new Error('Unable to connect to server'));
       }
       
       // Timeout error
@@ -67,7 +89,7 @@ apiClient.interceptors.response.use(
           apiUrl: API_URL,
           timestamp: new Date().toISOString(),
         });
-        toast.error('Request timed out. Please check your connection.', {
+        showToastOnce('Request timed out. Please try again.', 'error', {
           duration: 4000,
         });
         return Promise.reject(new Error('Request timed out'));
@@ -77,32 +99,52 @@ apiClient.interceptors.response.use(
     // Handle 401 Unauthorized: Token expired or invalid
     if (error.response?.status === 401) {
       localStorage.removeItem(TOKEN_KEY);
-      toast.error('Session expired. Please login again.', {
+      showToastOnce('Session expired. Please login again.', 'error', {
         duration: 3000,
       });
       window.location.href = '/login';
-      return Promise.reject(new Error('Session expired. Please login again.'));
+      return Promise.reject(new Error('Session expired'));
     }
 
     // Handle 403 Forbidden
     if (error.response?.status === 403) {
-      toast.error('You do not have permission to perform this action.', {
+      showToastOnce('Access denied. You do not have permission.', 'error', {
         duration: 4000,
       });
-      return Promise.reject(new Error('Permission denied'));
+      return Promise.reject(new Error('Access denied'));
     }
 
     // Handle 404 Not Found
     if (error.response?.status === 404) {
-      toast.error('Resource not found.', {
+      showToastOnce('Resource not found.', 'error', {
         duration: 3000,
       });
       return Promise.reject(new Error('Resource not found'));
     }
 
+    // Handle 422 Validation Error - Extract field-specific errors
+    if (error.response?.status === 422) {
+      const apiError = error.response.data as ApiError;
+      
+      // Check if we have detailed validation errors
+      if (apiError.details && Array.isArray(apiError.details)) {
+        // FastAPI validation error format
+        const validationErrors = apiError.details.map((err: any) => {
+          const field = err.loc ? err.loc[err.loc.length - 1] : 'field';
+          return `${field}: ${err.msg}`;
+        }).join(', ');
+        
+        return Promise.reject(new Error(validationErrors));
+      }
+      
+      // Single validation message
+      const message = apiError.message || 'Validation failed. Please check your input.';
+      return Promise.reject(new Error(message));
+    }
+
     // Handle 500 Server Error
     if (error.response?.status === 500) {
-      toast.error('Server error occurred. Please try again later.', {
+      showToastOnce('Server error. Please try again later.', 'error', {
         duration: 4000,
       });
       return Promise.reject(new Error('Server error'));
@@ -111,11 +153,12 @@ apiClient.interceptors.response.use(
     // Extract error message from backend format
     if (error.response?.data) {
       const apiError = error.response.data as ApiError;
-      const message = apiError.message || 'An error occurred';
+      const detailsMessage = typeof apiError.details === 'string' ? apiError.details : '';
+      const message = apiError.message || detailsMessage || 'An error occurred';
       
       // Don't show toast for validation errors (422) - let components handle them
       if (error.response.status !== 422) {
-        toast.error(message, {
+        showToastOnce(message, 'error', {
           duration: 4000,
         });
       }
@@ -125,7 +168,7 @@ apiClient.interceptors.response.use(
 
     // Generic error fallback
     const message = error.message || 'An unexpected error occurred';
-    toast.error(message, {
+    showToastOnce(message, 'error', {
       duration: 4000,
     });
     return Promise.reject(new Error(message));

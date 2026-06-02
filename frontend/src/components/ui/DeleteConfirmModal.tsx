@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Loader2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { Expense, Income } from '../../types';
-import { deleteExpense } from '../../api/expenses';
+import { deleteExpense } from '../../api/expenses.api';
 import { formatCurrency, getCategoryEmoji } from '../../utils/formatters';
 import { INCOME_SOURCES } from '../../utils/constants';
 

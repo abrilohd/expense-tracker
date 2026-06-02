@@ -11,7 +11,7 @@ import { X, Loader2, Target } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { Budget, ExpenseCategory } from '../../types';
 import { CATEGORIES } from '../../utils/constants';
-import { createBudget, updateBudget } from '../../api/budgets';
+import { createBudget, updateBudget } from '../../api/budgets.api';
 
 interface BudgetModalProps {
   isOpen: boolean;
@@ -83,7 +83,7 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
 
       if (isEditMode && budget) {
         await updateBudget(budget.id, payload);
-        toast.success('✨ Budget updated!');
+        toast.success('  Budget updated!');
       } else {
         await createBudget(payload);
         toast.success('🎯 Budget created!');

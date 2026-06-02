@@ -9,8 +9,9 @@ from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
 
 from app.core.config import settings
+from app.core.constants import API_TITLE, API_VERSION, API_DESCRIPTION
 from app.db.database import engine, Base
-from app.routes import expenses, auth, dashboard, insights, google_auth, income, balance, budgets, savings_goals, reports, recurring, admin
+from app.api.v1.api_router import api_router
 from app.core.exceptions import AppException
 from app.core.error_handlers import (
     handle_app_exception,
@@ -33,9 +34,9 @@ async def lifespan(app: FastAPI):
 
 # Initialize FastAPI app with metadata
 app = FastAPI(
-    title="Expense Tracker API",
-    description="Personal finance tracking API with JWT authentication, expense management, analytics dashboard, and AI-powered spending insights",
-    version="1.0.0",
+    title=API_TITLE,
+    description=API_DESCRIPTION,
+    version=API_VERSION,
     lifespan=lifespan
 )
 
@@ -67,19 +68,8 @@ app.add_exception_handler(AppException, handle_app_exception)
 app.add_exception_handler(RequestValidationError, handle_validation_error)
 app.add_exception_handler(Exception, handle_generic_exception)
 
-# Include routers with proper prefixes and tags
-app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
-app.include_router(google_auth.router, prefix="/auth", tags=["Google OAuth"])
-app.include_router(expenses.router, prefix="/expenses", tags=["Expenses"])
-app.include_router(income.router, prefix="/income", tags=["Income"])
-app.include_router(balance.router, prefix="/balance", tags=["Balance"])
-app.include_router(budgets.router, prefix="/budgets", tags=["Budgets"])
-app.include_router(savings_goals.router, prefix="/savings-goals", tags=["Savings Goals"])
-app.include_router(recurring.router, prefix="/recurring", tags=["Recurring Transactions"])
-app.include_router(reports.router, prefix="/reports", tags=["Reports"])
-app.include_router(admin.router, prefix="/admin", tags=["Admin"])
-app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
-app.include_router(insights.router, prefix="/insights", tags=["Insights"])
+# Include API v1 router
+app.include_router(api_router)
 
 # Root endpoint
 @app.get("/", tags=["Root"])
@@ -89,8 +79,9 @@ def read_root():
     """
     return {
         "message": "Expense Tracker API",
-        "version": "1.0.0",
-        "status": "running"
+        "version": API_VERSION,
+        "status": "running",
+        "docs": "/docs"
     }
 
 # Health check endpoint for Railway/Render
@@ -131,31 +122,3 @@ def cors_debug():
         "frontend_url": settings.frontend_url,
         "note": "If ALLOWED_ORIGINS is 'NOT SET', only localhost origins are allowed"
     }
-
-# PASSWORD UPDATE ENDPOINT - Added directly to main app
-from fastapi import Depends, status
-from sqlalchemy.orm import Session
-from app.db.database import get_db
-from app.models.user import User
-from app.schemas.user import PasswordUpdate
-from app.core.security import hash_password, verify_password, get_current_user
-from app.core.exceptions import UnauthorizedException
-
-@app.put("/auth/update-password", response_model=dict, status_code=status.HTTP_200_OK, tags=["Authentication"])
-def update_user_password(
-    password_data: PasswordUpdate,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """
-    Update user password - requires current password verification
-    """
-    # Verify current password
-    if not verify_password(password_data.current_password, current_user.hashed_password):
-        raise UnauthorizedException("Current password is incorrect")
-    
-    # Update to new password
-    current_user.hashed_password = hash_password(password_data.new_password)
-    db.commit()
-    
-    return {"message": "Password updated successfully"}

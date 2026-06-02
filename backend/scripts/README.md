@@ -88,7 +88,9 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # 2. Install dependencies
-pip install -r requirements.txt
+pip install -r requirements/dev.txt  # Development
+# OR
+pip install -r requirements/prod.txt  # Production
 
 # 3. Initialize database
 python scripts/init_db.py

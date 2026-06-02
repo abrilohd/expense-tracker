@@ -82,8 +82,8 @@ export const INCOME_SOURCES = [
     emoji: '📈',
   },
   {
-    label: 'Gift',
-    value: IncomeSource.Gift,
+    label: 'Gifts',
+    value: IncomeSource.Gifts,
     color: 'pink',
     emoji: '🎁',
   },

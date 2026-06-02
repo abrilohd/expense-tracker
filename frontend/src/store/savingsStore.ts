@@ -8,13 +8,14 @@ import {
   createSavingsGoal,
   updateSavingsGoal,
   deleteSavingsGoal,
-} from '../api/savings-goals';
+} from '../api/savings.api';
 import type {
   SavingsGoal,
   SavingsGoalCreate,
   SavingsGoalUpdate,
   SavingsGoalStatus,
 } from '../types';
+import { useExpenseStore } from './expenseStore';
 
 interface SavingsStore {
   // State
@@ -94,6 +95,9 @@ export const useSavingsStore = create<SavingsStore>((set, get) => ({
         totalTarget: state.totalTarget + newGoal.target_amount,
         isCreating: false,
       }));
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
       set({
         goalsError: error.response?.data?.message || 'Failed to create savings goal',
@@ -149,6 +153,9 @@ export const useSavingsStore = create<SavingsStore>((set, get) => ({
           isUpdating: false,
         };
       });
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
       set({
         goalsError: error.response?.data?.message || 'Failed to update savings goal',
@@ -194,6 +201,9 @@ export const useSavingsStore = create<SavingsStore>((set, get) => ({
           isDeleting: false,
         };
       });
+      
+      // Auto-refresh dashboard data after successful mutation
+      useExpenseStore.getState().fetchDashboard();
     } catch (error: any) {
       set({
         goalsError: error.response?.data?.message || 'Failed to delete savings goal',

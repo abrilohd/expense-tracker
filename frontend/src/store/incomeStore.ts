@@ -4,7 +4,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import toast from 'react-hot-toast';
-import * as api from '../api/income';
+import * as incomeApi from '../api/income.api';
 import { PAGE_SIZE } from '../utils/constants';
 import type {
   Income,
@@ -12,6 +12,7 @@ import type {
   IncomeUpdate,
   IncomeFilterParams,
 } from '../types';
+import { useExpenseStore } from './expenseStore';
 
 interface IncomeState {
   // Income list
@@ -63,7 +64,7 @@ export const useIncomeStore = create<IncomeState>()(
         const { filters, currentPage } = get();
 
         // Merge filters with params and add pagination
-        const response = await api.getIncome({
+        const response = await incomeApi.getIncome({
           ...filters,
           ...params,
           skip: (currentPage - 1) * PAGE_SIZE,
@@ -106,7 +107,7 @@ export const useIncomeStore = create<IncomeState>()(
       });
 
       try {
-        const newIncome = await api.createIncome(data);
+        const newIncome = await incomeApi.createIncome(data);
 
         // Replace temp with real income
         set((state) => {
@@ -119,6 +120,9 @@ export const useIncomeStore = create<IncomeState>()(
         });
 
         toast.success('Income added!');
+        
+        // Auto-refresh dashboard data after successful mutation
+        useExpenseStore.getState().fetchDashboard();
       } catch (error) {
         // Remove temp income on error
         set((state) => {
@@ -126,7 +130,7 @@ export const useIncomeStore = create<IncomeState>()(
           state.isSaving = false;
         });
 
-        toast.error(error instanceof Error ? error.message : 'Failed to add income');
+        // Error already handled by API client interceptor
         throw error;
       }
     },
@@ -156,7 +160,7 @@ export const useIncomeStore = create<IncomeState>()(
       });
 
       try {
-        const updatedIncome = await api.updateIncome(id, data);
+        const updatedIncome = await incomeApi.updateIncome(id, data);
 
         // Replace with server response
         set((state) => {
@@ -168,6 +172,9 @@ export const useIncomeStore = create<IncomeState>()(
         });
 
         toast.success('Income updated!');
+        
+        // Auto-refresh dashboard data after successful mutation
+        useExpenseStore.getState().fetchDashboard();
       } catch (error) {
         // Rollback on error
         set((state) => {
@@ -178,7 +185,7 @@ export const useIncomeStore = create<IncomeState>()(
           state.isSaving = false;
         });
 
-        toast.error(error instanceof Error ? error.message : 'Failed to update income');
+        // Error already handled by API client interceptor
         throw error;
       }
     },
@@ -209,7 +216,7 @@ export const useIncomeStore = create<IncomeState>()(
       });
 
       try {
-        await api.deleteIncome(id);
+        await incomeApi.deleteIncome(id);
 
         // Success
         set((state) => {
@@ -217,6 +224,9 @@ export const useIncomeStore = create<IncomeState>()(
         });
 
         toast.success('Income deleted!');
+        
+        // Auto-refresh dashboard data after successful mutation
+        useExpenseStore.getState().fetchDashboard();
       } catch (error) {
         // Rollback on error
         set((state) => {
@@ -225,7 +235,7 @@ export const useIncomeStore = create<IncomeState>()(
           state.isDeleting = false;
         });
 
-        toast.error(error instanceof Error ? error.message : 'Failed to delete income');
+        // Error already handled by API client interceptor
         throw error;
       }
     },

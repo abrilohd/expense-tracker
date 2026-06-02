@@ -11,7 +11,7 @@ import EmptyState from '../components/ui/EmptyState';
 import SavingsModal from '../components/ui/SavingsModal';
 import ContributionModal from '../components/ui/ContributionModal';
 import DeleteConfirmModal from '../components/ui/DeleteConfirmModal';
-import { getSavingsGoals, deleteSavingsGoal } from '../api/expenses';
+import { getSavingsGoals, deleteSavingsGoal } from '../api/expenses.api';
 import type { SavingsGoalSimplified } from '../types';
 
 const Savings = () => {

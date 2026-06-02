@@ -20,7 +20,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import type { Income, IncomeSource, IncomeFilterParams } from '../types';
-import { getIncomes, createIncome, updateIncome, deleteIncome } from '../api/expenses';
+import { getIncomes, createIncome, updateIncome, deleteIncome } from '../api/expenses.api';
 import { INCOME_SOURCES, PAGE_SIZE } from '../utils/constants';
 import { Card, StatCard } from '../components/ui/Card';
 import TransactionRow from '../components/ui/TransactionRow';

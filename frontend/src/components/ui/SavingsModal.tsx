@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2, PiggyBank } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { SavingsGoalSimplified } from '../../types';
-import { createSavingsGoal, updateSavingsGoal } from '../../api/expenses';
+import { createSavingsGoal, updateSavingsGoal } from '../../api/expenses.api';
 
 interface SavingsModalProps {
   isOpen: boolean;
@@ -101,7 +101,7 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
 
       if (isEditMode && goal) {
         await updateSavingsGoal(goal.id, payload);
-        toast.success('✨ Goal updated!');
+        toast.success('  Goal updated!');
       } else {
         await createSavingsGoal(payload);
         toast.success('🎯 Goal created!');

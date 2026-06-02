@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2, Plus, TrendingUp } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { SavingsGoalSimplified } from '../../types';
-import { contributeSavings } from '../../api/expenses';
+import { contributeSavings } from '../../api/expenses.api';
 
 interface ContributionModalProps {
   isOpen: boolean;
@@ -413,7 +413,7 @@ const ContributionModal = ({ isOpen, onClose, goal, onSuccess }: ContributionMod
                               color: goalColor,
                             }}
                           >
-                            🎉 Goal will be completed!
+                              Goal will be completed!
                           </span>
                         </div>
                       )}

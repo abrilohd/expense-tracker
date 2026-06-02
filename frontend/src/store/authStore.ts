@@ -3,7 +3,7 @@
  */
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import * as api from '../api/expenses';
+import * as api from '../api/expenses.api';
 import { TOKEN_KEY } from '../utils/constants';
 import type { User } from '../types';
 

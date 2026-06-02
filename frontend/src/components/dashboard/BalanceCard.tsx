@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, Minus, DollarSign, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { getBalance } from '../../api/balance';
+import { getBalance } from '../../api/balance.api';
 import { formatCurrency } from '../../utils/formatters';
 import type { BalanceData } from '../../types';
 

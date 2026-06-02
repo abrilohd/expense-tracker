@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Lock, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { resetPassword } from '../api/auth';
+import { resetPassword } from '../api/auth.api';
 
 export default function ResetPassword() {
   const navigate = useNavigate();

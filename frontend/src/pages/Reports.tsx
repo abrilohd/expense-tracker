@@ -10,7 +10,7 @@ import { Card, CardHeader, StatCard } from '../components/ui/Card';
 import EmptyState from '../components/ui/EmptyState';
 import AreaChart from '../components/charts/AreaChart';
 import DonutChart from '../components/charts/DonutChart';
-import { generateQuickReport, exportQuickReportCSV, downloadBlob } from '../api/reports';
+import { generateQuickReport, exportQuickReportCSV, downloadBlob } from '../api/reports.api';
 import { CATEGORIES } from '../utils/constants';
 import type { ReportResponse } from '../types';
 

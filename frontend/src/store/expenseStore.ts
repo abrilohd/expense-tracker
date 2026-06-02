@@ -4,7 +4,8 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import toast from 'react-hot-toast';
-import * as api from '../api/expenses';
+import * as expenseApi from '../api/expenses.api';
+import * as dashboardApi from '../api/dashboard.api';
 import { PAGE_SIZE } from '../utils/constants';
 import type {
   Expense,
@@ -86,7 +87,7 @@ export const useExpenseStore = create<ExpenseState>()(
         const { filters, currentPage } = get();
 
         // Merge filters with params and add pagination
-        const response = await api.getExpenses({
+        const response = await expenseApi.getExpenses({
           ...filters,
           ...params,
           skip: (currentPage - 1) * PAGE_SIZE,
@@ -114,7 +115,7 @@ export const useExpenseStore = create<ExpenseState>()(
       });
 
       try {
-        const dashboard = await api.getDashboard();
+        const dashboard = await dashboardApi.getDashboard();
 
         set((state) => {
           state.dashboard = dashboard;
@@ -136,7 +137,7 @@ export const useExpenseStore = create<ExpenseState>()(
       });
 
       try {
-        const insights = await api.getInsights(days);
+        const insights = await dashboardApi.getInsights(days);
 
         set((state) => {
           state.insights = insights;
@@ -173,7 +174,7 @@ export const useExpenseStore = create<ExpenseState>()(
       });
 
       try {
-        const newExpense = await api.createExpense(data);
+        const newExpense = await expenseApi.createExpense(data);
 
         // Replace temp with real expense
         set((state) => {
@@ -182,9 +183,11 @@ export const useExpenseStore = create<ExpenseState>()(
             state.expenses[index] = newExpense;
           }
           state.total += 1;
-          state.dashboard = null; // Invalidate dashboard
           state.isSaving = false;
         });
+
+        // Auto-refresh dashboard data after successful mutation
+        get().fetchDashboard();
 
         toast.success('Expense added!');
       } catch (error) {
@@ -194,7 +197,7 @@ export const useExpenseStore = create<ExpenseState>()(
           state.isSaving = false;
         });
 
-        toast.error(error instanceof Error ? error.message : 'Failed to add expense');
+        // Error already handled by API client interceptor
         throw error;
       }
     },
@@ -224,7 +227,7 @@ export const useExpenseStore = create<ExpenseState>()(
       });
 
       try {
-        const updatedExpense = await api.updateExpense(id, data);
+        const updatedExpense = await expenseApi.updateExpense(id, data);
 
         // Replace with server response
         set((state) => {
@@ -232,9 +235,11 @@ export const useExpenseStore = create<ExpenseState>()(
           if (index !== -1) {
             state.expenses[index] = updatedExpense;
           }
-          state.dashboard = null; // Invalidate dashboard
           state.isSaving = false;
         });
+
+        // Auto-refresh dashboard data after successful mutation
+        get().fetchDashboard();
 
         toast.success('Expense updated!');
       } catch (error) {
@@ -247,7 +252,7 @@ export const useExpenseStore = create<ExpenseState>()(
           state.isSaving = false;
         });
 
-        toast.error(error instanceof Error ? error.message : 'Failed to update expense');
+        // Error already handled by API client interceptor
         throw error;
       }
     },
@@ -278,13 +283,15 @@ export const useExpenseStore = create<ExpenseState>()(
       });
 
       try {
-        await api.deleteExpense(id);
+        await expenseApi.deleteExpense(id);
 
-        // Success - invalidate dashboard
+        // Success - refresh dashboard
         set((state) => {
-          state.dashboard = null;
           state.isDeleting = false;
         });
+
+        // Auto-refresh dashboard data after successful mutation
+        get().fetchDashboard();
 
         toast.success('Expense deleted!');
       } catch (error) {
@@ -295,7 +302,7 @@ export const useExpenseStore = create<ExpenseState>()(
           state.isDeleting = false;
         });
 
-        toast.error(error instanceof Error ? error.message : 'Failed to delete expense');
+        // Error already handled by API client interceptor
         throw error;
       }
     },
