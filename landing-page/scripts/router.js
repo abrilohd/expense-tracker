@@ -10,7 +10,7 @@
     ? 'http://localhost:5173'
     : (window.PRODUCTION_APP_URL || 'https://expense-tracker-app-tau-rust.vercel.app');
   
-  console.log('🚀 Router v5.1.0 initialized');
+  console.log('    Router v5.1.0 initialized');
   console.log('   Environment:', isLocalhost ? 'LOCALHOST' : 'PRODUCTION');
   console.log('   APP_URL:', APP_URL);
   
@@ -51,7 +51,7 @@
     e.stopPropagation();
     
     var destination = getDestination();
-    console.log('✅ CTA clicked. Redirecting to:', destination);
+    console.log('    CTA clicked. Redirecting to:', destination);
     
     // Redirect to destination
     window.location.href = destination;
@@ -99,7 +99,7 @@
       console.log('   ✓ Attached listener to:', freshBtn.textContent.trim().substring(0, 30));
     });
     
-    console.log('✅ Router initialization complete');
+    console.log('    Router initialization complete');
   }
   
   // Initialize when DOM is ready

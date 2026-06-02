@@ -79,7 +79,7 @@ const RecurringTransactionsPage = () => {
         toast.success('  Recurring transaction updated!');
       } else {
         await createRecurring(data);
-        toast.success('🎯 Recurring transaction created!');
+        toast.success('   Recurring transaction created!');
       }
       setIsModalOpen(false);
       setEditingRecurring(undefined);
@@ -97,7 +97,7 @@ const RecurringTransactionsPage = () => {
     
     try {
       await deleteRecurring(deletingId);
-      toast.success('🗑️ Recurring transaction deleted');
+      toast.success('   Recurring transaction deleted');
       setDeletingId(null);
     } catch (error) {
       toast.error('Failed to delete recurring transaction');

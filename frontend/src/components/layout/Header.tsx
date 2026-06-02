@@ -39,8 +39,14 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
   const userDropdownRef = useRef<HTMLDivElement>(null);
   const notifDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Mark all notifications as read
+  const handleMarkAllRead = () => {
+    setHasUnreadNotifications(false);
+  };
 
   const subtitle = getSubtitle(location.pathname);
 
@@ -129,10 +135,12 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
             className="relative flex items-center justify-center transition-all w-[34px] h-[34px] bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/7 rounded-lg text-gray-600 dark:text-white/50 hover:bg-gray-200 dark:hover:bg-white/8 hover:text-gray-900 dark:hover:text-white cursor-pointer"
           >
             <Bell size={16} />
-            {/* Red notification dot */}
-            <span
-              className="absolute rounded-full w-[7px] h-[7px] bg-red-500 border-2 border-white dark:border-[#0B0D14] top-1.5 right-1.5"
-            />
+            {/* Red notification dot - only show if unread */}
+            {hasUnreadNotifications && (
+              <span
+                className="absolute rounded-full w-[7px] h-[7px] bg-red-500 border-2 border-white dark:border-[#0B0D14] top-1.5 right-1.5"
+              />
+            )}
           </button>
 
           {/* Notification Dropdown */}
@@ -155,7 +163,8 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
                     Notifications
                   </span>
                   <button
-                    className="text-xs text-purple-600 dark:text-[#A78BFA] bg-transparent border-none cursor-pointer"
+                    onClick={handleMarkAllRead}
+                    className="text-xs text-purple-600 dark:text-[#A78BFA] bg-transparent border-none cursor-pointer hover:text-purple-700 dark:hover:text-purple-400"
                   >
                     Mark all read
                   </button>
@@ -168,18 +177,18 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
                     className="flex gap-2.5 transition-colors cursor-pointer p-2.5 hover:bg-gray-50 dark:hover:bg-white/3"
                   >
                     <div
-                      className="flex items-center justify-center flex-shrink-0 rounded-full w-7 h-7 bg-purple-100 dark:bg-purple-500/15"
+                      className="flex items-center justify-center flex-shrink-0 rounded-full w-7 h-7 bg-purple-100 dark:bg-purple-500/20 text-base"
                     >
-                      <span className="text-xs">💳</span>
+                      <span>💳</span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p
-                        className="text-xs text-gray-900 dark:text-white"
+                        className="text-xs font-medium text-gray-900 dark:text-white"
                       >
                         Budget alert: Food category at 85%
                       </p>
                       <p
-                        className="text-[10px] text-gray-500 dark:text-white/30"
+                        className="text-[10px] text-gray-500 dark:text-white/40"
                       >
                         2 hours ago
                       </p>
@@ -191,18 +200,18 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
                     className="flex gap-2.5 transition-colors cursor-pointer p-2.5 hover:bg-gray-50 dark:hover:bg-white/3"
                   >
                     <div
-                      className="flex items-center justify-center flex-shrink-0 rounded-full w-7 h-7 bg-green-100 dark:bg-green-500/15"
+                      className="flex items-center justify-center flex-shrink-0 rounded-full w-7 h-7 bg-green-100 dark:bg-green-500/20 text-base"
                     >
-                      <span className="text-xs"> </span>
+                      <span>💡</span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p
-                        className="text-xs text-gray-900 dark:text-white"
+                        className="text-xs font-medium text-gray-900 dark:text-white"
                       >
                         New AI insight available
                       </p>
                       <p
-                        className="text-[10px] text-gray-500 dark:text-white/30"
+                        className="text-[10px] text-gray-500 dark:text-white/40"
                       >
                         5 hours ago
                       </p>
@@ -214,18 +223,18 @@ const Header = ({ onMenuClick, title }: HeaderProps) => {
                     className="flex gap-2.5 transition-colors cursor-pointer p-2.5 hover:bg-gray-50 dark:hover:bg-white/3"
                   >
                     <div
-                      className="flex items-center justify-center flex-shrink-0 rounded-full w-7 h-7 bg-red-100 dark:bg-red-500/15"
+                      className="flex items-center justify-center flex-shrink-0 rounded-full w-7 h-7 bg-blue-100 dark:bg-blue-500/20 text-base"
                     >
-                      <span className="text-xs">📊</span>
+                      <span>📊</span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p
-                        className="text-xs text-gray-900 dark:text-white"
+                        className="text-xs font-medium text-gray-900 dark:text-white"
                       >
                         Monthly report ready
                       </p>
                       <p
-                        className="text-[10px] text-gray-500 dark:text-white/30"
+                        className="text-[10px] text-gray-500 dark:text-white/40"
                       >
                         1 day ago
                       </p>

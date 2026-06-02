@@ -25,22 +25,22 @@ def emergency_reset_password():
     # Get email
     email = input("Enter user email: ").strip()
     if not email:
-        print("❌ Email is required")
+        print("    Email is required")
         sys.exit(1)
     
     # Get new password
     new_password = getpass("Enter new password (min 8 chars, must contain number): ")
     if len(new_password) < 8:
-        print("❌ Password must be at least 8 characters")
+        print("    Password must be at least 8 characters")
         sys.exit(1)
     
     if not any(char.isdigit() for char in new_password):
-        print("❌ Password must contain at least one number")
+        print("    Password must contain at least one number")
         sys.exit(1)
     
     confirm_password = getpass("Confirm new password: ")
     if new_password != confirm_password:
-        print("❌ Passwords do not match")
+        print("    Passwords do not match")
         sys.exit(1)
     
     # Update database
@@ -50,7 +50,7 @@ def emergency_reset_password():
         user = db.query(User).filter(User.email == email).first()
         
         if not user:
-            print(f"❌ User with email {email} not found")
+            print(f"    User with email {email} not found")
             sys.exit(1)
         
         # Hash and update password
@@ -64,7 +64,7 @@ def emergency_reset_password():
         
         print()
         print("=" * 60)
-        print("✅ PASSWORD RESET SUCCESSFUL!")
+        print("    PASSWORD RESET SUCCESSFUL!")
         print("=" * 60)
         print(f"📧 Email: {email}")
         print(f"🔐 New password: {'*' * len(new_password)}")
@@ -73,7 +73,7 @@ def emergency_reset_password():
         print("=" * 60)
         
     except Exception as e:
-        print(f"❌ Error resetting password: {e}")
+        print(f"    Error resetting password: {e}")
         db.rollback()
         sys.exit(1)
     finally:

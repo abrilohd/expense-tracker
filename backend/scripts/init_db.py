@@ -20,13 +20,13 @@ def init_database():
     try:
         # Create all tables
         Base.metadata.create_all(bind=engine)
-        print("✅ Database tables created successfully!")
+        print("    Database tables created successfully!")
         print("📋 Tables created:")
         print("   - users")
         print("   - expenses")
         
     except Exception as e:
-        print(f"❌ Error creating tables: {e}")
+        print(f"    Error creating tables: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

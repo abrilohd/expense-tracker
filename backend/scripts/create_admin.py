@@ -26,7 +26,7 @@ def create_admin_user(email: str, password: str, name: str = "Admin User"):
             # Update existing user to admin
             existing_user.is_admin = True
             db.commit()
-            print(f"✅ Updated existing user {email} to admin")
+            print(f"    Updated existing user {email} to admin")
         else:
             # Create new admin user
             hashed_password = hash_password(password)
@@ -40,14 +40,14 @@ def create_admin_user(email: str, password: str, name: str = "Admin User"):
             )
             db.add(admin_user)
             db.commit()
-            print(f"✅ Created new admin user: {email}")
+            print(f"    Created new admin user: {email}")
         
         print(f"🔐 Admin credentials:")
         print(f"   Email: {email}")
         print(f"   Password: {'*' * len(password)}")
         
     except Exception as e:
-        print(f"❌ Error creating admin user: {e}")
+        print(f"    Error creating admin user: {e}")
         db.rollback()
         sys.exit(1)
     finally:
@@ -60,19 +60,19 @@ def main():
     
     email = input("Enter admin email: ").strip()
     if not email:
-        print("❌ Email is required")
+        print("    Email is required")
         sys.exit(1)
     
     full_name = input("Enter full name (default: Admin User): ").strip() or "Admin User"
     
     password = getpass("Enter password: ")
     if len(password) < 8:
-        print("❌ Password must be at least 8 characters")
+        print("    Password must be at least 8 characters")
         sys.exit(1)
     
     confirm_password = getpass("Confirm password: ")
     if password != confirm_password:
-        print("❌ Passwords do not match")
+        print("    Passwords do not match")
         sys.exit(1)
     
     create_admin_user(email, password, full_name)

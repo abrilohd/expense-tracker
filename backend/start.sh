@@ -10,7 +10,7 @@ from app.db.database import Base, engine
 from app.models import *
 
 Base.metadata.create_all(bind=engine)
-print('✅ Database tables created')
+print('    Database tables created')
 "
 
 # Run database migrations

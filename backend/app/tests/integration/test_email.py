@@ -41,7 +41,7 @@ def test_password_reset_email():
     
     # Print result
     if result.get("success"):
-        print("✅ SUCCESS! Email sent successfully")
+        print("    SUCCESS! Email sent successfully")
         print(f"📬 Email ID: {result.get('email_id')}")
         print(f"\n💡 Check your inbox at: {test_email}")
         print(f"📱 Don't forget to check spam folder!")
@@ -49,7 +49,7 @@ def test_password_reset_email():
         app_url = os.getenv("APP_URL", "http://localhost:5173")
         print(f"   {app_url}/reset-password?token={test_token}")
     else:
-        print("❌ FAILED! Email sending failed")
+        print("    FAILED! Email sending failed")
         print(f"Error: {result.get('error')}")
         print(f"\n🔍 Troubleshooting:")
         print(f"   1. Check RESEND_API_KEY in .env file")
@@ -80,10 +80,10 @@ def test_welcome_email():
     )
     
     if result.get("success"):
-        print("✅ SUCCESS! Welcome email sent successfully")
+        print("    SUCCESS! Welcome email sent successfully")
         print(f"📬 Email ID: {result.get('email_id')}")
     else:
-        print("❌ FAILED! Welcome email sending failed")
+        print("    FAILED! Welcome email sending failed")
         print(f"Error: {result.get('error')}")
     
     print("\n" + "=" * 60)
@@ -103,28 +103,28 @@ def check_configuration():
     app_url = os.getenv("APP_URL")
     
     print(f"\n📋 Environment Variables:")
-    print(f"   RESEND_API_KEY: {'✅ Set' if api_key else '❌ Not set'}")
+    print(f"   RESEND_API_KEY: {'    Set' if api_key else '    Not set'}")
     if api_key:
         print(f"      Value: {api_key[:10]}...{api_key[-10:]}")
     
-    print(f"   RESEND_FROM_EMAIL: {'✅ Set' if from_email else '❌ Not set'}")
+    print(f"   RESEND_FROM_EMAIL: {'    Set' if from_email else '    Not set'}")
     if from_email:
         print(f"      Value: {from_email}")
     
-    print(f"   APP_NAME: {'✅ Set' if app_name else '❌ Not set'}")
+    print(f"   APP_NAME: {'    Set' if app_name else '    Not set'}")
     if app_name:
         print(f"      Value: {app_name}")
     
-    print(f"   APP_URL: {'✅ Set' if app_url else '❌ Not set'}")
+    print(f"   APP_URL: {'    Set' if app_url else '    Not set'}")
     if app_url:
         print(f"      Value: {app_url}")
     
     all_set = all([api_key, from_email, app_name, app_url])
     
     if all_set:
-        print(f"\n✅ All environment variables are configured!")
+        print(f"\n    All environment variables are configured!")
     else:
-        print(f"\n❌ Some environment variables are missing!")
+        print(f"\n    Some environment variables are missing!")
         print(f"\n💡 Make sure your .env file contains:")
         print(f"   RESEND_API_KEY=your-api-key")
         print(f"   RESEND_FROM_EMAIL=onboarding@resend.dev")
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     
     # Check configuration first
     if not check_configuration():
-        print("\n❌ Configuration check failed. Please fix environment variables.")
+        print("\n    Configuration check failed. Please fix environment variables.")
         sys.exit(1)
     
     # Test password reset email
@@ -153,15 +153,15 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("TEST SUMMARY")
     print("=" * 60)
-    print(f"\n✅ Password Reset Email: {'PASSED' if reset_success else 'FAILED'}")
-    print(f"✅ Welcome Email: {'PASSED' if welcome_success else 'FAILED'}")
+    print(f"\n    Password Reset Email: {'PASSED' if reset_success else 'FAILED'}")
+    print(f"    Welcome Email: {'PASSED' if welcome_success else 'FAILED'}")
     
     if reset_success and welcome_success:
         print(f"\n  All tests passed! Email service is working correctly.")
         print(f"\n📧 Check your inbox at: abrsh067@gmail.com")
         print(f"📱 Don't forget to check spam folder!")
     else:
-        print(f"\n❌ Some tests failed. Check the errors above.")
+        print(f"\n    Some tests failed. Check the errors above.")
     
     print("\n" + "=" * 60)
 

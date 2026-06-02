@@ -33,7 +33,7 @@ def create_admin():
         return
     
     if len(password) < 8:
-        print('⚠️  ADMIN_PASSWORD must be at least 8 characters')
+        print('     ADMIN_PASSWORD must be at least 8 characters')
         return
     
     # Create database session
@@ -47,7 +47,7 @@ def create_admin():
             # Update existing user to admin
             existing.is_admin = True
             db.commit()
-            print(f'✅ Updated existing user {email} to admin')
+            print(f'    Updated existing user {email} to admin')
         else:
             # Create new admin user
             admin = User(
@@ -60,14 +60,14 @@ def create_admin():
             )
             db.add(admin)
             db.commit()
-            print(f'✅ Created new admin user: {email}')
+            print(f'    Created new admin user: {email}')
         
         print(f'🔐 Admin credentials configured:')
         print(f'   Email: {email}')
         print(f'   Name: {name}')
         
     except Exception as e:
-        print(f'❌ Admin creation failed: {e}')
+        print(f'    Admin creation failed: {e}')
         import traceback
         traceback.print_exc()
         db.rollback()

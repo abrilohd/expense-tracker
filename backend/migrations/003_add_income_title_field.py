@@ -35,20 +35,20 @@ def migrate():
             """)
             
             conn.commit()
-            print("✅ Successfully added 'title' column to income table")
+            print("    Successfully added 'title' column to income table")
         else:
             print("ℹ️  Column 'title' already exists in income table")
             
     except Exception as e:
         conn.rollback()
-        print(f"❌ Migration failed: {e}")
+        print(f"    Migration failed: {e}")
         raise
     finally:
         conn.close()
 
 def rollback():
     """Remove title column from income table (SQLite doesn't support DROP COLUMN easily)"""
-    print("⚠️  Warning: SQLite doesn't support DROP COLUMN. Manual intervention required.")
+    print("     Warning: SQLite doesn't support DROP COLUMN. Manual intervention required.")
     print("To rollback, you would need to:")
     print("1. Create a new table without the title column")
     print("2. Copy data from the old table")

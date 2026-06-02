@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Mail, Phone, Lock, AlertTriangle, Crown, Calendar, DollarSign, TrendingUp, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, Lock, AlertTriangle, Crown, Calendar, Loader2, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Card } from '../components/ui/Card';
 import { useAuthStore } from '../store/authStore';
@@ -43,6 +43,9 @@ const Profile = () => {
   const { data: dashboard } = useDashboardData();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Profile form
   const {
@@ -526,9 +529,9 @@ const Profile = () => {
                       <Lock size={18} />
                     </div>
                     <input
-                      type="password"
+                      type={showCurrentPassword ? 'text' : 'password'}
                       placeholder="Enter current password"
-                      className={`w-full pl-12 pr-4 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white ${
+                      className={`w-full pl-12 pr-12 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white ${
                         passwordErrors.current_password
                           ? 'border border-red-500'
                           : 'border border-gray-200 dark:border-white/10'
@@ -538,6 +541,13 @@ const Profile = () => {
                       }}
                       {...registerPassword('current_password')}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35 hover:text-gray-600 dark:hover:text-white/50 transition-colors"
+                    >
+                      {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
                   </div>
                   {passwordErrors.current_password && (
                     <p
@@ -555,7 +565,7 @@ const Profile = () => {
                 {/* New Password */}
                 <div>
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
                     }}
@@ -564,24 +574,30 @@ const Profile = () => {
                   </label>
                   <div className="relative">
                     <div
-                      className="absolute left-4 top-1/2 -translate-y-1/2"
-                      style={{ color: 'rgba(134, 120, 120, 0.35)' }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35"
                     >
                       <Lock size={18} />
                     </div>
                     <input
-                      type="password"
+                      type={showNewPassword ? 'text' : 'password'}
                       placeholder="Min 8 characters, 1 number"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all"
+                      className={`w-full pl-12 pr-12 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white ${
+                        passwordErrors.new_password
+                          ? 'border border-red-500'
+                          : 'border border-gray-200 dark:border-white/10'
+                      }`}
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: passwordErrors.new_password
-                          ? '1px solid #F87171'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
                         fontSize: '14px',
                       }}
                       {...registerPassword('new_password')}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35 hover:text-gray-600 dark:hover:text-white/50 transition-colors"
+                    >
+                      {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
                   </div>
                   {passwordErrors.new_password && (
                     <p
@@ -599,7 +615,7 @@ const Profile = () => {
                 {/* Confirm Password */}
                 <div>
                   <label
-                    className="block font-medium mb-2"
+                    className="block font-medium mb-2 text-gray-700 dark:text-white/70"
                     style={{
                       fontSize: '13px',
                     }}
@@ -608,23 +624,30 @@ const Profile = () => {
                   </label>
                   <div className="relative">
                     <div
-                      className="absolute left-4 top-1/2 -translate-y-1/2"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35"
                     >
                       <Lock size={18} />
                     </div>
                     <input
-                      type="password"
+                      type={showConfirmPassword ? 'text' : 'password'}
                       placeholder="Re-enter new password"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl transition-all"
+                      className={`w-full pl-12 pr-12 py-3 rounded-xl transition-all bg-white dark:bg-white/[0.05] text-gray-900 dark:text-white ${
+                        passwordErrors.confirm_password
+                          ? 'border border-red-500'
+                          : 'border border-gray-200 dark:border-white/10'
+                      }`}
                       style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: passwordErrors.confirm_password
-                          ? '1px solid #F87171'
-                          : '1px solid rgba(146, 11, 11, 0.1)',
                         fontSize: '14px',
                       }}
                       {...registerPassword('confirm_password')}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/35 hover:text-gray-600 dark:hover:text-white/50 transition-colors"
+                    >
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
                   </div>
                   {passwordErrors.confirm_password && (
                     <p

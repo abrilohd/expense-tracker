@@ -25,23 +25,23 @@ def test_insights():
     )
     
     if response.status_code != 200:
-        print(f"   ❌ Login failed: {response.status_code}")
+        print(f"       Login failed: {response.status_code}")
         return False
     
     token = response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
-    print("   ✅ Logged in successfully")
+    print("       Logged in successfully")
     
     # Step 2: Get insights (30 days)
     print("\n2️⃣ Getting insights (30 days)...")
     response = requests.get(f"{BASE_URL}/insights", headers=headers, params={"days": 30})
     if response.status_code != 200:
-        print(f"   ❌ Failed: {response.status_code}")
+        print(f"       Failed: {response.status_code}")
         print(f"   Response: {response.text}")
         return False
     
     data = response.json()
-    print(f"   ✅ Got {len(data['insights'])} insights")
+    print(f"       Got {len(data['insights'])} insights")
     print(f"      Period: {data['period_days']} days")
     print(f"      Generated: {data['generated_at']}")
     
@@ -50,8 +50,8 @@ def test_insights():
         print("\n3️⃣ Insights:")
         for i, insight in enumerate(data['insights'], 1):
             icon = {
-                'warning': '⚠️',
-                'success': '✅',
+                'warning': '   ',
+                'success': '   ',
                 'tip': '💡',
                 'info': 'ℹ️'
             }.get(insight['type'], '📊')
@@ -67,24 +67,24 @@ def test_insights():
     print("\n4️⃣ Getting insights (7 days)...")
     response = requests.get(f"{BASE_URL}/insights", headers=headers, params={"days": 7})
     if response.status_code != 200:
-        print(f"   ❌ Failed: {response.status_code}")
+        print(f"       Failed: {response.status_code}")
         return False
     
     data = response.json()
-    print(f"   ✅ Got {len(data['insights'])} insights for 7 days")
+    print(f"       Got {len(data['insights'])} insights for 7 days")
     
     # Step 5: Get insights (90 days)
     print("\n5️⃣ Getting insights (90 days)...")
     response = requests.get(f"{BASE_URL}/insights", headers=headers, params={"days": 90})
     if response.status_code != 200:
-        print(f"   ❌ Failed: {response.status_code}")
+        print(f"       Failed: {response.status_code}")
         return False
     
     data = response.json()
-    print(f"   ✅ Got {len(data['insights'])} insights for 90 days")
+    print(f"       Got {len(data['insights'])} insights for 90 days")
     
     print("\n" + "=" * 60)
-    print("✅ ALL TESTS PASSED! Insights API is fully functional!")
+    print("    ALL TESTS PASSED! Insights API is fully functional!")
     print("=" * 60)
     return True
 

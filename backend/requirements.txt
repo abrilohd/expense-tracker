@@ -1,4 +1,4 @@
-# ⚠️ DEPRECATED: Use requirements/ directory instead
+#     DEPRECATED: Use requirements/ directory instead
 # 
 # For development: pip install -r requirements/dev.txt
 # For production:  pip install -r requirements/prod.txt

@@ -70,7 +70,7 @@ apiClient.interceptors.response.use(
     if (!error.response) {
       const isNetworkError = error.message === 'Network Error' || error.code === 'ERR_NETWORK';
       if (isNetworkError) {
-        console.error('❌ Backend Connection Error:', {
+        console.error('    Backend Connection Error:', {
           message: error.message,
           code: error.code,
           apiUrl: API_URL,

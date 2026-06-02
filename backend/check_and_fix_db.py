@@ -9,7 +9,7 @@ def check_and_fix_income_table():
     db_path = 'expenses.db'
     
     if not os.path.exists(db_path):
-        print("❌ Database file not found. Run the app first to create it.")
+        print("    Database file not found. Run the app first to create it.")
         return False
     
     conn = sqlite3.connect(db_path)
@@ -26,7 +26,7 @@ def check_and_fix_income_table():
         
         # Check if title column exists
         if 'title' not in column_names:
-            print("\n⚠️  WARNING: 'title' column is MISSING from income table!")
+            print("\n     WARNING: 'title' column is MISSING from income table!")
             print("   This will cause errors when adding income from frontend.")
             print("\n🔧 Adding 'title' column...")
             
@@ -44,16 +44,16 @@ def check_and_fix_income_table():
             """)
             
             conn.commit()
-            print("✅ Successfully added 'title' column to income table")
-            print("✅ Updated existing records with default titles")
+            print("    Successfully added 'title' column to income table")
+            print("    Updated existing records with default titles")
             return True
         else:
-            print("✅ Income table has 'title' column - schema is correct!")
+            print("    Income table has 'title' column - schema is correct!")
             return True
             
     except Exception as e:
         conn.rollback()
-        print(f"❌ Error: {e}")
+        print(f"    Error: {e}")
         return False
     finally:
         conn.close()
@@ -63,7 +63,7 @@ def check_all_tables():
     db_path = 'expenses.db'
     
     if not os.path.exists(db_path):
-        print("❌ Database file not found")
+        print("    Database file not found")
         return
     
     conn = sqlite3.connect(db_path)
@@ -102,6 +102,6 @@ if __name__ == "__main__":
     check_all_tables()
     
     if success:
-        print("\n✅ Database is ready for production deployment!")
+        print("\n    Database is ready for production deployment!")
     else:
-        print("\n⚠️  Database needs attention before deployment!")
+        print("\n     Database needs attention before deployment!")

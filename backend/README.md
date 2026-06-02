@@ -89,28 +89,28 @@ backend/
 └── README.md                   # This file
 ```
 
-## 🚀 Features
+##     Features
 
 ### Authentication & Security
-- ✅ JWT-based authentication
-- ✅ Google OAuth integration
-- ✅ Password reset via email (Resend)
-- ✅ Secure password hashing (bcrypt)
-- ✅ Role-based access control (admin/user)
+-     JWT-based authentication
+-     Google OAuth integration
+-     Password reset via email (Resend)
+-     Secure password hashing (bcrypt)
+-     Role-based access control (admin/user)
 
 ### Financial Management
-- ✅ Expense tracking with categories
-- ✅ Income tracking with sources
-- ✅ Budget management (overall & category-based)
-- ✅ Savings goals with progress tracking
-- ✅ Recurring transactions (auto-generation)
+-     Expense tracking with categories
+-     Income tracking with sources
+-     Budget management (overall & category-based)
+-     Savings goals with progress tracking
+-     Recurring transactions (auto-generation)
 
 ### Analytics & Insights
-- ✅ Dashboard with financial overview
-- ✅ Spending insights & trends
-- ✅ Budget alerts & notifications
-- ✅ Custom reports (PDF, Excel)
-- ✅ Category breakdown & analysis
+-     Dashboard with financial overview
+-     Spending insights & trends
+-     Budget alerts & notifications
+-     Custom reports (PDF, Excel)
+-     Category breakdown & analysis
 
 ## 📋 Prerequisites
 
@@ -327,7 +327,7 @@ python scripts/emergency_password_reset.py
 
 See `scripts/README.md` for detailed documentation.
 
-## 🚀 Deployment
+##     Deployment
 
 ### Railway / Render / Heroku
 

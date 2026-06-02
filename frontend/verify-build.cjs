@@ -52,14 +52,14 @@ checks.forEach(({ name, check }) => {
   try {
     const result = check();
     if (result) {
-      console.log(`✅ ${name}`);
+      console.log(`    ${name}`);
       passed++;
     } else {
-      console.log(`❌ ${name}`);
+      console.log(`    ${name}`);
       failed++;
     }
   } catch (error) {
-    console.log(`❌ ${name} - Error: ${error.message}`);
+    console.log(`    ${name} - Error: ${error.message}`);
     failed++;
   }
 });
@@ -70,6 +70,6 @@ if (failed === 0) {
   console.log('\n  Build is ready for deployment!');
   process.exit(0);
 } else {
-  console.log('\n⚠️  Build has issues. Please fix before deploying.');
+  console.log('\n     Build has issues. Please fix before deploying.');
   process.exit(1);
 }

@@ -104,7 +104,7 @@ const SavingsModal = ({ isOpen, onClose, goal, onSuccess }: SavingsModalProps) =
         toast.success('  Goal updated!');
       } else {
         await createSavingsGoal(payload);
-        toast.success('🎯 Goal created!');
+        toast.success('   Goal created!');
       }
 
       onSuccess();

@@ -32,7 +32,7 @@ def migrate_income_title():
                     "ALTER TABLE income "
                     "ADD COLUMN title VARCHAR(200) NOT NULL DEFAULT 'Income'"
                 ))
-                print('✅ Added title column')
+                print('    Added title column')
                 
                 # Update existing records
                 result = conn.execute(text(
@@ -40,15 +40,15 @@ def migrate_income_title():
                     "SET title = source || ' Income' "
                     "WHERE title = 'Income'"
                 ))
-                print(f'✅ Updated {result.rowcount} existing income records')
+                print(f'    Updated {result.rowcount} existing income records')
             
             return True
         else:
-            print('✅ Income table already has title column')
+            print('    Income table already has title column')
             return True
             
     except Exception as e:
-        print(f'❌ Migration failed: {e}')
+        print(f'    Migration failed: {e}')
         import traceback
         traceback.print_exc()
         return False

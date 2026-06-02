@@ -57,7 +57,7 @@ A modern, full-stack expense tracking application with AI-powered insights, dual
 
 ---
 
-## 🚀 Quick Start
+##     Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -231,17 +231,17 @@ See **TESTING_CHECKLIST.md** for complete testing guide.
 
 ## 🔒 Security
 
-- ✅ Password hashing with bcrypt
-- ✅ JWT token authentication
-- ✅ CORS configuration
-- ✅ Input validation with Pydantic
-- ✅ SQL injection prevention
-- ✅ XSS protection
-- ✅ Secure token storage
+-     Password hashing with bcrypt
+-     JWT token authentication
+-     CORS configuration
+-     Input validation with Pydantic
+-     SQL injection prevention
+-     XSS protection
+-     Secure token storage
 
 ---
 
-## 🚀 Deployment
+##     Deployment
 
 ### Backend (Heroku/Railway/Render)
 1. Set up PostgreSQL database
@@ -297,15 +297,15 @@ See **TESTING_CHECKLIST.md** for complete testing guide.
 
 ---
 
-## 🎯 Key Highlights
+##    Key Highlights
 
-- ✅ **Production Ready** - Error handling, validation, security
-- ✅ **Type Safe** - TypeScript throughout frontend
-- ✅ **Modern UI** - Fundex-inspired design
-- ✅ **Responsive** - Works on all devices
-- ✅ **Accessible** - WCAG AA compliant
-- ✅ **Fast** - Optimized performance
-- ✅ **Clean Code** - Well-organized, documented
+-     **Production Ready** - Error handling, validation, security
+-     **Type Safe** - TypeScript throughout frontend
+-     **Modern UI** - Fundex-inspired design
+-     **Responsive** - Works on all devices
+-     **Accessible** - WCAG AA compliant
+-     **Fast** - Optimized performance
+-     **Clean Code** - Well-organized, documented
 
 ---
 
@@ -374,4 +374,4 @@ See [CHANGELOG.md](./CHANGELOG.md) for planned features and version history.
 
 **Built with ❤️ using modern web technologies**
 
-🚀 **Ready for production use!**
+    **Ready for production use!**

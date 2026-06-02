@@ -261,7 +261,7 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                       className="flex items-center gap-1.5 mt-2 text-red-500 dark:text-red-400"
                       style={{ fontSize: '13px' }}
                     >
-                      <span>⚠️</span> {errors.amount.message}
+                      <span>   </span> {errors.amount.message}
                     </motion.p>
                   )}
                 </motion.div>
@@ -293,7 +293,7 @@ const IncomeModal = ({ isOpen, onClose, income, onSuccess }: IncomeModalProps) =
                       className="flex items-center gap-1.5 mt-2 text-red-500 dark:text-red-400"
                       style={{ fontSize: '13px' }}
                     >
-                      <span>⚠️</span> {errors.title.message}
+                      <span>   </span> {errors.title.message}
                     </motion.p>
                   )}
                 </motion.div>

@@ -29,7 +29,7 @@ def test_comprehensive():
     headers = get_auth_headers()
     
     # Test 1: Create goal without deadline (optional)
-    print("\n✅ Test 1: Create goal without deadline")
+    print("\n    Test 1: Create goal without deadline")
     goal1 = {
         "name": "Emergency Fund",
         "target_amount": 10000,
@@ -40,10 +40,10 @@ def test_comprehensive():
     goal1_data = response.json()
     goal1_id = goal1_data["id"]
     assert goal1_data["deadline"] is None, "Deadline should be None"
-    print(f"   ✅ Created goal without deadline: {goal1_data['name']}")
+    print(f"       Created goal without deadline: {goal1_data['name']}")
     
     # Test 2: Create goal with deadline
-    print("\n✅ Test 2: Create goal with deadline")
+    print("\n    Test 2: Create goal with deadline")
     deadline = (date.today() + timedelta(days=365)).isoformat()
     goal2 = {
         "name": "New Car",
@@ -59,10 +59,10 @@ def test_comprehensive():
     assert goal2_data["deadline"] is not None, "Deadline should exist"
     assert goal2_data["emoji"] == "🚗", "Emoji mismatch"
     assert goal2_data["color"] == "#F59E0B", "Color mismatch"
-    print(f"   ✅ Created goal with deadline: {goal2_data['name']}")
+    print(f"       Created goal with deadline: {goal2_data['name']}")
     
     # Test 3: Multiple contributions
-    print("\n✅ Test 3: Multiple contributions")
+    print("\n    Test 3: Multiple contributions")
     contributions = [500, 1000, 250, 750]
     for amount in contributions:
         response = requests.post(
@@ -76,10 +76,10 @@ def test_comprehensive():
     goal1_updated = response.json()
     expected_total = sum(contributions)
     assert goal1_updated["saved_amount"] == expected_total, f"Expected {expected_total}, got {goal1_updated['saved_amount']}"
-    print(f"   ✅ Added {len(contributions)} contributions totaling ${expected_total}")
+    print(f"       Added {len(contributions)} contributions totaling ${expected_total}")
     
     # Test 4: Goal completion (100%)
-    print("\n✅ Test 4: Goal completion")
+    print("\n    Test 4: Goal completion")
     remaining = goal1_updated["target_amount"] - goal1_updated["saved_amount"]
     response = requests.post(
         f"{BASE_URL}/savings-goals/{goal1_id}/contribute",
@@ -90,10 +90,10 @@ def test_comprehensive():
     completed_goal = response.json()
     assert completed_goal["percentage"] >= 100, "Goal should be 100% complete"
     assert completed_goal["status"] == "completed", "Status should be 'completed'"
-    print(f"   ✅ Goal completed: {completed_goal['percentage']}%")
+    print(f"       Goal completed: {completed_goal['percentage']}%")
     
     # Test 5: Over-contribution (>100%)
-    print("\n✅ Test 5: Over-contribution")
+    print("\n    Test 5: Over-contribution")
     response = requests.post(
         f"{BASE_URL}/savings-goals/{goal1_id}/contribute",
         json={"amount": 1000},
@@ -102,10 +102,10 @@ def test_comprehensive():
     assert response.status_code == 200, f"Failed: {response.text}"
     over_goal = response.json()
     assert over_goal["saved_amount"] > over_goal["target_amount"], "Should allow over-contribution"
-    print(f"   ✅ Over-contributed: ${over_goal['saved_amount']}/${over_goal['target_amount']}")
+    print(f"       Over-contributed: ${over_goal['saved_amount']}/${over_goal['target_amount']}")
     
     # Test 6: Update goal details
-    print("\n✅ Test 6: Update goal details")
+    print("\n    Test 6: Update goal details")
     update_data = {
         "name": "New Car (Tesla Model 3)",
         "target_amount": 30000,
@@ -123,19 +123,19 @@ def test_comprehensive():
     assert updated_goal["target_amount"] == update_data["target_amount"], "Amount not updated"
     assert updated_goal["emoji"] == update_data["emoji"], "Emoji not updated"
     assert updated_goal["color"] == update_data["color"], "Color not updated"
-    print(f"   ✅ Updated goal: {updated_goal['name']}")
+    print(f"       Updated goal: {updated_goal['name']}")
     
     # Test 7: Get all goals (should have 2)
-    print("\n✅ Test 7: Get all goals")
+    print("\n    Test 7: Get all goals")
     response = requests.get(f"{BASE_URL}/savings-goals", headers=headers)
     assert response.status_code == 200, f"Failed: {response.text}"
     all_goals = response.json()
     assert isinstance(all_goals, list), "Should return array"
     assert len(all_goals) >= 2, f"Should have at least 2 goals, got {len(all_goals)}"
-    print(f"   ✅ Retrieved {len(all_goals)} goals")
+    print(f"       Retrieved {len(all_goals)} goals")
     
     # Test 8: Field aliases (frontend compatibility)
-    print("\n✅ Test 8: Field aliases")
+    print("\n    Test 8: Field aliases")
     response = requests.get(f"{BASE_URL}/savings-goals/{goal1_id}", headers=headers)
     goal = response.json()
     assert "saved_amount" in goal, "Missing 'saved_amount' alias"
@@ -144,63 +144,63 @@ def test_comprehensive():
     assert "progress_percentage" in goal, "Missing 'progress_percentage'"
     assert goal["saved_amount"] == goal["current_amount"], "Aliases should match"
     assert goal["percentage"] == goal["progress_percentage"], "Aliases should match"
-    print(f"   ✅ All field aliases present and matching")
+    print(f"       All field aliases present and matching")
     
     # Test 9: Invalid contribution (negative)
-    print("\n✅ Test 9: Invalid contribution (negative)")
+    print("\n    Test 9: Invalid contribution (negative)")
     response = requests.post(
         f"{BASE_URL}/savings-goals/{goal1_id}/contribute",
         json={"amount": -100},
         headers=headers
     )
     assert response.status_code == 422, "Should reject negative contribution"
-    print(f"   ✅ Correctly rejected negative contribution")
+    print(f"       Correctly rejected negative contribution")
     
     # Test 10: Invalid contribution (zero)
-    print("\n✅ Test 10: Invalid contribution (zero)")
+    print("\n    Test 10: Invalid contribution (zero)")
     response = requests.post(
         f"{BASE_URL}/savings-goals/{goal1_id}/contribute",
         json={"amount": 0},
         headers=headers
     )
     assert response.status_code == 422, "Should reject zero contribution"
-    print(f"   ✅ Correctly rejected zero contribution")
+    print(f"       Correctly rejected zero contribution")
     
     # Test 11: Access control (can't access other user's goals)
-    print("\n✅ Test 11: Access control")
+    print("\n    Test 11: Access control")
     # This would require another user, skipping for now
     print(f"   ⏭️  Skipped (requires second user)")
     
     # Test 12: Delete goals
-    print("\n✅ Test 12: Delete goals")
+    print("\n    Test 12: Delete goals")
     response = requests.delete(f"{BASE_URL}/savings-goals/{goal1_id}", headers=headers)
     assert response.status_code == 204, f"Failed to delete goal1: {response.text}"
     response = requests.delete(f"{BASE_URL}/savings-goals/{goal2_id}", headers=headers)
     assert response.status_code == 204, f"Failed to delete goal2: {response.text}"
-    print(f"   ✅ Deleted both test goals")
+    print(f"       Deleted both test goals")
     
     # Test 13: Verify deletion
-    print("\n✅ Test 13: Verify deletion")
+    print("\n    Test 13: Verify deletion")
     response = requests.get(f"{BASE_URL}/savings-goals/{goal1_id}", headers=headers)
     assert response.status_code == 404, "Deleted goal should return 404"
-    print(f"   ✅ Confirmed goals are deleted")
+    print(f"       Confirmed goals are deleted")
     
     print("\n" + "=" * 70)
-    print("✅ ALL COMPREHENSIVE TESTS PASSED!")
+    print("    ALL COMPREHENSIVE TESTS PASSED!")
     print("=" * 70)
     print("\n📊 Test Summary:")
-    print("   ✅ Optional deadline support")
-    print("   ✅ Required deadline support")
-    print("   ✅ Multiple contributions")
-    print("   ✅ Goal completion (100%)")
-    print("   ✅ Over-contribution (>100%)")
-    print("   ✅ Update all fields")
-    print("   ✅ Array response format")
-    print("   ✅ Field aliases for compatibility")
-    print("   ✅ Input validation (negative)")
-    print("   ✅ Input validation (zero)")
-    print("   ✅ Deletion and cleanup")
-    print("\n🚀 Savings Goals is PRODUCTION READY!")
+    print("       Optional deadline support")
+    print("       Required deadline support")
+    print("       Multiple contributions")
+    print("       Goal completion (100%)")
+    print("       Over-contribution (>100%)")
+    print("       Update all fields")
+    print("       Array response format")
+    print("       Field aliases for compatibility")
+    print("       Input validation (negative)")
+    print("       Input validation (zero)")
+    print("       Deletion and cleanup")
+    print("\n    Savings Goals is PRODUCTION READY!")
     
     return True
 
@@ -209,8 +209,8 @@ if __name__ == "__main__":
         success = test_comprehensive()
         exit(0 if success else 1)
     except AssertionError as e:
-        print(f"\n❌ Test failed: {e}")
+        print(f"\n    Test failed: {e}")
         exit(1)
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n    Error: {e}")
         exit(1)

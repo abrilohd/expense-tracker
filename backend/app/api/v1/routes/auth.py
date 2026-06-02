@@ -164,7 +164,7 @@ def forgot_password(
             # Check if it's a Resend test mode limitation
             if "testing emails" in error_msg.lower() or "verify a domain" in error_msg.lower():
                 return {
-                    "message": "⚠️ Email service is in test mode. Please use the reset link below or verify your domain at resend.com/domains",
+                    "message": "    Email service is in test mode. Please use the reset link below or verify your domain at resend.com/domains",
                     "reset_token": reset_token,
                     "reset_url": f"{os.getenv('APP_URL', 'http://localhost:5173')}/reset-password?token={reset_token}",
                     "dev_mode": True,

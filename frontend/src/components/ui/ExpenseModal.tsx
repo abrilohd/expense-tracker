@@ -133,7 +133,7 @@ const ExpenseModal = ({ isOpen, onClose, expense, onSuccess }: ExpenseModalProps
       // If budget is exceeded, show confirmation
       if (budgetWarning && budgetWarning.remaining < 0 && !isEditMode) {
         const confirmed = window.confirm(
-          `⚠️ Budget Alert!\n\n${budgetWarning.message}\n\nDo you want to proceed anyway?`
+          ` Budget Alert!\n\n${budgetWarning.message}\n\nDo you want to proceed anyway?`
         );
         if (!confirmed) {
           return;

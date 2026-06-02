@@ -24,7 +24,7 @@ def upgrade(connection):
         ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMP;
     """))
     
-    print("✅ Migration completed: Added phone_number, reset_token, and reset_token_expires columns")
+    print("    Migration completed: Added phone_number, reset_token, and reset_token_expires columns")
 
 def downgrade(connection):
     """Remove columns from users table"""
@@ -36,7 +36,7 @@ def downgrade(connection):
         DROP COLUMN IF EXISTS reset_token_expires;
     """))
     
-    print("✅ Rollback completed: Removed phone_number, reset_token, and reset_token_expires columns")
+    print("    Rollback completed: Removed phone_number, reset_token, and reset_token_expires columns")
 
 if __name__ == "__main__":
     # Run migration manually

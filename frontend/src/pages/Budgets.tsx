@@ -142,7 +142,7 @@ const Budgets = () => {
 
     try {
       await deleteBudget(deletingBudget.budget.id);
-      toast.success('🗑️ Budget deleted');
+      toast.success('   Budget deleted');
       setDeletingBudget(null);
       fetchBudgets();
     } catch (err) {

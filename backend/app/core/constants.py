@@ -17,7 +17,7 @@ analytics dashboard, and AI-powered spending insights.
 - 🔐 JWT Authentication with Google OAuth
 - 💰 Expense & Income Tracking
 - 📊 Budget Management
-- 🎯 Savings Goals
+-    Savings Goals
 - 🔄 Recurring Transactions
 - 📈 Reports & Insights
 - 👤 User Profile Management

@@ -41,9 +41,9 @@ class MigrationRunner:
         if not self.column_exists(table, column):
             default_clause = f" DEFAULT {default}" if default is not None else ""
             conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}{default_clause};"))
-            print(f"✅ Added {column} to {table}")
+            print(f"    Added {column} to {table}")
         else:
-            print(f"⚠️  {column} already exists in {table}")
+            print(f"     {column} already exists in {table}")
     
     def run_all_migrations(self):
         """Run all migrations in order"""
@@ -78,41 +78,41 @@ class MigrationRunner:
                 conn.execute(text("CREATE INDEX idx_income_user_id ON income(user_id);"))
                 conn.execute(text("CREATE INDEX idx_income_date ON income(date);"))
                 conn.execute(text("CREATE INDEX idx_income_source ON income(source);"))
-                print("✅ Created income table with indexes")
+                print("    Created income table with indexes")
             else:
-                print("⚠️  Income table already exists")
+                print("     Income table already exists")
             
             # Migration 4: Budgets table
             print("\n📝 Migration 4: Budgets table")
             if not self.table_exists("budgets"):
                 Budget.__table__.create(self.engine)
-                print("✅ Created budgets table")
+                print("    Created budgets table")
             else:
-                print("⚠️  Budgets table already exists")
+                print("     Budgets table already exists")
             
             # Migration 5: Savings goals emoji and color
             print("\n📝 Migration 5: Savings goals emoji and color")
             if self.table_exists("savings_goals"):
-                self.add_column_safe(conn, "savings_goals", "emoji", "VARCHAR", "'🎯'")
+                self.add_column_safe(conn, "savings_goals", "emoji", "VARCHAR", "'  '")
                 self.add_column_safe(conn, "savings_goals", "color", "VARCHAR", "'#3B82F6'")
             
             # Migration 6: Savings goals deadline nullable
             print("\n📝 Migration 6: Savings goals deadline nullable")
             # SQLite doesn't support ALTER COLUMN, so we skip this for existing tables
             if self.table_exists("savings_goals") and self.column_exists("savings_goals", "deadline"):
-                print("⚠️  Deadline column exists (nullable status cannot be changed in SQLite)")
+                print("     Deadline column exists (nullable status cannot be changed in SQLite)")
             
             # Migration 7: Recurring transactions table
             print("\n📝 Migration 7: Recurring transactions table")
             if not self.table_exists("recurring_transactions"):
                 RecurringTransaction.__table__.create(self.engine)
-                print("✅ Created recurring_transactions table")
+                print("    Created recurring_transactions table")
             else:
-                print("⚠️  Recurring transactions table already exists")
+                print("     Recurring transactions table already exists")
             
             conn.commit()
         
-        print("\n✅ All migrations completed successfully!")
+        print("\n    All migrations completed successfully!")
         print("\n📊 Database schema is up to date")
 
 
@@ -122,7 +122,7 @@ def main():
         runner = MigrationRunner()
         runner.run_all_migrations()
     except Exception as e:
-        print(f"\n❌ Migration failed: {e}")
+        print(f"\n    Migration failed: {e}")
         sys.exit(1)
 
 

@@ -86,7 +86,7 @@ const BudgetModal = ({ isOpen, onClose, budget, month, onSuccess }: BudgetModalP
         toast.success('  Budget updated!');
       } else {
         await createBudget(payload);
-        toast.success('🎯 Budget created!');
+        toast.success('   Budget created!');
       }
 
       onSuccess();

@@ -36,7 +36,7 @@ def create_test_users():
             existing_user = db.query(User).filter(User.email == user_data["email"]).first()
             
             if existing_user:
-                print(f"⚠️  User {user_data['email']} already exists")
+                print(f"     User {user_data['email']} already exists")
                 continue
             
             hashed_password = get_password_hash(user_data["password"])
@@ -49,12 +49,12 @@ def create_test_users():
             )
             db.add(user)
             db.commit()
-            print(f"✅ Created test user: {user_data['email']} (password: {user_data['password']})")
+            print(f"    Created test user: {user_data['email']} (password: {user_data['password']})")
         
-        print("\n✅ Test users created successfully!")
+        print("\n    Test users created successfully!")
         
     except Exception as e:
-        print(f"❌ Error creating test users: {e}")
+        print(f"    Error creating test users: {e}")
         db.rollback()
         sys.exit(1)
     finally:

@@ -200,7 +200,7 @@ Complete expense tracking application with modern architecture and comprehensive
 - Manual testing guide
 - QA procedures
 
-### 🚀 Deployment
+###     Deployment
 
 - Vercel-ready frontend
 - Railway-ready backend

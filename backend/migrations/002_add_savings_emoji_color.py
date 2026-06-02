@@ -22,7 +22,7 @@ def run_migration(db_path: str = "expenses.db"):
                 ALTER TABLE savings_goals 
                 ADD COLUMN emoji TEXT DEFAULT '💳'
             """)
-            print("✅ Added 'emoji' column")
+            print("    Added 'emoji' column")
         else:
             print("⏭️  'emoji' column already exists")
         
@@ -33,16 +33,16 @@ def run_migration(db_path: str = "expenses.db"):
                 ALTER TABLE savings_goals 
                 ADD COLUMN color TEXT DEFAULT NULL
             """)
-            print("✅ Added 'color' column")
+            print("    Added 'color' column")
         else:
             print("⏭️  'color' column already exists")
         
         conn.commit()
-        print("\n✅ Migration 002 completed successfully!")
+        print("\n    Migration 002 completed successfully!")
         return True
         
     except sqlite3.Error as e:
-        print(f"❌ Migration failed: {e}")
+        print(f"    Migration failed: {e}")
         return False
     finally:
         if conn:
